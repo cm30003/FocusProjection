@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - Farm_Machine
+  - Rest_Area
+  - Eat_Area
+  - NPC
+  - Farm_Field
+  - TouchFish_Area
+  - WareHouse_Area
+  - Freight_Target
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - Map
+  - Water
+  - UI
+  - Obstacle
+  - Farm_Machine
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: Obstacle
+    uniqueID: 451324841
+    locked: 0
+  - name: Map
+    uniqueID: 593256009
+    locked: 0
+  - name: Target
+    uniqueID: 3005969399
+    locked: 0
+  - name: Character
+    uniqueID: 164201117
+    locked: 0
