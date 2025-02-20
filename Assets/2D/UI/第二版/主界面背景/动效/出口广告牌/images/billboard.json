@@ -1,0 +1,32 @@
+{ "skeleton": { "images": "/f/专注类游戏/需要做动效的部分（阿杰收）/出口广告牌/images/" },
+"bones": [
+	{ "name": "root" }
+],
+"slots": [
+	{ "name": "di", "bone": "root", "attachment": "di" },
+	{ "name": "faguang", "bone": "root", "attachment": "faguang" },
+	{ "name": "图层 1", "bone": "root" },
+	{ "name": "caution", "bone": "root", "attachment": "caution" },
+	{ "name": "banmaxian", "bone": "root", "attachment": "banmaxian" }
+],
+"skins": {
+	"default": {
+		"di": {
+			"di": { "x": 391, "y": -202.5, "width": 422, "height": 369 }
+		},
+		"faguang": {
+			"faguang": { "x": 385.5, "y": -221, "width": 433, "height": 342 }
+		},
+		"图层 1": {
+			"图层 1": { "x": 405.5, "y": -288, "width": 813, "height": 56 }
+		},
+		"caution": {
+			"caution": { "x": 268.5, "y": -288.5, "width": 227, "height": 55 }
+		},
+		"banmaxian": {
+			"banmaxian": { "x": 507, "y": -288, "width": 338, "height": 52 }
+		}
+	}
+},
+"animations": { "animation": {} }
+}

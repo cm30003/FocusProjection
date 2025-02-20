@@ -256,7 +256,7 @@ public class CharaController : MonoBehaviour
             Map_Target map_Target = gameObject.GetComponent<Map_Target>();
             if(map_Target.Freight.Name!=null&&map_Target.Is_Empty&&map_Target.GetComponent<SpriteRenderer>().enabled)
             {
-                NPC_Status=NPC_status.Transport;
+                NPC_Status=NPC_status.Transport;//∞·‘À
                 Target.target = gameObject.transform;
             }
             else

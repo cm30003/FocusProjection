@@ -1,0 +1,32 @@
+{ "skeleton": { "images": "/f/专注类游戏/需要做动效的部分（阿杰收）/背景远景/images/" },
+"bones": [
+	{ "name": "root" }
+],
+"slots": [
+	{ "name": "light_4", "bone": "root", "attachment": "light_4" },
+	{ "name": "light_3", "bone": "root", "attachment": "light_3" },
+	{ "name": "light_2", "bone": "root", "attachment": "light_2" },
+	{ "name": "light_1", "bone": "root", "attachment": "light_1" },
+	{ "name": "light_0", "bone": "root", "attachment": "light_0" }
+],
+"skins": {
+	"default": {
+		"light_4": {
+			"light_4": { "x": 98.5, "y": -32.5, "width": 117, "height": 67 }
+		},
+		"light_3": {
+			"light_3": { "x": 96.5, "y": -55, "width": 113, "height": 74 }
+		},
+		"light_2": {
+			"light_2": { "x": 87, "y": -88, "width": 106, "height": 112 }
+		},
+		"light_1": {
+			"light_1": { "x": 63.5, "y": -119, "width": 95, "height": 132 }
+		},
+		"light_0": {
+			"light_0": { "x": 32, "y": -141.5, "width": 64, "height": 163 }
+		}
+	}
+},
+"animations": { "animation": {} }
+}

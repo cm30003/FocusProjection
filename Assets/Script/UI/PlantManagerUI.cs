@@ -45,9 +45,10 @@ public class PlantManagerUI : UIBase
     /// </summary>
     public void Button_SignIn(GameObject Plant_Button)
     {
+        //暂存按钮
         Button button = Plant_Button.GetComponent<Button>();
         PlantData plant_Data = button.GetComponent<Plant>().Data;
-
+        //
         button.GetComponent<Image>().sprite = plant_Data.Sprite;
         button.transform.GetChild(0).GetComponentInChildren<TextMeshProUGUI>().text = plant_Data.Name;
         button.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = plant_Data.Description;
@@ -67,6 +68,7 @@ public class PlantManagerUI : UIBase
         //更新田地状态
         for(int i=0;i<fileds.Length;i++)
         {
+            //
             GameObject field= fileds[i];
             plant_State plant_State = field.GetComponent<plant_State>();
             if (plant_State.State== Plant_State.Empty)

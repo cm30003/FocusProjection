@@ -1,0 +1,24 @@
+{ "skeleton": { "images": "/f/专注类游戏/需要做动效的部分（阿杰收）/出口广告牌/images/" },
+"bones": [
+	{ "name": "root" }
+],
+"slots": [
+	{ "name": "图层 1", "bone": "root", "attachment": "图层 1" },
+	{ "name": "jinatou", "bone": "root", "attachment": "jinatou" },
+	{ "name": "welcome", "bone": "root", "attachment": "welcome" }
+],
+"skins": {
+	"default": {
+		"图层 1": {
+			"图层 1": { "x": 229.5, "y": -137.5, "width": 461, "height": 59 }
+		},
+		"jinatou": {
+			"jinatou": { "x": 398, "y": -136.5, "width": 88, "height": 57 }
+		},
+		"welcome": {
+			"welcome": { "x": 203.5, "y": -138.5, "width": 269, "height": 57 }
+		}
+	}
+},
+"animations": { "animation": {} }
+}

@@ -35,7 +35,7 @@ public class plant_State : MonoBehaviour
                 Sprit_Change(data.Germinate_Image);
                 //计算时间
                 Time_calculation(ref data.Plant_Time);
-                //时间走完，切换状态
+                //时间走完，切换到发芽状态
                 if (data.Plant_Time<=0)
                 {
                     State= Plant_State.Germinate;
