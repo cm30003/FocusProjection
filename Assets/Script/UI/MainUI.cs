@@ -165,6 +165,12 @@ public class MainUI : UIBase
         Destroy(placeHolder);
     }
     #endregion 计划板相关
+    #region 左上角玩家信息相关
+    public void Player_Left_Up()
+    {
+
+    }
+    #endregion
     /// <summary>
     /// 打开主UI
     /// </summary>

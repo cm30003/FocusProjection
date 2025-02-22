@@ -5,6 +5,10 @@ using UnityEngine;
 
 public class Map_Target:MonoBehaviour
 {
+    public Sprite Water_Sprite;
+    public Sprite Fertilize_Sprite;
+    public Sprite BugControl_Sprite;
+
     public PlantData Freight;//货物
 
     public GameObject npc;
@@ -14,9 +18,9 @@ public class Map_Target:MonoBehaviour
     public bool Is_Empty=true;
     private void Start()
     {
-
+        //货物初始化
         Freight = new PlantData(null);
-        //print(Freight.Name);
+
         if (kind==Map_Target_Kind.Freight_Target)
         {
             GetComponent<SpriteRenderer>().enabled=false;
@@ -67,6 +71,18 @@ public class Map_Target:MonoBehaviour
                 if(Is_Empty)
                 {
                     charaController.NPC_Status = NPC_status.Work;
+                    if(charaController.Work_Field.State==Plant_State.water)
+                    {
+                        GetComponent<SpriteRenderer>().sprite = Water_Sprite;
+                    }
+                    else if(charaController.Work_Field.State == Plant_State.fertilize)
+                    {
+                        GetComponent<SpriteRenderer>().sprite = Fertilize_Sprite;
+                    }
+                    else if(charaController.Work_Field.State == Plant_State.bug_control)
+                    {
+                        GetComponent<SpriteRenderer>().sprite = BugControl_Sprite;
+                    }
                     Is_Empty = false;
                 }
 

@@ -1,0 +1,8 @@
+warning line.png
+size:601,51
+filter:Linear,Linear
+pma:true
+banmaxian
+bounds:2,5,360,44
+caution
+bounds:364,2,235,47

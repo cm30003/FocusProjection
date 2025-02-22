@@ -8,13 +8,14 @@ public class plant_State : MonoBehaviour
     public NPCData npc_Data;
 
     public PlantData Temple_Data;
-    public PlantData data;                           
+    public PlantData data;
     public Plant_State State;
 
-    private int Water_Num=2;
+    private int Water_Num = 2;
+    private float Standard_Second = 1;
     private void Start()
     {
-        npc_Data=new NPCData(null);
+        npc_Data = new NPCData(null);
     }
     private void Update()
     {
@@ -36,18 +37,18 @@ public class plant_State : MonoBehaviour
                 //计算时间
                 Time_calculation(ref data.Plant_Time);
                 //时间走完，切换到发芽状态
-                if (data.Plant_Time<=0)
+                if (data.Plant_Time <= 0)
                 {
-                    State= Plant_State.Germinate;
+                    State = Plant_State.Germinate;
                 }
                 break;
 
 
             case Plant_State.Germinate://发芽阶段
                 //自然生长
-                GameManager.GetInstance().Update_Timer(ref data.Germinate_Time,1f);
+                GameManager.GetInstance().Update_Timer(ref data.Germinate_Time, 1f);
 
-                if(data.Germinate_Time<=0)
+                if (data.Germinate_Time <= 0)
                 {
                     State = Plant_State.Grown;
                 }
@@ -60,7 +61,7 @@ public class plant_State : MonoBehaviour
 
                 GameManager.GetInstance().Update_Timer(ref data.Grown_Time, 1f);
 
-                if(data.Grown_Time<= 0)
+                if (data.Grown_Time <= 0)
                 {
                     State = Plant_State.water;
                 }
@@ -75,8 +76,8 @@ public class plant_State : MonoBehaviour
                 if (data.Plant_Time <= 0)
                 {
                     State = Plant_State.water;
-                    
-                    if(Water_Num==0)
+
+                    if (Water_Num == 0)
                     {
                         State = Plant_State.Mature;
                     }
@@ -85,7 +86,7 @@ public class plant_State : MonoBehaviour
                         Water_Num--;
                         data.Water_Time = Temple_Data.Water_Time;
                         data.Grown_Time = Temple_Data.Grown_Time;
-                        State= Plant_State.Grown;
+                        State = Plant_State.Grown;
                     }
                 }
                 break;
@@ -94,9 +95,9 @@ public class plant_State : MonoBehaviour
             case Plant_State.Mature://成熟阶段
                 GameManager.GetInstance().Update_Timer(ref data.Mature_Time, 1f);
 
-                if(data.Mature_Time<=0)
+                if (data.Mature_Time <= 0)
                 {
-                    State= Plant_State.fertilize;
+                    State = Plant_State.fertilize;
                 }
                 break;
 
@@ -127,26 +128,26 @@ public class plant_State : MonoBehaviour
 
                 Time_calculation(ref data.Harvest_Time);
 
-                if(data.Harvest_Time<=0&&data.Name!=null)
+                if (data.Harvest_Time <= 0 && data.Name != null)
                 {
                     GameObject[] gameObjects = ObjectKeeper_Singleton.Instance.Freight_Target;
 
-                    for(int i=0;i<gameObjects.Length;i++)
+                    for (int i = 0; i < gameObjects.Length; i++)
                     {
                         GameObject gameObject = gameObjects[i];
                         Map_Target target = gameObject.GetComponent<Map_Target>();
-                        if(target.Freight.Name==null)
+                        if (target.Freight.Name == null)
                         {
                             target.GetComponent<SpriteRenderer>().enabled = true;
 
                             target.Freight = data;
-                            
+
                             //print(target.name);
                             break;
                         }
                     }
                     Reset_AllTime();
-                    data =new PlantData(null);
+                    data = new PlantData(null);
 
                     Sprit_Change(null);
                     State = Plant_State.Empty;
@@ -174,7 +175,7 @@ public class plant_State : MonoBehaviour
     /// <param name="time">本阶段时间</param>
     public void Time_calculation(ref float time)
     {
-        if(npc_Data.Name!=null)
+        if (npc_Data.Name != null)
         {
             GameManager.GetInstance().Update_Timer(ref time, npc_Data.Work_Speed);
         }
@@ -194,4 +195,14 @@ public class plant_State : MonoBehaviour
         data.BugControl_Time = Temple_Data.BugControl_Time;
         data.Harvest_Time = Temple_Data.Harvest_Time;
     }
+    public void Timer(ref float time, float speed)
+    {
+        Standard_Second -= Time.deltaTime;
+        if (Standard_Second <= 0)
+        {
+            Standard_Second = 1;
+            time -= speed;
+        }
+    }
 }
+
