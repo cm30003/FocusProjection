@@ -18,6 +18,7 @@ public class MainUI : UIBase
     public CanvasGroup Mail_UI;//邮件
     public CanvasGroup WareHouse_UI;//仓库
     public CanvasGroup DiningHall_UI;//食堂
+    public CanvasGroup Timer_UI;//计时器二级界面
     [Header("————底部工具栏————")]
     public Button Quit_Button;//退出
     public Button Mail_Button;//邮件
@@ -30,7 +31,7 @@ public class MainUI : UIBase
     public Button DiningHall_Button;//食堂
     public Button WareHouse_Button;//仓库
     public Button PlantManager_Button;//植物管理
-    public Button Timer;//计时器
+    public Button Timer_Button;//计时器
     public Button Player_IDCard_Button;//玩家名片
     [Header("————右上计划板————")]
     public GameObject InputField_Group;
@@ -63,6 +64,7 @@ public class MainUI : UIBase
         DiningHall_Button.onClick.AddListener(Open_DiningHall_UI);//食堂
         WareHouse_Button.onClick.AddListener(Open_WareHouse_UI);//仓库
         PlantManager_Button.onClick.AddListener(Open_Plant_Manage_UI);//植物管理
+        Timer_Button.onClick.AddListener(Open_Timer_UI);//计时器
 
         Player_IDCard_Button.onClick.AddListener(Open_Player_IDCard);//打开玩家名片
         Quit_Button.onClick.AddListener(QuitGame);//退出
@@ -76,6 +78,9 @@ public class MainUI : UIBase
 
         Plan_Panel_Button();
     }
+
+
+
     /// <summary>
     /// 更新主UI中的玩家信息
     /// </summary>
@@ -166,9 +171,9 @@ public class MainUI : UIBase
     }
     #endregion 计划板相关
     #region 左上角玩家信息相关
-    public void Player_Left_Up()
+    public void Player_Left_Up()//左上角玩家信息更新
     {
-
+        
     }
     #endregion
     /// <summary>
@@ -195,7 +200,10 @@ public class MainUI : UIBase
         OpenUI(Player_ID_Card_UI);
         Player_ID_Card_UI.GetComponent<IDCardUI>().enabled = true;
     }
-
+    private void Open_Timer_UI()
+    {
+        OpenUI(Timer_UI);
+    }
     public void Open_Shop_UI()
     {
         OpenUI(ShopUI);
@@ -235,7 +243,7 @@ public class MainUI : UIBase
     public void QuitGame()
     {
         ObjectKeeper_Singleton.Instance.Save_GamerData();
-        Timer.GetComponent<Timer>().calculate_FocusTime();
+        Timer_Button.GetComponent<Timer>().calculate_FocusTime();
         Application.Quit();
     }
 }

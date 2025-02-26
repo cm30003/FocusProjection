@@ -33,7 +33,7 @@ public class Timer : UIBase
     }
     private void InitClick()
     {
-        Open_SetFoucusTimeUI_Button.onClick.AddListener(Open_SetFoucusTimeUI);
+        //Open_SetFoucusTimeUI_Button.onClick.AddListener(Open_SetFoucusTimeUI);
         Cancle_SetFoucusTimeUI_Button.onClick.AddListener(Cancle_SetFoucusTimeUI);
         Ensure_Foucus_Time.onClick.AddListener(Ensure_Foucus_Time_Method);
         Pause_Button.onClick.AddListener(Pause_Timer);
@@ -55,7 +55,7 @@ public class Timer : UIBase
     {
         string Month = DateTime.Now.ToString("MMMM", new System.Globalization.CultureInfo("en-us")).Substring(0, 3);
         string Day = DateTime.Now.Day.ToString();
-        Month_Day.text = Month + "   " + Day;
+        Month_Day.text = Month + " " + Day;
     }
     /// <summary>
     /// 重置专注时间
@@ -74,20 +74,24 @@ public class Timer : UIBase
             if (is_pause == 0)
             {
                 is_pause++;
+                Pause_Button.transform.GetChild(0).GetComponent<Image>().color = new Color(255, 255, 255, 255);
+                Pause_Button.transform.GetChild(1).GetComponent<Image>().color = new Color32(255, 255, 255, 0);
             }
             else
             {
                 is_pause--;
+                Pause_Button.transform.GetChild(0).GetComponent<Image>().color = new Color(255, 255, 255, 0);
+                Pause_Button.transform.GetChild(1).GetComponent<Image>().color = new Color32(255, 255, 255, 255);
             }
         }
     }
     /// <summary>
     /// 打开专注时间设置UI
     /// </summary>
-    private void Open_SetFoucusTimeUI()
-    {
-        OpenUI(SetFoucusTimeUI.GetComponent<CanvasGroup>());
-    }
+    //private void Open_SetFoucusTimeUI()
+    //{
+    //    OpenUI(SetFoucusTimeUI.GetComponent<CanvasGroup>());
+    //}
     /// <summary>
     /// 取消专注时间设置
     /// </summary>
