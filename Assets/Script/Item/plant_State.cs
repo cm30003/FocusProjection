@@ -165,8 +165,7 @@ public class plant_State : MonoBehaviour
     {
         for (int i = 0; i < transform.childCount; i++)
         {
-            Image image = transform.GetChild(i).GetComponent<Image>();
-            image.sprite = sprite;
+            transform.GetChild(i).GetComponent<SpriteRenderer>().sprite = sprite;
         }
     }
     /// <summary>
