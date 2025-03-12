@@ -8,7 +8,12 @@ using UnityEngine.Events;
 /// </summary>
 public class ResourceManager : BaseManager<ResourceManager>
 {
-    //资源同步加载
+    /// <summary>
+    /// 同步加载资源
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="name"></param>
+    /// <returns></returns>
     public T Load<T>(string name)where T : Object
     {
         T res = Resources.Load<T>(name);
@@ -18,7 +23,12 @@ public class ResourceManager : BaseManager<ResourceManager>
         else//TextAsset Audioclip
             return res;
     }
-    //异步加载资源
+    /// <summary>
+    /// 异步加载资源
+    /// </summary>
+    /// <typeparam name="T">类</typeparam>
+    /// <param name="name">名字</param>
+    /// <param name="callback">回调</param>
     public void LoadAsync<T>(string name,UnityAction<T>callback) where T :Object
     {
         MonoManager.GetInstance().StartCoroutine(ReallyLoadAsync(name,callback));

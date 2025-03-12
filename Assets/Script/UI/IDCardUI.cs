@@ -85,10 +85,9 @@ public class IDCardUI : UIBase
     }
     public void Close()
     {
-        CloseUI(GetComponent<CanvasGroup>());
         //当前的UI关闭时，在ObjectKeeper脚本处保存数据
         EventCenter.GetInstance().EventTrigger("SaveGamerData");
         EventCenter.GetInstance().EventTrigger("Info_Update");
-        this.enabled = false;
+        UIManager.GetInstance().HideUI("——Player IDCard——");
     }
 }

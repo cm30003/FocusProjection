@@ -5,28 +5,32 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class MainUI : UIBase
 {
     [Header("————各系统————")]
     public CanvasGroup ShopUI;//商店界面
-    public CanvasGroup Player_ID_Card_UI;//玩家名片
+
     public CanvasGroup NCP_Manager_UI;//动物管理
-    public CanvasGroup Calendar_UI;//日历
     public CanvasGroup Plant_Manage_UI;//植物管理
-    public CanvasGroup System_Menue_UI;//系统菜单
-    public CanvasGroup Mail_UI;//邮件
+
     public CanvasGroup WareHouse_UI;//仓库
     public CanvasGroup DiningHall_UI;//食堂
     public CanvasGroup Timer_UI;//计时器二级界面
+
+    public GameObject Phone_UI;
+    //public CanvasGroup Player_ID_Card_UI;//玩家名片
+    //public CanvasGroup System_Menue_UI;//系统菜单
+    //public CanvasGroup Mail_UI;//邮件
+    //public CanvasGroup Calendar_UI;//日历
     [Header("————底部工具栏————")]
     public Button Quit_Button;//退出
-    public Button Mail_Button;//邮件
-    public Button Calendar_Button;//日历
+    public Button fullscreen_Button;//全屏
     public Button Hide_UI_Button;//隐藏主UI
-    public Button System_Menue_Button;//系统菜单
+    public Button Phone_Button;//手机
     [Header("————主界面按钮————")]
-    public Button Shop_Button;//商店
+    //public Button Shop_Button;//商店
     public Button NPCManager_Button;//动物管理
     public Button DiningHall_Button;//食堂
     public Button WareHouse_Button;//仓库
@@ -45,6 +49,8 @@ public class MainUI : UIBase
     public TextMeshProUGUI Player_Name;
     public TextMeshProUGUI Player_Money;
     public TextMeshProUGUI Player_level;
+    [Header("————其他————")]
+    public GameObject OpenMainUI_Trigger;
     private void Start()
     {
         if (JsonManager.Instance.LoadData<Mission_ADay>("ADay") != null)
@@ -59,7 +65,8 @@ public class MainUI : UIBase
     }
     private void InitClick()
     {
-        Shop_Button.onClick.AddListener(Open_Shop_UI);//商店
+        Phone_Button.onClick.AddListener(Open_Phone_UI);//手机界面
+        //Shop_Button.onClick.AddListener(Open_Shop_UI);//商店
         NPCManager_Button.onClick.AddListener(Open_NCP_Manager_UI);//动物管理
         DiningHall_Button.onClick.AddListener(Open_DiningHall_UI);//食堂
         WareHouse_Button.onClick.AddListener(Open_WareHouse_UI);//仓库
@@ -68,18 +75,18 @@ public class MainUI : UIBase
 
         Player_IDCard_Button.onClick.AddListener(Open_Player_IDCard);//打开玩家名片
         Quit_Button.onClick.AddListener(QuitGame);//退出
-        Mail_Button.onClick.AddListener(Open_Mail_UI);//邮件
-        Calendar_Button.onClick.AddListener(Open_Calendar_UI);//日历
+
         Hide_UI_Button.onClick.AddListener(Hide_Main_UI);//隐藏主UI
-        System_Menue_Button.onClick.AddListener(Open_System_Menue_UI);//打开系统菜单
+
+        //System_Menue_Button.onClick.AddListener(Open_System_Menue_UI);//打开系统菜单
+        //Mail_Button.onClick.AddListener(Open_Mail_UI);//邮件
+        //Calendar_Button.onClick.AddListener(Open_Calendar_UI);//日历
 
         EventCenter.GetInstance().AddEventListener("Info_Update", Info_Update);//信息更新事件
         Info_Update();
 
         Plan_Panel_Button();
     }
-
-
 
     /// <summary>
     /// 更新主UI中的玩家信息
@@ -183,6 +190,8 @@ public class MainUI : UIBase
     {
         var ui = GetComponent<CanvasGroup>();
         OpenUI(ui);
+        print("打开主UI");
+        OpenMainUI_Trigger.GetComponent<GraphicRaycaster>().enabled = false;
     }
     /// <summary>
     /// 隐藏主UI
@@ -191,46 +200,54 @@ public class MainUI : UIBase
     {
         var ui = GetComponent<CanvasGroup>();
         CloseUI(ui);
+        OpenMainUI_Trigger.GetComponent<GraphicRaycaster>().enabled = true;
+    }
+    /// <summary>
+    /// 唤出手机界面
+    /// </summary>
+    private void Open_Phone_UI()
+    {
+        Phone_UI.transform.DOLocalMoveY(-45, 1f);
     }
     /// <summary>
     /// 打开玩家名片
     /// </summary>
     private void Open_Player_IDCard()
     {
-        OpenUI(Player_ID_Card_UI);
-        Player_ID_Card_UI.GetComponent<IDCardUI>().enabled = true;
+        UIManager.GetInstance().ShowOldUI<IDCardUI>("——Player IDCard——");
     }
     private void Open_Timer_UI()
     {
         OpenUI(Timer_UI);
     }
-    public void Open_Shop_UI()
-    {
-        OpenUI(ShopUI);
-    }
-    public void Open_Player_ID_Card_UI()
-    {
-        OpenUI(Player_ID_Card_UI);
-    }
+    //public void Open_Shop_UI()
+    //{
+    //    OpenUI(ShopUI);
+    //}
+
+    //public void Open_Player_ID_Card_UI()
+    //{
+    //    OpenUI(Player_ID_Card_UI);
+    //}
     public void Open_NCP_Manager_UI()
     {
         OpenUI(NCP_Manager_UI);
     }
-    public void Open_Calendar_UI()
-    {
-        OpenUI(Calendar_UI);
-    }
+    //public void Open_Calendar_UI()
+    //{
+    //    OpenUI(Calendar_UI);
+    //}
     public void Open_Plant_Manage_UI()
     {
         OpenUI(Plant_Manage_UI);
     }
-    public void Open_System_Menue_UI()
-    {
-        OpenUI(System_Menue_UI);
-    }
+    //public void Open_System_Menue_UI()
+    //{
+    //    OpenUI(System_Menue_UI);
+    //}
     public void Open_Mail_UI()
     {
-        OpenUI(Mail_UI);
+        UIManager.GetInstance().ShowOldUI<MailUI>("——Mail——");
     }
     public void Open_WareHouse_UI()
     {

@@ -74,7 +74,6 @@ public class MailUI : UIBase
     }
     private void Quit_MailUI()
     {
-        CanvasGroup canvasGroup = GetComponent<CanvasGroup>();
-        CloseUI(canvasGroup);
+        UIManager.GetInstance().HideUI("！！Mail！！");
     }
 }

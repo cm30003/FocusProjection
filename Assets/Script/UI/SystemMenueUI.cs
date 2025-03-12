@@ -82,6 +82,6 @@ public class SystemMenueUI : UIBase
             
         }
         CanvasGroup canvasGroup = GetComponent<CanvasGroup>();
-        CloseUI(canvasGroup);
+        UIManager.GetInstance().HideUI("！！System Menue UI CanvasGroup！！");
     }
 }

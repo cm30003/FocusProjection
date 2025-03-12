@@ -41,10 +41,9 @@ public class DiningHall : UIBase
             Button button = Instantiate(Item_button, Buttons_Group).GetComponent<Button>();
             Button Buy_Button = button.transform.GetChild(0).GetComponent<Button>();
 
-
             button.transform.GetChild(1).GetComponent<Image>().sprite = Food_List[i].Sprite;
             button.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = Food_List[i].Name;
-            button.GetComponent<food>().Data = Food_List[i];
+            button.GetComponent<Item_Food>().Data = Food_List[i];
             button.onClick.AddListener(() => Click(button));
             Buy_Button.onClick.AddListener(() => Buy(button));
         }
@@ -78,7 +77,7 @@ public class DiningHall : UIBase
     /// <param name="button">µ±Ç°Item</param>
     public void Buy(Button button)
     {
-        Current_Food=button.GetComponent<food>().Data;
+        Current_Food=button.GetComponent<Item_Food>().Data;
 
         ObjectKeeper_Singleton.Instance.foodData = Current_Food;
         ObjectKeeper_Singleton.Instance.gamerData.Money+=Current_Food.Money_Cost_reward;

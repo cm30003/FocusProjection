@@ -12,6 +12,7 @@ TagManager:
   - TouchFish_Area
   - WareHouse_Area
   - Freight_Target
+  - Phone_Base
   layers:
   - Default
   - TransparentFX
@@ -60,4 +61,7 @@ TagManager:
     locked: 0
   - name: Character
     uniqueID: 164201117
+    locked: 0
+  - name: Light
+    uniqueID: 1754740231
     locked: 0
