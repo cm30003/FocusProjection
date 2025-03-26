@@ -7,9 +7,9 @@ using UnityEngine.UI;
 public class DiningHall : UIBase
 {
     [Header("————当前食物————")]
-    public FoodData Current_Food;
+    public FoodItem_Data Current_Food;
 
-    public List<FoodData> Food_List;//要读表的数据列表
+    public List<FoodItem_Data> Food_List;//要读表的数据列表
 
     public Transform Buttons_Group;//按钮生成的位置
     public Button Quit_Button;//退出按钮
@@ -80,7 +80,7 @@ public class DiningHall : UIBase
         Current_Food=button.GetComponent<Item_Food>().Data;
 
         ObjectKeeper_Singleton.Instance.foodData = Current_Food;
-        ObjectKeeper_Singleton.Instance.gamerData.Money+=Current_Food.Money_Cost_reward;
+        ObjectKeeper_Singleton.Instance.gamerData.Money+=Current_Food.Cost;
         EventCenter.GetInstance().EventTrigger("Info_Update");
     }
     /// <summary>

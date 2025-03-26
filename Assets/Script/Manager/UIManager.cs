@@ -219,15 +219,19 @@ public class UIManager : BaseManager<UIManager>
     /// <param name="callBack">事件的响应函数</param>
     public static void AddCustomEventListener(UIBehaviour control,EventTriggerType type, UnityAction<BaseEventData> callBack)
     {
+        //假如挂载对象上存在EventTrigger组件，则获取
         EventTrigger trigger=control.GetComponent<EventTrigger>();
+        //若没有，则为其添加EventTrigger
         if(trigger==null)
         {
             trigger=control.gameObject.AddComponent<EventTrigger>();
         }
+        //自定义事件类型
         EventTrigger.Entry entry=new EventTrigger.Entry();
         entry.eventID=type;
+        //自定义回调函数
         entry.callback.AddListener(callBack);
-
+        //添加到EventTrigger中
         trigger.triggers.Add(entry);
     }
 }

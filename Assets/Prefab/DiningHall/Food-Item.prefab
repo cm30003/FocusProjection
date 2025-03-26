@@ -88,6 +88,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5305233862414105707, guid: 02ea3603f916071448896b339cfa5666, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5305233862414105707, guid: 02ea3603f916071448896b339cfa5666, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5305233862414105707, guid: 02ea3603f916071448896b339cfa5666, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5305233862414105707, guid: 02ea3603f916071448896b339cfa5666, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7805436443052190597, guid: 02ea3603f916071448896b339cfa5666, type: 3}
       propertyPath: m_Name
       value: Food-Item

@@ -3,9 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.EventSystems;
+using UnityEngine.Events;
+using DG.Tweening;
 
 public class Phone : NewUIBase
 {
+    private void Start()
+    {
+        UIManager.AddCustomEventListener(GetControl<Image>("TOP"), EventTriggerType.PointerClick, (data) => 
+        {
+
+            this.transform.parent.DOLocalMoveY(-1050f, 1f);
+        });
+    }
     protected override void OnClick(string btnName,Button button)
     {
         switch (btnName)
@@ -39,6 +50,5 @@ public class Phone : NewUIBase
                 UIManager.GetInstance().ShowOldUI<MailUI>("！！Mail！！");
                 break;
         }
-
     }
 }

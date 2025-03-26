@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class Item_Food : MonoBehaviour
 {
-    public FoodData Data;
+    public FoodItem_Data Data;
 }

@@ -13,9 +13,6 @@ public class CharaController : MonoBehaviour
     public AIDestinationSetter Target;//目标地点
 
     public NPC_status NPC_Status;//小动物状态
-
-    private AIPath aiPath;
-
     [Tooltip("工作的田地")]
     public plant_State Work_Field;
     [Tooltip("搬运的货物")]
@@ -23,16 +20,19 @@ public class CharaController : MonoBehaviour
     [Header("————动物/数据————")]
     public NPCData Template_data;
     public NPCData data;
-
+    [Header("————组件————")]
+    public Animator animator;//动画状态机
+    private AIPath aiPath;//A Star 寻路
     private void Start()
     {
-        //data=JsonManager.Instance.LoadData<NPCData>(this.name);
+        animator = GetComponentInChildren<Animator>();//获取动画状态机
 
         Template_data = new NPCData(data) ;//生成副本
 
-        Event_SignIn();
+        Event_SignIn();//事件注册
 
         Target = GetComponent<AIDestinationSetter>();
+
         Target.target = null;
 
         aiPath = GetComponent<AIPath>();
@@ -129,9 +129,12 @@ public class CharaController : MonoBehaviour
         switch (NPC_Status)
         {
             case NPC_status.GoToWork://当小动物处于去工作状态，则寻找距离最近的种田机器
-                Target.target = null;
-                HungryTime_calculation();//计算饥饿时间
-                Freight_Wait();//查找是否存在货物需要搬运
+
+                animator.Play("z_move");//行走动画
+
+                Target.target = null;//首先目标置空
+                HungryTime_calculation();//开始计算饥饿时间
+                Freight_Wait();//查找是否存在货物需要搬运，若有则优先搬运货物
                 if (Target.target==null)//如果没有找到工作地点，则搜寻最近的
                 {
                     ShortestPath(ObjectKeeper_Singleton.Instance.Farm_Machine);
@@ -141,9 +144,12 @@ public class CharaController : MonoBehaviour
                 {
                     Target.target = null;
                 }
+                Move_Right_OR_Left();//判断左右并进行翻转
                 break;
 
-            case NPC_status.Work:
+            case NPC_status.Work://工作
+
+                animator.Play("b_work1");//播放 工作动画
 
                 HungryTime_calculation();//计算饥饿时间
 
@@ -172,24 +178,42 @@ public class CharaController : MonoBehaviour
                 //若没有需要工作的田地，则进入偷懒状态
                 else
                 {
-                    Work_Field = Choosen_Field();
                     //查找存在工作的田地
+                    Work_Field = Choosen_Field();
+                    //找不到，就摸鱼！
                     if (Work_Field == null)
                     {
                         NPC_Status = NPC_status.TouchFish;
                     }
-                    
-                    //NPC_Status =NPC_status.TouchFish;
                 }
                 break;
 
             case NPC_status.Rest://小动物回休息室
+
+                Move_Right_OR_Left();
+
+                
+                animator.Play("z_move");//行走动画
+
                 Leave_Field();//离开田地，田地的负责人置空
                 Target.target = ObjectKeeper_Singleton.Instance.Rest_Area.transform;
 
                 break;
 
             case NPC_status.TouchFish://小动物摸鱼
+
+                if(aiPath.reachedEndOfPath)
+                {
+                    print("摸了");
+                    animator.Play("b_sit");//坐
+                }
+                else
+                {
+                    print("摸的路上");
+                    animator.Play("z_move");//走
+                }
+                
+
                 Leave_Field();//离开田地，田地的负责人置空
                 HungryTime_calculation();//计算饥饿时间
                 
@@ -197,6 +221,11 @@ public class CharaController : MonoBehaviour
                 break;
             
             case NPC_status.GoToEat://小动物去吃东西
+
+                Move_Right_OR_Left();
+
+                animator.Play("z_move");//行走动画
+
                 Target.target = null;
 
                 Leave_Field();//离开田地，田地的负责人置空
@@ -205,13 +234,16 @@ public class CharaController : MonoBehaviour
                 {
                     ShortestPath(ObjectKeeper_Singleton.Instance.Eat_Area);
                 }
-                else if (!Target.target.GetComponent<Map_Target>().Is_Empty)
+                else if (!Target.target.GetComponent<Map_Target>().Is_Empty)//如果目标点被占用，则重新寻找目标点
                 {
                     Target.target = null;
                 }
                 break;
 
             case NPC_status.Eat://小动物吃东西
+
+                animator.Play("b_sit");//播放 背对 坐姿动画
+
                 Leave_Field();
                 //开始吃饭倒计时
                 GameManager.GetInstance().FixedUpdate_Timer(ref data.Eat_Time,1f);
@@ -222,7 +254,7 @@ public class CharaController : MonoBehaviour
                     data.Work_Speed += ObjectKeeper_Singleton.Instance.foodData.Buff;
                     data.MoveSpeed += ObjectKeeper_Singleton.Instance.foodData.Buff;
                     //进行数值计算(小动物每次进食扣除餐费)
-                    ObjectKeeper_Singleton.Instance.gamerData.Money += ObjectKeeper_Singleton.Instance.foodData.Money_Cost_reward;
+                    ObjectKeeper_Singleton.Instance.gamerData.Money += ObjectKeeper_Singleton.Instance.foodData.Cost;
                     //更新数值显示
                     EventCenter.GetInstance().EventTrigger("Info_Update");
 
@@ -233,7 +265,12 @@ public class CharaController : MonoBehaviour
                 break;
 
             case NPC_status.Transport://搬运
-                if(freight.Name!=null)
+
+                animator.Play("z_hug");//搬运动画
+
+                Move_Right_OR_Left();//判断左右并进行翻转
+
+                if (freight.Name!=null)
                 {
                     Target.target = ObjectKeeper_Singleton.Instance.WareHouse.transform;
                 }
@@ -245,21 +282,36 @@ public class CharaController : MonoBehaviour
         }
     }
     /// <summary>
-    /// 如果有等待搬运的货物
+    /// 判断小动物是往右还是往左走了
+    /// </summary>
+    public void Move_Right_OR_Left()
+    {
+        if (aiPath.desiredVelocity.x > 0)
+        {
+            this.transform.rotation = Quaternion.Euler(0, 0, 0);
+        }
+        else if (aiPath.desiredVelocity.x < 0)
+        {
+            this.transform.rotation = Quaternion.Euler(0, 180, 0);
+        }
+    }
+    /// <summary>
+    /// 如果有等待搬运的货物，则优先搬运货物
     /// </summary>
     public void Freight_Wait()
     {
         GameObject[] Freights = ObjectKeeper_Singleton.Instance.Freight_Target;
-
+        //遍历所有等待搬运的货物
         foreach (var gameObject in Freights)
         {
             Map_Target map_Target = gameObject.GetComponent<Map_Target>();
+            //如果货物没有被占用，则搬走
             if(map_Target.Freight.Name!=null&&map_Target.Is_Empty&&map_Target.GetComponent<SpriteRenderer>().enabled)
             {
                 NPC_Status=NPC_status.Transport;//搬运
                 Target.target = gameObject.transform;
             }
-            else
+            else//如果被搬走了，就重新计算
             {
                 NPC_Status = NPC_status.GoToWork;
             }

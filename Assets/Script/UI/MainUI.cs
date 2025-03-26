@@ -190,7 +190,6 @@ public class MainUI : UIBase
     {
         var ui = GetComponent<CanvasGroup>();
         OpenUI(ui);
-        print("´ò¿ªÖ÷UI");
         OpenMainUI_Trigger.GetComponent<GraphicRaycaster>().enabled = false;
     }
     /// <summary>

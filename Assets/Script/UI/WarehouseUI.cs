@@ -49,7 +49,6 @@ public class WarehouseUI : UIBase
                 Sell_Button.onClick.AddListener(() => Sell(button));
             }
         }
-
     }
     public void Clear_ObjectGroup()
     {
@@ -99,6 +98,7 @@ public class WarehouseUI : UIBase
         
         EventCenter.GetInstance().EventTrigger("Info_Update");//画面左上角玩家信息更新信息
     }
+    #region 弃用
     /// <summary>
     /// 检查列表是否存在存入物品
     /// </summary>
@@ -120,6 +120,7 @@ public class WarehouseUI : UIBase
     //        button.onClick.AddListener(Quit_UI);
     //    }
     //}
+    #endregion
     private void Quit_UI()
     {
         CloseUI(GetComponent<CanvasGroup>());

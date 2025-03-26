@@ -40,7 +40,7 @@ public class NPCManagerUI : UIBase
                 GameObject gameObject = Instantiate(NPCUI_Prefab, NPC_Group.transform);
                 //给每个NPC赋值
                 gameObject.name = npc[i].name;
-                gameObject.GetComponent<Image>().sprite = npc[i].GetComponentInChildren<SpriteRenderer>().sprite;
+                gameObject.GetComponent<Image>().sprite = npc[i].GetComponent<CharaController>().data.sprite;
                 gameObject.transform.Find("NPC_Description_Bar/Name").GetComponent<TextMeshProUGUI>().text = npc[i].GetComponent<CharaController>().data.Name;
                 gameObject.transform.Find("NPC_Description_Bar/personality").GetComponentInChildren<TextMeshProUGUI>().text = npc[i].GetComponent<CharaController>().data.Personality;
                 gameObject.transform.Find("NPC_Description_Bar/hobby").GetComponentInChildren<TextMeshProUGUI>().text = npc[i].GetComponent<CharaController>().data.Hobby;

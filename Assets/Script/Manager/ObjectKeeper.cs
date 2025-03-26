@@ -12,7 +12,7 @@ public class ObjectKeeper_Singleton:SingletonMono<ObjectKeeper_Singleton>
     [Header("————条件————")]
     public bool Is_Set;//是否设定专注时间
     [Header("————在场的对象————")]
-    public FoodData foodData;//设定的食堂食物
+    public FoodItem_Data foodData;//设定的食堂食物
 
     public GameObject WareHouse;//库房
 
@@ -72,11 +72,11 @@ public class ObjectKeeper_Singleton:SingletonMono<ObjectKeeper_Singleton>
     /// </summary>
     /// <param name="foodData">食物数据</param>
     /// <returns>食物数据</returns>
-    public FoodData Current_Food(FoodData foodData)
+    public FoodItem_Data Current_Food(FoodItem_Data foodData)
     {
         if(foodData==null)
         {
-            foodData = new FoodData();
+            foodData = new FoodItem_Data();
         }
 
         return foodData;
@@ -153,7 +153,7 @@ public class Mission_ADay//数据类，统计玩家每天完成的任务及其专注时间
 public class NPCData//数据类，用于存储NPC数据
 {
     //public Sprite Sprite;
-
+    public Sprite sprite;
     public string Name;//名字
     public string Hobby;//爱好
     public string Personality;//性格
@@ -178,7 +178,7 @@ public class NPCData//数据类，用于存储NPC数据
         if (other == null)
         {
             // 如果传入的参数为 null，则初始化为默认值
-            //Sprite = null;
+            sprite = null;
             Name = string.Empty;
             Hobby = string.Empty;
             Personality = string.Empty;
@@ -194,7 +194,7 @@ public class NPCData//数据类，用于存储NPC数据
         }
         else
         {
-            //Sprite = other.Sprite;
+            sprite = other.sprite;
             Name = other.Name;
             Hobby = other.Hobby;
             Personality = other.Personality;
@@ -212,6 +212,7 @@ public class NPCData//数据类，用于存储NPC数据
     // 公共无参构造函数
     public NPCData()
     {
+        sprite = null;
         Name = string.Empty;
         Hobby = string.Empty;
         Personality = string.Empty;
@@ -332,11 +333,8 @@ public class GiftData: ItemData
     [Tooltip("好感度加成")]
     public int favorability_Plus_Num;//好感度加成
 }
-[System.Serializable]
-public class FoodData: ItemData
-{
-    public float Buff;//增益
-}
+
+
 
 
 

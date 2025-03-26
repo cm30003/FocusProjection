@@ -10,7 +10,8 @@ using UnityEngine.Rendering.Universal;
 public class DayAndNight : MonoBehaviour
 {
     //2D灯光
-    public Light2D light;
+    public Light2D Globallight;
+    public List<Light2D> light2Ds;
     //后处理
     public VolumeProfile volume;
     public Bloom bloom;
@@ -31,15 +32,23 @@ public class DayAndNight : MonoBehaviour
         int hour=DateTime.Now.Hour;
         if (hour >= 6 && hour < 18)
         {
-            light.intensity = 1f;
+            Globallight.intensity = 1f;
             bloom.intensity.value = 0.25f;
             BKMusic_Name = "德国傍晚的休闲广场";
+            for(int i=0;i<light2Ds.Count;i++)
+            {
+                light2Ds[i].enabled = false;
+            }
         }
         else
         {
-            light.intensity = 0.65f;
+            Globallight.intensity = 0.65f;
             bloom.intensity.value = 2f;
             BKMusic_Name = "德国傍晚的休闲广场";
+            for (int i = 0; i < light2Ds.Count; i++)
+            {
+                light2Ds[i].enabled = true;
+            }
         }
     }
     public void Change_BKMusic()

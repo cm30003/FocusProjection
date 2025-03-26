@@ -28,6 +28,7 @@ public class Phone_Shop : NewUIBase
         {
             case "Quit":
                 UIManager.GetInstance().HideUI("Phone_Shop");
+                EventCenter.GetInstance().RemoveEventListener("Info_Update", Grade_Two_Info_Update);
                 break;
             case "Gitf_Button":
                 Open_Gift_UI(button);
@@ -127,7 +128,7 @@ public class Phone_Shop : NewUIBase
 
             giftdata.Data = data.Data;
             button.gameObject.name = npcs[i % npcs.Length].name;//将按钮的名字全部转为现有的NPC的名字
-            button.image.sprite = npcs[i % npcs.Length].GetComponentInChildren<SpriteRenderer>().sprite;//按钮Image全部转为NPC的Sprite
+            button.image.sprite = npcs[i % npcs.Length].GetComponent<CharaController>().Template_data.sprite;//按钮Image全部转为NPC的Sprite
             favorability.text = npcs[i % npcs.Length].GetComponent<CharaController>().data.Favorability.ToString();//更新送礼的NPC的好感度
 
             //注册送礼事件

@@ -419,7 +419,7 @@ GameObject:
   - component: {fileID: 5730280032199368457}
   - component: {fileID: 3264907726636222924}
   m_Layer: 0
-  m_Name: Phone_NPCManage
+  m_Name: Phone_NPCManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -471,7 +471,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -513,6 +513,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a295040d371250d4093d31bb0cf73bf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Info_Group: {fileID: 7187192794944530569}
+  Waitings_Group: {fileID: 6897554113869873880}
+  Npc_Waiting_Prefab: {fileID: 3665994120384983398, guid: 4cdd63a04f1739443ae1afafbfffaed0, type: 3}
 --- !u!1 &2928728743013381682
 GameObject:
   m_ObjectHideFlags: 0
@@ -947,7 +950,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1702858104141035929}
-  - component: {fileID: 6273303339587648347}
   m_Layer: 0
   m_Name: ChoosenNPCS
   m_TagString: Untagged
@@ -977,32 +979,6 @@ RectTransform:
   m_AnchoredPosition: {x: 3, y: 223}
   m_SizeDelta: {x: 585, y: 120}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &6273303339587648347
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8640753331088720181}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Padding:
-    m_Left: 0
-    m_Right: 0
-    m_Top: 0
-    m_Bottom: 0
-  m_ChildAlignment: 4
-  m_Spacing: -35
-  m_ChildForceExpandWidth: 1
-  m_ChildForceExpandHeight: 1
-  m_ChildControlWidth: 0
-  m_ChildControlHeight: 0
-  m_ChildScaleWidth: 0
-  m_ChildScaleHeight: 0
-  m_ReverseArrangement: 0
 --- !u!1001 &3296942611472013139
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1025,7 +1001,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4058767327634976869, guid: 45979415b3dd021488bb9b41e2db9382, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4058767327634976869, guid: 45979415b3dd021488bb9b41e2db9382, type: 3}
       propertyPath: m_AnchorMin.x
@@ -1033,7 +1009,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4058767327634976869, guid: 45979415b3dd021488bb9b41e2db9382, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4058767327634976869, guid: 45979415b3dd021488bb9b41e2db9382, type: 3}
       propertyPath: m_SizeDelta.x
@@ -1073,11 +1049,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4058767327634976869, guid: 45979415b3dd021488bb9b41e2db9382, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 292.5
       objectReference: {fileID: 0}
     - target: {fileID: 4058767327634976869, guid: 45979415b3dd021488bb9b41e2db9382, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -60
       objectReference: {fileID: 0}
     - target: {fileID: 4058767327634976869, guid: 45979415b3dd021488bb9b41e2db9382, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1093,7 +1069,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6427959733285539155, guid: 45979415b3dd021488bb9b41e2db9382, type: 3}
       propertyPath: m_Name
-      value: NPCChoosen (1)
+      value: NPCChoosen
+      objectReference: {fileID: 0}
+    - target: {fileID: 7650240793819858435, guid: 45979415b3dd021488bb9b41e2db9382, type: 3}
+      propertyPath: m_ShowMaskGraphic
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1203,7 +1183,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6421925221674810226, guid: d7fe61da5810ce74ea74d400474ef0cc, type: 3}
       propertyPath: m_Name
-      value: NPCWaiting (5)
+      value: NPC_Waiting
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1313,7 +1293,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6421925221674810226, guid: d7fe61da5810ce74ea74d400474ef0cc, type: 3}
       propertyPath: m_Name
-      value: NPCWaiting (6)
+      value: NPC_Waiting
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1423,7 +1403,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6421925221674810226, guid: d7fe61da5810ce74ea74d400474ef0cc, type: 3}
       propertyPath: m_Name
-      value: NPCWaiting (1)
+      value: NPC_Waiting
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1533,7 +1513,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6421925221674810226, guid: d7fe61da5810ce74ea74d400474ef0cc, type: 3}
       propertyPath: m_Name
-      value: NPCWaiting (2)
+      value: NPC_Waiting
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1643,7 +1623,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6421925221674810226, guid: d7fe61da5810ce74ea74d400474ef0cc, type: 3}
       propertyPath: m_Name
-      value: NPCWaiting (7)
+      value: NPC_Waiting
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1753,7 +1733,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6421925221674810226, guid: d7fe61da5810ce74ea74d400474ef0cc, type: 3}
       propertyPath: m_Name
-      value: NPCWaiting (4)
+      value: NPC_Waiting
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1787,7 +1767,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4058767327634976869, guid: 45979415b3dd021488bb9b41e2db9382, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4058767327634976869, guid: 45979415b3dd021488bb9b41e2db9382, type: 3}
       propertyPath: m_AnchorMin.x
@@ -1795,7 +1775,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4058767327634976869, guid: 45979415b3dd021488bb9b41e2db9382, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4058767327634976869, guid: 45979415b3dd021488bb9b41e2db9382, type: 3}
       propertyPath: m_SizeDelta.x
@@ -1835,11 +1815,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4058767327634976869, guid: 45979415b3dd021488bb9b41e2db9382, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 109.166664
       objectReference: {fileID: 0}
     - target: {fileID: 4058767327634976869, guid: 45979415b3dd021488bb9b41e2db9382, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -60
       objectReference: {fileID: 0}
     - target: {fileID: 4058767327634976869, guid: 45979415b3dd021488bb9b41e2db9382, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1889,7 +1869,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4058767327634976869, guid: 45979415b3dd021488bb9b41e2db9382, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4058767327634976869, guid: 45979415b3dd021488bb9b41e2db9382, type: 3}
       propertyPath: m_AnchorMin.x
@@ -1897,7 +1877,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4058767327634976869, guid: 45979415b3dd021488bb9b41e2db9382, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4058767327634976869, guid: 45979415b3dd021488bb9b41e2db9382, type: 3}
       propertyPath: m_SizeDelta.x
@@ -1937,11 +1917,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4058767327634976869, guid: 45979415b3dd021488bb9b41e2db9382, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 475.8333
       objectReference: {fileID: 0}
     - target: {fileID: 4058767327634976869, guid: 45979415b3dd021488bb9b41e2db9382, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -60
       objectReference: {fileID: 0}
     - target: {fileID: 4058767327634976869, guid: 45979415b3dd021488bb9b41e2db9382, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1957,7 +1937,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6427959733285539155, guid: 45979415b3dd021488bb9b41e2db9382, type: 3}
       propertyPath: m_Name
-      value: NPCChoosen (2)
+      value: NPCChoosen
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2057,17 +2037,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4636905630789245745, guid: d7fe61da5810ce74ea74d400474ef0cc, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4636905630789245745, guid: d7fe61da5810ce74ea74d400474ef0cc, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -11
-      objectReference: {fileID: 0}
     - target: {fileID: 6421925221674810226, guid: d7fe61da5810ce74ea74d400474ef0cc, type: 3}
       propertyPath: m_Name
-      value: NPCWaiting
+      value: NPC_Waiting
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2177,7 +2149,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6421925221674810226, guid: d7fe61da5810ce74ea74d400474ef0cc, type: 3}
       propertyPath: m_Name
-      value: NPCWaiting (3)
+      value: NPC_Waiting
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
