@@ -16,10 +16,12 @@ public class DragByInterface : MonoBehaviour,IDragHandler,IBeginDragHandler,IEnd
         canvas = this.transform.root.GetComponent<Canvas>();
         Originalparent = this.transform.parent;
     }
+    /// <summary>
+    /// 开始拖拽
+    /// </summary>
+    /// <param name="eventData"></param>
     public void OnBeginDrag(PointerEventData eventData)
     {
-        print("BeginDrag");
-
         this.transform.SetParent(this.transform.parent.parent.parent);
         CanvasGroup.blocksRaycasts = false;
     }
@@ -33,9 +35,13 @@ public class DragByInterface : MonoBehaviour,IDragHandler,IBeginDragHandler,IEnd
         //本语句意即将 RectTransform 的 anchoredPosition 属性增加 eventData.delta 的值。
         RectTransform.anchoredPosition += eventData.delta/canvas.scaleFactor;
     }
-
+    /// <summary>
+    /// 拖拽结束
+    /// </summary>
+    /// <param name="eventData"></param>
     public void OnEndDrag(PointerEventData eventData)
     {
+        //如果被拖入了小动物选择框。
         if(eventData.pointerCurrentRaycast.gameObject.name== "NPCChoosen")
         {
             transform.SetParent(eventData.pointerCurrentRaycast.gameObject.transform);
@@ -45,6 +51,9 @@ public class DragByInterface : MonoBehaviour,IDragHandler,IBeginDragHandler,IEnd
             GetComponent<RectTransform>().sizeDelta = new Vector2(145, 205);
 
             CanvasGroup.blocksRaycasts = true;
+
+            //玩家选中事件
+            EventCenter.GetInstance().EventTrigger<string>("Is_Choosen",GetComponent<NPCData_Data>().data.Name);
         }
         else
         {
@@ -53,6 +62,8 @@ public class DragByInterface : MonoBehaviour,IDragHandler,IBeginDragHandler,IEnd
             this.transform.localPosition = new Vector3(-5, -13, 0);
             GetComponent<RectTransform>().localScale = new Vector3(0.1f, 0.1f, 0.1f);
             GetComponent<RectTransform>().sizeDelta = new Vector2(900, 1289);
+            //待命事件
+            EventCenter.GetInstance().EventTrigger<string>("Is_Waiting", GetComponent<NPCData_Data>().data.Name);
         }
 
     }

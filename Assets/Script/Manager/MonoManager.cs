@@ -20,7 +20,6 @@ public class MonoManager : BaseManager<MonoManager>
     public void AddUpdateLisener(UnityAction action)
     {
         contorl.AddUpdateLisener(action);
-
     }
     public void RemoveUpdateLisener(UnityAction action)
     {

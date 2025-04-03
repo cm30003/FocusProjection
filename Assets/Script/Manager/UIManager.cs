@@ -195,7 +195,6 @@ public class UIManager : BaseManager<UIManager>
             GameObject.Destroy(LoadedOldUIDic[uiName].gameObject);
             LoadedOldUIDic.Remove(uiName);
         }
-        Debug.Log("UIHide");
     }
     /// <summary>
     /// 得到某一个已经显示的面板 方便外部使用

@@ -2117,6 +2117,119 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 152273892}
   m_CullTransparentMesh: 1
+--- !u!1 &163173012
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 163173015}
+  - component: {fileID: 163173014}
+  - component: {fileID: 163173013}
+  m_Layer: 0
+  m_Name: TouchFish_Area 3
+  m_TagString: TouchFish_Area
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!61 &163173013
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 163173012}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -0.4279999}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.9}
+    oldSize: {x: 0.59, y: 1.07}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
+--- !u!114 &163173014
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 163173012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee7aa62680928b74396cd1909190629c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Water_Sprite: {fileID: 0}
+  Fertilize_Sprite: {fileID: 0}
+  BugControl_Sprite: {fileID: 0}
+  Freight:
+    Name: 
+    Sprite: {fileID: 0}
+    Description: 
+    Money_Cost_reward: 0
+    Germinate_Image: {fileID: 0}
+    Grown_Image: {fileID: 0}
+    Mature_Image: {fileID: 0}
+    Germinate_Time: 0
+    Grown_Time: 0
+    Mature_Time: 0
+    Plant_Time: 0
+    Water_Time: 0
+    fertilize_Time: 0
+    BugControl_Time: 0
+    Harvest_Time: 0
+    Num: 0
+  npc: {fileID: 0}
+  kind: 0
+  Is_Empty: 1
+--- !u!4 &163173015
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 163173012}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -4.0480003, y: -3.052, z: 0}
+  m_LocalScale: {x: 0.05, y: 0.05, z: 0.05}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &164106573
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3165,8 +3278,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: -0.053299963, y: -0.20644999, z: 0}
-    m_Extent: {x: 1.8883, y: 2.16045, z: 0}
+    m_Center: {x: -0.05304998, y: -0.20610005, z: 0}
+    m_Extent: {x: 1.8884499, y: 2.1598, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -11301,8 +11414,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: -0.069050014, y: 0.049950004, z: 0}
-    m_Extent: {x: 1.6178501, y: 2.39895, z: 0}
+    m_Center: {x: -0.06920004, y: 0.049650073, z: 0}
+    m_Extent: {x: 1.6179, y: 2.39845, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -11585,8 +11698,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: 3.8203502, y: -0.28400004, z: 0}
-    m_Extent: {x: 3.45335, y: 4.0160003, z: 0}
+    m_Center: {x: 3.82025, y: -0.28420007, z: 0}
+    m_Extent: {x: 3.45325, y: 4.0158, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -12617,8 +12730,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: -0.78215, y: -0.034049988, z: 0}
-    m_Extent: {x: 2.5527499, y: 2.94485, z: 0}
+    m_Center: {x: -0.78095, y: -0.033849955, z: 0}
+    m_Extent: {x: 2.55315, y: 2.94395, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -12968,6 +13081,119 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!1 &936931392
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 936931395}
+  - component: {fileID: 936931394}
+  - component: {fileID: 936931393}
+  m_Layer: 0
+  m_Name: TouchFish_Area 2
+  m_TagString: TouchFish_Area
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!61 &936931393
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 936931392}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -0.4279999}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.9}
+    oldSize: {x: 0.59, y: 1.07}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
+--- !u!114 &936931394
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 936931392}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee7aa62680928b74396cd1909190629c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Water_Sprite: {fileID: 0}
+  Fertilize_Sprite: {fileID: 0}
+  BugControl_Sprite: {fileID: 0}
+  Freight:
+    Name: 
+    Sprite: {fileID: 0}
+    Description: 
+    Money_Cost_reward: 0
+    Germinate_Image: {fileID: 0}
+    Grown_Image: {fileID: 0}
+    Mature_Image: {fileID: 0}
+    Germinate_Time: 0
+    Grown_Time: 0
+    Mature_Time: 0
+    Plant_Time: 0
+    Water_Time: 0
+    fertilize_Time: 0
+    BugControl_Time: 0
+    Harvest_Time: 0
+    Num: 0
+  npc: {fileID: 0}
+  kind: 0
+  Is_Empty: 1
+--- !u!4 &936931395
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 936931392}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -3.4490001, y: -2.696, z: 0}
+  m_LocalScale: {x: 0.05, y: 0.05, z: 0.05}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &940599126
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16354,7 +16580,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   version: 5
-  radius: 7
+  radius: 2
   height: 2
   canMove: 1
   maxSpeed: 1
@@ -16475,7 +16701,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 7
+  m_Radius: 2
 --- !u!114 &1177463140
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17259,7 +17485,7 @@ MonoBehaviour:
   Farm_Machine: []
   Eat_Area: []
   Rest_Area: {fileID: 0}
-  TouchFish_Area: {fileID: 0}
+  TouchFish_Area: []
 --- !u!4 &1204273221
 Transform:
   m_ObjectHideFlags: 0
@@ -17285,8 +17511,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1215237718}
   - component: {fileID: 1215237717}
-  - component: {fileID: 1215237716}
-  - component: {fileID: 1215237715}
   m_Layer: 0
   m_Name: Rest_Area
   m_TagString: Rest_Area
@@ -17294,86 +17518,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!61 &1215237715
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1215237714}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1}
-  m_EdgeRadius: 0
---- !u!114 &1215237716
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1215237714}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee7aa62680928b74396cd1909190629c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Water_Sprite: {fileID: 0}
-  Fertilize_Sprite: {fileID: 0}
-  BugControl_Sprite: {fileID: 0}
-  Freight:
-    Name: 
-    Sprite: {fileID: 0}
-    Description: 
-    Money_Cost_reward: 0
-    Germinate_Image: {fileID: 0}
-    Grown_Image: {fileID: 0}
-    Mature_Image: {fileID: 0}
-    Germinate_Time: 0
-    Grown_Time: 0
-    Mature_Time: 0
-    Plant_Time: 0
-    Water_Time: 0
-    fertilize_Time: 0
-    BugControl_Time: 0
-    Harvest_Time: 0
-    Num: 0
-  npc: {fileID: 0}
-  kind: 1
-  Is_Empty: 1
 --- !u!212 &1215237717
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -18668,6 +18812,119 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1348754532}
   m_CullTransparentMesh: 1
+--- !u!1 &1362840663
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1362840666}
+  - component: {fileID: 1362840665}
+  - component: {fileID: 1362840664}
+  m_Layer: 0
+  m_Name: TouchFish_Area
+  m_TagString: TouchFish_Area
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!61 &1362840664
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1362840663}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -0.4279999}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.9}
+    oldSize: {x: 0.59, y: 1.07}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
+--- !u!114 &1362840665
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1362840663}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee7aa62680928b74396cd1909190629c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Water_Sprite: {fileID: 0}
+  Fertilize_Sprite: {fileID: 0}
+  BugControl_Sprite: {fileID: 0}
+  Freight:
+    Name: 
+    Sprite: {fileID: 0}
+    Description: 
+    Money_Cost_reward: 0
+    Germinate_Image: {fileID: 0}
+    Grown_Image: {fileID: 0}
+    Mature_Image: {fileID: 0}
+    Germinate_Time: 0
+    Grown_Time: 0
+    Mature_Time: 0
+    Plant_Time: 0
+    Water_Time: 0
+    fertilize_Time: 0
+    BugControl_Time: 0
+    Harvest_Time: 0
+    Num: 0
+  npc: {fileID: 0}
+  kind: 0
+  Is_Empty: 1
+--- !u!4 &1362840666
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1362840663}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -2.243, y: -2.027, z: 0}
+  m_LocalScale: {x: 0.05, y: 0.05, z: 0.05}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1364142001
 GameObject:
   m_ObjectHideFlags: 0
@@ -20779,8 +21036,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1497727585}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -8, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -1.5, z: 0}
   m_LocalScale: {x: 2.5, y: 2.5, z: 2.5}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -23429,49 +23686,13 @@ GameObject:
   m_Component:
   - component: {fileID: 1664589454}
   - component: {fileID: 1664589453}
-  - component: {fileID: 1664589452}
   m_Layer: 7
-  m_Name: TouchFish_Area
-  m_TagString: TouchFish_Area
+  m_Name: Sofa
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1664589452
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1664589451}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee7aa62680928b74396cd1909190629c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Water_Sprite: {fileID: 0}
-  Fertilize_Sprite: {fileID: 0}
-  BugControl_Sprite: {fileID: 0}
-  Freight:
-    Name: 
-    Sprite: {fileID: 0}
-    Description: 
-    Money_Cost_reward: 0
-    Germinate_Image: {fileID: 0}
-    Grown_Image: {fileID: 0}
-    Mature_Image: {fileID: 0}
-    Germinate_Time: 0
-    Grown_Time: 0
-    Mature_Time: 0
-    Plant_Time: 0
-    Water_Time: 0
-    fertilize_Time: 0
-    BugControl_Time: 0
-    Harvest_Time: 0
-    Num: 0
-  npc: {fileID: 0}
-  kind: 0
-  Is_Empty: 1
 --- !u!212 &1664589453
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -23510,9 +23731,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -1288997897
-  m_SortingLayer: 3
-  m_SortingOrder: 1
+  m_SortingLayerID: 593256009
+  m_SortingLayer: 2
+  m_SortingOrder: 6
   m_Sprite: {fileID: 21300000, guid: b44ef60f7e320194ba550c8f407524ae, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -26010,6 +26231,119 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!1 &1910737735
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1910737738}
+  - component: {fileID: 1910737737}
+  - component: {fileID: 1910737736}
+  m_Layer: 0
+  m_Name: TouchFish_Area 1
+  m_TagString: TouchFish_Area
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!61 &1910737736
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1910737735}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -0.4279999}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.9}
+    oldSize: {x: 0.59, y: 1.07}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
+--- !u!114 &1910737737
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1910737735}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee7aa62680928b74396cd1909190629c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Water_Sprite: {fileID: 0}
+  Fertilize_Sprite: {fileID: 0}
+  BugControl_Sprite: {fileID: 0}
+  Freight:
+    Name: 
+    Sprite: {fileID: 0}
+    Description: 
+    Money_Cost_reward: 0
+    Germinate_Image: {fileID: 0}
+    Grown_Image: {fileID: 0}
+    Mature_Image: {fileID: 0}
+    Germinate_Time: 0
+    Grown_Time: 0
+    Mature_Time: 0
+    Plant_Time: 0
+    Water_Time: 0
+    fertilize_Time: 0
+    BugControl_Time: 0
+    Harvest_Time: 0
+    Num: 0
+  npc: {fileID: 0}
+  kind: 0
+  Is_Empty: 1
+--- !u!4 &1910737738
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1910737735}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -2.8630002, y: -2.3270001, z: 0}
+  m_LocalScale: {x: 0.05, y: 0.05, z: 0.05}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1912066294
 GameObject:
   m_ObjectHideFlags: 0
@@ -27746,8 +28080,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -319.8864, y: 372.69788}
-  m_SizeDelta: {x: 639.7729, y: 745.3959}
+  m_AnchoredPosition: {x: -164.85394, y: 311.46664}
+  m_SizeDelta: {x: 329.7047, y: 325.8965}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2048104563
 MonoBehaviour:
@@ -32295,6 +32629,7 @@ SceneRoots:
   - {fileID: 1412713669}
   - {fileID: 577927101}
   - {fileID: 2020043915}
+  - {fileID: 1664589454}
   - {fileID: 789385880}
   - {fileID: 1193787219}
   - {fileID: 1411726238}
@@ -32318,9 +32653,12 @@ SceneRoots:
   - {fileID: 139583282}
   - {fileID: 614865873}
   - {fileID: 1194240445}
-  - {fileID: 1664589454}
   - {fileID: 934871628}
   - {fileID: 1215237718}
+  - {fileID: 1362840666}
+  - {fileID: 1910737738}
+  - {fileID: 936931395}
+  - {fileID: 163173015}
   - {fileID: 987680207}
   - {fileID: 4204745}
   - {fileID: 1578891217}

@@ -3,6 +3,7 @@ using UnityEngine;
 public enum NPC_status
 {
     Rest,//回休息室休息
+    GoTo_TouchFish,//摸鱼
     TouchFish,//摸鱼
     GoToWork,//去工作的路上
     Work,//工作中
@@ -13,7 +14,6 @@ public enum NPC_status
 public enum Map_Target_Kind
 {
     TouchFish_Area,//摸鱼的地方
-    Rest_Area,//休息室
     Farm_Machine,//种田机器
     Eat_Area,//吃东西的地方
     WareHouse_Area,//仓库

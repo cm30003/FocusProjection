@@ -26,6 +26,9 @@ public class Phone_NPCManager : NewUIBase
                 break;
         }
     }
+    /// <summary>
+    /// 创建等待组的内容
+    /// </summary>
     public void Creat_Waitings()
     {
         GameObject[] npc = ObjectKeeper_Singleton.Instance.NPCs;
@@ -45,18 +48,17 @@ public class Phone_NPCManager : NewUIBase
             Button button= waiting.AddComponent<Button>();
             button.onClick.AddListener(() => UpdateInfo(button));
 
-            waiting.AddComponent<NPCData_Data>();
-            waiting.GetComponent<NPCData_Data>().data= npc[i].GetComponent<CharaController>().Template_data;
-            image.sprite = waiting.GetComponent<NPCData_Data>().data.sprite;
+            child.AddComponent<NPCData_Data>();
+            child.GetComponent<NPCData_Data>().data= npc[i].GetComponent<CharaController>().Template_data;
+            image.sprite = child.GetComponent<NPCData_Data>().data.sprite;
             image.SetNativeSize();
         }
     }
     public void UpdateInfo(Button button)
     {
-        print("111111");
-        Info_Group.transform.GetChild(0).GetComponent<Image>().sprite= button.GetComponent<NPCData_Data>().data.sprite;
-        Info_Group.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text= button.GetComponent<NPCData_Data>().data.Name;
-        Info_Group.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text= button.GetComponent<NPCData_Data>().data.Description;
+        Info_Group.transform.GetChild(0).GetComponent<Image>().sprite= button.GetComponentInChildren<NPCData_Data>().data.sprite;
+        Info_Group.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text= button.GetComponentInChildren<NPCData_Data>().data.Name;
+        Info_Group.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text= button.GetComponentInChildren<NPCData_Data>().data.Description;
 
     }
 }

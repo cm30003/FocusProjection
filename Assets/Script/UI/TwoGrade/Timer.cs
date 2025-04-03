@@ -120,7 +120,7 @@ public class Timer : UIBase
 
         ObjectKeeper_Singleton.Instance.Is_Set = true;
         //当专注时间设置后，触发NPC工作事件
-        EventCenter.GetInstance().EventTrigger("FocusTime_Set");
+        //EventCenter.GetInstance().EventTrigger("FocusTime_Set");
     }
 
     /// <summary>

@@ -8,7 +8,6 @@ public class Layer_Trigger : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        print(11111);
         MeshRenderer meshRenderer = collision.GetComponentInChildren<MeshRenderer>();
         //如果此时小动物位于天台下方，则触发该触发器
         if (this.gameObject.name == "Bottom_Trigger" && meshRenderer.sortingOrder == 0)
@@ -33,7 +32,6 @@ public class Layer_Trigger : MonoBehaviour
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
-        print(22222);
         MeshRenderer meshRenderer = collision.GetComponentInChildren<MeshRenderer>();
         if (collision.gameObject.name == "Farm_Trigger"&& meshRenderer.sortingLayerName == "Character")
         {

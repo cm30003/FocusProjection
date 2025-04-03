@@ -30,7 +30,7 @@ public class ObjectKeeper_Singleton:SingletonMono<ObjectKeeper_Singleton>
 
     public GameObject Rest_Area;//休息的区域
 
-    public GameObject TouchFish_Area;//摸鱼的区域
+    public GameObject[] TouchFish_Area;//摸鱼的区域
 
 
     private void Awake()
@@ -45,9 +45,9 @@ public class ObjectKeeper_Singleton:SingletonMono<ObjectKeeper_Singleton>
         Farm_Machine = GameObject.FindGameObjectsWithTag("Farm_Machine");
         Eat_Area=GameObject.FindGameObjectsWithTag("Eat_Area");
         Rest_Area = GameObject.FindGameObjectWithTag("Rest_Area");
-        TouchFish_Area = GameObject.FindGameObjectWithTag("TouchFish_Area");
+        TouchFish_Area = GameObject.FindGameObjectsWithTag("TouchFish_Area");
         //注册事件
-        EventCenter.GetInstance().AddEventListener<Button>("Gifted", Gifted);
+        EventCenter.GetInstance().AddEventListener<Button>("Gifted", Gifted);//送礼事件
     }
     /// <summary>
     /// 送礼后扣款了，更新金钱

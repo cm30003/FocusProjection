@@ -45,12 +45,11 @@ public class CharaController : MonoBehaviour
     {
         /*————事件————*/
         //专注时间设置事件，当专注时间被设置，小动物会去工作
-        EventCenter.GetInstance().AddEventListener("FocusTime_Set", () =>
-        {
-            //Debug.Log("FocusTime_Set");
-            Target.target = null;
-            NPC_Status = NPC_status.GoToWork;
-        });
+        //EventCenter.GetInstance().AddEventListener("FocusTime_Set", IsChoosen);
+        //玩家选中事件
+        EventCenter.GetInstance().AddEventListener<string>("Is_Choosen",IsChoosen);
+        //待命事件
+        EventCenter.GetInstance().AddEventListener<string>("Is_Waiting", IsWaiting);
         //礼物事件，增加好感度，减少玩家金钱
         EventCenter.GetInstance().AddEventListener<Button>("Gifted", Gifted);
         //工作事件
@@ -60,7 +59,20 @@ public class CharaController : MonoBehaviour
         //加餐事件
         EventCenter.GetInstance().AddEventListener<Button>("NPC_Eat", Order_Eat);
     }
-
+    public void IsChoosen(string name)
+    {
+        if (ObjectKeeper_Singleton.Instance.Is_Set&&name==data.Name)
+        {
+            NPC_Status = NPC_status.GoToWork;
+        }
+    }
+    public void IsWaiting(string name)
+    {
+        if (ObjectKeeper_Singleton.Instance.Is_Set&&name==data.Name)
+        {
+            NPC_Status = NPC_status.Rest;
+        }
+    }
     /// <summary>
     /// 被送了礼物事件
     /// </summary>
@@ -124,6 +136,9 @@ public class CharaController : MonoBehaviour
         Switch_Status();
         aiPath.maxSpeed = data.MoveSpeed;
     }
+    /// <summary>
+    /// 状态切换
+    /// </summary>
     public void Switch_Status()
     {
         switch (NPC_Status)
@@ -169,7 +184,7 @@ public class CharaController : MonoBehaviour
                         if (Lazy_Check(data.Favorability) == 0)
                         {
                             print(name + ":偷懒了！");
-                            NPC_Status = NPC_status.TouchFish;
+                            NPC_Status = NPC_status.GoTo_TouchFish;
 
                             data.Work_Time = Template_data.Work_Time;//重置时间
                         }
@@ -183,7 +198,7 @@ public class CharaController : MonoBehaviour
                     //找不到，就摸鱼！
                     if (Work_Field == null)
                     {
-                        NPC_Status = NPC_status.TouchFish;
+                        NPC_Status = NPC_status.GoTo_TouchFish;
                     }
                 }
                 break;
@@ -191,35 +206,44 @@ public class CharaController : MonoBehaviour
             case NPC_status.Rest://小动物回休息室
 
                 Move_Right_OR_Left();
-
                 
                 animator.Play("z_move");//行走动画
 
                 Leave_Field();//离开田地，田地的负责人置空
-                Target.target = ObjectKeeper_Singleton.Instance.Rest_Area.transform;
+                Target.target = ObjectKeeper_Singleton.Instance.Rest_Area.transform;//目标为休息室
 
                 break;
 
-            case NPC_status.TouchFish://小动物摸鱼
+            case NPC_status.GoTo_TouchFish://小动物去摸鱼
 
-                if(aiPath.reachedEndOfPath)
+                Move_Right_OR_Left();
+                animator.Play("z_move");
+
+                if (Target.target == null)
                 {
-                    print("摸了");
-                    animator.Play("b_sit");//坐
+                    ShortestPath(ObjectKeeper_Singleton.Instance.TouchFish_Area);
                 }
-                else
+                //若找到了工作地点并前往，但工作地点已经被其他小动物提前占用，则重新寻找工作地点
+                else if (!Target.target.GetComponent<Map_Target>().Is_Empty)
                 {
-                    print("摸的路上");
-                    animator.Play("z_move");//走
+                    Target.target = null;
                 }
                 
-
                 Leave_Field();//离开田地，田地的负责人置空
                 HungryTime_calculation();//计算饥饿时间
-                
-                Target.target = ObjectKeeper_Singleton.Instance.TouchFish_Area.transform;
+                break;
+
+            case NPC_status.TouchFish://摸鱼
+
+                this.transform.rotation = Quaternion.Euler(0, 180, 0);
+
+                animator.Play("b_sit");//坐
+
+                HungryTime_calculation();//计算饥饿时间
+
                 break;
             
+        
             case NPC_status.GoToEat://小动物去吃东西
 
                 Move_Right_OR_Left();
@@ -229,7 +253,7 @@ public class CharaController : MonoBehaviour
                 Target.target = null;
 
                 Leave_Field();//离开田地，田地的负责人置空
-
+                 
                 if (Target.target == null)
                 {
                     ShortestPath(ObjectKeeper_Singleton.Instance.Eat_Area);
@@ -387,7 +411,7 @@ public class CharaController : MonoBehaviour
         }
     }
     /// <summary>
-    /// 寻找最短距离
+    /// 寻找最短距离的目标点
     /// </summary>
     /// <param name="gameObjects">寻路目标组</param>
     public void ShortestPath(GameObject[] gameObjects)
@@ -399,8 +423,7 @@ public class CharaController : MonoBehaviour
             if (Distance > Vector3.Distance(transform.position, gameObjects[i].transform.position)&&is_empty)
             {
                 Distance = Vector3.Distance(transform.position, gameObjects[i].transform.position);
-                int TargetIndex = i;
-                Target.target = gameObjects[TargetIndex].transform;
+                Target.target = gameObjects[i].transform;
             }
         }
     }

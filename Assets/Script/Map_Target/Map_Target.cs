@@ -36,9 +36,6 @@ public class Map_Target:MonoBehaviour
             case "Freight_Target":
                 kind = Map_Target_Kind.Freight_Target;
                 break;
-            case "Rest_Area":
-                kind = Map_Target_Kind.Rest_Area;
-                break;
             case "WareHouse_Area":
                 kind = Map_Target_Kind.WareHouse_Area;
                 break;
@@ -73,6 +70,7 @@ public class Map_Target:MonoBehaviour
             //print(gameObject.name);
             //print(charaController.Target.target);
             #endregion
+            //如果NPC的目标为当前点位，则将该据点的占据数据更新为该NPC
             if (charaController.Target.target== this.transform)
             {
                 npc = collision.gameObject;
@@ -94,9 +92,11 @@ public class Map_Target:MonoBehaviour
         switch (kind)
         {
             case Map_Target_Kind.TouchFish_Area:
-                break;
-
-            case Map_Target_Kind.Rest_Area:
+                if (Is_Empty)
+                {
+                    Is_Empty = false;
+                    charaController.NPC_Status = NPC_status.TouchFish;
+                }
                 break;
 
             case Map_Target_Kind.Farm_Machine:
