@@ -1,0 +1,74 @@
+[
+  {
+    "ID": 1001,
+    "Name": "每年达",
+    "Description": "每年都发达",
+    "Cost": 10,
+    "favorability_Plus_Num": 1,
+    "Sprite_ResPath": "UI/Sprite/Gift/健康套餐"
+  },
+  {
+    "ID": 1002,
+    "Name": "卡布奇诺",
+    "Description": "卡不得奇诺",
+    "Cost": 20,
+    "favorability_Plus_Num": 2,
+    "Sprite_ResPath": "UI/Sprite/Gift/卡布奇诺"
+  },
+  {
+    "ID": 1003,
+    "Name": "咖喱饭",
+    "Description": "咖喱的饭",
+    "Cost": 30,
+    "favorability_Plus_Num": 3,
+    "Sprite_ResPath": "UI/Sprite/Gift/咖喱饭"
+  },
+  {
+    "ID": 1004,
+    "Name": "拿铁",
+    "Description": "拿拿的铁",
+    "Cost": 40,
+    "favorability_Plus_Num": 4,
+    "Sprite_ResPath": "UI/Sprite/Gift/拿铁"
+  },
+  {
+    "ID": 1005,
+    "Name": "有猫可乐",
+    "Description": "有猫的可乐",
+    "Cost": 50,
+    "favorability_Plus_Num": 5,
+    "Sprite_ResPath": "UI/Sprite/Gift/有猫可乐"
+  },
+  {
+    "ID": 1006,
+    "Name": "每年达",
+    "Description": "每年都达",
+    "Cost": 60,
+    "favorability_Plus_Num": 6,
+    "Sprite_ResPath": "UI/Sprite/Gift/每年达"
+  },
+  {
+    "ID": 1007,
+    "Name": "老山美式",
+    "Description": "崂山的美式",
+    "Cost": 70,
+    "favorability_Plus_Num": 7,
+    "Sprite_ResPath": "UI/Sprite/Gift/老山美式"
+  },
+  {
+    "ID": 1008,
+    "Name": "草莓奶昔",
+    "Description": "草莓的奶昔",
+    "Cost": 80,
+    "favorability_Plus_Num": 8,
+    "Sprite_ResPath": "UI/Sprite/Gift/草莓奶昔"
+  },
+  {
+    "ID": 1009,
+    "Name": "鸡排饭",
+    "Description": "鸡鸡的排",
+    "Cost": 90,
+    "favorability_Plus_Num": 9,
+    "Sprite_ResPath": "UI/Sprite/Gift/鸡排饭"
+  }
+]

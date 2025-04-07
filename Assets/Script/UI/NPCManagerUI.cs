@@ -39,11 +39,11 @@ public class NPCManagerUI : UIBase
             {
                 GameObject gameObject = Instantiate(NPCUI_Prefab, NPC_Group.transform);
                 //给每个NPC赋值
-                gameObject.name = npc[i].name;
-                gameObject.GetComponent<Image>().sprite = npc[i].GetComponent<CharaController>().data.sprite;
-                gameObject.transform.Find("NPC_Description_Bar/Name").GetComponent<TextMeshProUGUI>().text = npc[i].GetComponent<CharaController>().data.Name;
-                gameObject.transform.Find("NPC_Description_Bar/personality").GetComponentInChildren<TextMeshProUGUI>().text = npc[i].GetComponent<CharaController>().data.Personality;
-                gameObject.transform.Find("NPC_Description_Bar/hobby").GetComponentInChildren<TextMeshProUGUI>().text = npc[i].GetComponent<CharaController>().data.Hobby;
+                gameObject.name = npc[i].name;//对象名字
+                gameObject.GetComponent<Image>().sprite = ResourceManager.GetInstance().Load<Sprite>(npc[i].GetComponent<CharaController>().data.Sprite_Res); //NPC图片
+                gameObject.transform.Find("NPC_Description_Bar/Name").GetComponent<TextMeshProUGUI>().text = npc[i].GetComponent<CharaController>().data.Name;//UI显示名字
+                gameObject.transform.Find("NPC_Description_Bar/personality").GetComponentInChildren<TextMeshProUGUI>().text = npc[i].GetComponent<CharaController>().data.Personality;//个性
+                gameObject.transform.Find("NPC_Description_Bar/hobby").GetComponentInChildren<TextMeshProUGUI>().text = npc[i].GetComponent<CharaController>().data.Hobby;//爱好
                 gameObject.transform.GetChild(1).GetComponentInChildren<TextMeshProUGUI>().text = npc[i].GetComponent<CharaController>().data.Favorability.ToString();//好感度
             }
         }

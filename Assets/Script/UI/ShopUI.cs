@@ -1,3 +1,4 @@
+using LitJson;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -31,6 +32,13 @@ public class ShopUI : UIBase
     public GameObject Gift_Grade_Two_UI;
     private void Start()
     {
+        //获取数据列表中的GiftJson数据
+        string GiftData = ResourceManager.GetInstance().Load<TextAsset>("JsonDataAsset/Gift_Data").text;
+        //反序列化解析为对应的数据结构
+        GiftData[] Gift_Datas = JsonMapper.ToObject<GiftData[]>(GiftData);
+        //数组转化为列表
+        product_list = new List<GiftData>(Gift_Datas);
+
         InitClick();
     }
     /// <summary>
@@ -85,7 +93,7 @@ public class ShopUI : UIBase
             Gift_Button.GetComponent<Gift>().Data = product_list[i];//给按钮赋值
             Gift data = Gift_Button.GetComponent<Gift>();
             //更改按钮细节
-            Gift_Button.GetComponent<Image>().sprite = data.Data.Sprite;
+            Gift_Button.GetComponent<Image>().sprite = ResourceManager.GetInstance().Load<Sprite>(data.Data.Sprite_ResPath);
             Gift_Button.transform.GetChild(0).GetComponentInChildren<TextMeshProUGUI>().text = data.Data.Name;
             Gift_Button.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = data.Data.Description;
 

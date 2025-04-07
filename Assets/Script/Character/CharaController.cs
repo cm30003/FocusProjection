@@ -5,6 +5,7 @@ using Pathfinding;
 using Unity.VisualScripting;
 using UnityEngine.UI;
 using TMPro;
+using LitJson;
 
 public class CharaController : MonoBehaviour
 {
@@ -25,9 +26,24 @@ public class CharaController : MonoBehaviour
     private AIPath aiPath;//A Star 寻路
     private void Start()
     {
+        //获取数据列表中的NPCJson数据
+        string NPCInfo = ResourceManager.GetInstance().Load<TextAsset>("JsonDataAsset/NPC_Data").text;
+        //反序列化解析为对应的数据结构
+        NPCData[] NPC_Datas = JsonMapper.ToObject<NPCData[]>(NPCInfo);
+        //遍历数据结构，寻找对应名字的小动物
+        for (int i = 0; i < NPC_Datas.Length; i++)
+        {
+            string name = NPC_Datas[i].Name;
+            if (name == this.name)
+            {
+                Template_data = NPC_Datas[i];
+                break;
+            }
+        }
+
         animator = GetComponentInChildren<Animator>();//获取动画状态机
 
-        Template_data = new NPCData(data) ;//生成副本
+
 
         Event_SignIn();//事件注册
 
@@ -70,7 +86,7 @@ public class CharaController : MonoBehaviour
     {
         if (ObjectKeeper_Singleton.Instance.Is_Set&&name==data.Name)
         {
-            NPC_Status = NPC_status.Rest;
+            NPC_Status = NPC_status.Go_To_Rest;
         }
     }
     /// <summary>
@@ -111,7 +127,7 @@ public class CharaController : MonoBehaviour
         string button_Name = info.transform.parent.gameObject.transform.parent.gameObject.transform.parent.gameObject.name;
         if (button_Name == data.Name)
         {
-            NPC_Status = NPC_status.Rest;
+            NPC_Status = NPC_status.Go_To_Rest;
             print("强制休息指令");
         }
     }
@@ -130,7 +146,7 @@ public class CharaController : MonoBehaviour
         //专注时间结束了就不管三七二十一下班
         if (!ObjectKeeper_Singleton.Instance.Is_Set)
         {
-            NPC_Status = NPC_status.Rest;
+            NPC_Status = NPC_status.Go_To_Rest;
         }
 
         Switch_Status();
@@ -203,7 +219,7 @@ public class CharaController : MonoBehaviour
                 }
                 break;
 
-            case NPC_status.Rest://小动物回休息室
+            case NPC_status.Go_To_Rest://小动物回休息室
 
                 Move_Right_OR_Left();
                 
@@ -212,8 +228,12 @@ public class CharaController : MonoBehaviour
                 Leave_Field();//离开田地，田地的负责人置空
                 Target.target = ObjectKeeper_Singleton.Instance.Rest_Area.transform;//目标为休息室
 
-                break;
 
+                break;
+            case NPC_status.Rest://小动物休息
+
+
+                break;
             case NPC_status.GoTo_TouchFish://小动物去摸鱼
 
                 Move_Right_OR_Left();
@@ -324,6 +344,7 @@ public class CharaController : MonoBehaviour
     /// </summary>
     public void Freight_Wait()
     {
+        //获取所有货物
         GameObject[] Freights = ObjectKeeper_Singleton.Instance.Freight_Target;
         //遍历所有等待搬运的货物
         foreach (var gameObject in Freights)
@@ -350,15 +371,12 @@ public class CharaController : MonoBehaviour
         if (data.Hungry_Time <= 0)
         {
             NPC_Status = NPC_status.GoToEat;
-
-            data.Hungry_Time = Template_data.Hungry_Time;//重置饥饿时间
             //重置数据
-            data.Work_Speed = Template_data.Work_Speed;
-            data.MoveSpeed=Template_data.MoveSpeed;
+            Time_Data_Reset();
         }
     }
     /// <summary>
-    /// 重置时间
+    /// 重置时间/工作 吃饭 饥饿等时间
     /// </summary>
     public void Time_Data_Reset()
     {
@@ -398,7 +416,7 @@ public class CharaController : MonoBehaviour
         return null;
     }
     /// <summary>
-    /// 离开田地
+    /// 离开田地,用于置空工作田地
     /// </summary>
     public void Leave_Field()
     {

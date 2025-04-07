@@ -2,7 +2,8 @@ using UnityEngine;
 
 public enum NPC_status
 {
-    Rest,//回休息室休息
+    Go_To_Rest,//回休息室休息
+    Rest,//休息
     GoTo_TouchFish,//摸鱼
     TouchFish,//摸鱼
     GoToWork,//去工作的路上

@@ -55,7 +55,7 @@ public class ObjectKeeper_Singleton:SingletonMono<ObjectKeeper_Singleton>
     /// <param name="Info">礼品信息</param>
     private void Gifted(Button Info)
     {
-        gamerData.Money += Info.GetComponent<Gift>().Data.Money_Cost_reward;
+        gamerData.Money += Info.GetComponent<Gift>().Data.Cost;
         EventCenter.GetInstance().EventTrigger("Info_Update");
     }
 
@@ -107,7 +107,9 @@ public class ObjectKeeper_Singleton:SingletonMono<ObjectKeeper_Singleton>
         //第一次进入游戏时，设置第一次进入游戏时间
         if (gamerData.First_SignIn_Date == null)
         {
+            //设置第一次进入游戏时间
             gamerData.First_SignIn_Date = DateTime.Now.ToString("yyyy年MM月dd号");
+            //保存第一次进入游戏的时间
             JsonManager.Instance.SaveData(gamerData, "GamerData");
         }
         if(gamerData.Items==null)
@@ -117,7 +119,8 @@ public class ObjectKeeper_Singleton:SingletonMono<ObjectKeeper_Singleton>
         }
         for(int i=0;i<NPCs.Length;i++)
         {
-            NPCs[i].GetComponent<CharaController>().data = JsonManager.Instance.LoadData<NPCData>(NPCs[i].name);
+            //加载存储的NPC好感度
+            NPCs[i].GetComponent<CharaController>().data.Favorability = JsonManager.Instance.LoadData<NPCData>(NPCs[i].name).Favorability;
         }
         EventCenter.GetInstance().AddEventListener("SaveGamerData", Save_GamerData);//存储事件
     }
@@ -135,12 +138,18 @@ public class ObjectKeeper_Singleton:SingletonMono<ObjectKeeper_Singleton>
         //存储玩家数据
         JsonManager.Instance.SaveData(gamerData, "GamerData");
     }
-    //private void Update()
-    //{
-    //    print(gamerData.Items);
-    //}
 }
-[System.Serializable]
+
+
+
+
+
+
+
+
+
+
+[Serializable]
 public class Mission_ADay//数据类，统计玩家每天完成的任务及其专注时间
 {
     public int Focus_Time;//专注时间
@@ -149,11 +158,11 @@ public class Mission_ADay//数据类，统计玩家每天完成的任务及其专注时间
     public Dictionary<string,int> ADay_FocusTime_Dic=new Dictionary<string, int>();//该日期的专注时间
     public Dictionary<string, List<string>> ADay_Options_Dic=new Dictionary<string, List<string>>();//该日期下的完成项目
 }
-[System.Serializable]
+[Serializable]
 public class NPCData//数据类，用于存储NPC数据
 {
-    //public Sprite Sprite;
-    public Sprite sprite;
+    [Header("————基本信息————")]
+    public int ID;
     public string Name;//名字
     public string Hobby;//爱好
     public string Personality;//性格
@@ -171,14 +180,15 @@ public class NPCData//数据类，用于存储NPC数据
     public float Eat_Time;//吃饭时间
 
     public float Hungry_Time;//饥饿时间
-
+    [Header("————资源————")]
+    public string Sprite_Res;
     // 拷贝构造函数
     public NPCData(NPCData other)
     {
         if (other == null)
         {
             // 如果传入的参数为 null，则初始化为默认值
-            sprite = null;
+            ID = 0;
             Name = string.Empty;
             Hobby = string.Empty;
             Personality = string.Empty;
@@ -194,7 +204,7 @@ public class NPCData//数据类，用于存储NPC数据
         }
         else
         {
-            sprite = other.sprite;
+            ID = other.ID;
             Name = other.Name;
             Hobby = other.Hobby;
             Personality = other.Personality;
@@ -212,7 +222,7 @@ public class NPCData//数据类，用于存储NPC数据
     // 公共无参构造函数
     public NPCData()
     {
-        sprite = null;
+        ID = 0;
         Name = string.Empty;
         Hobby = string.Empty;
         Personality = string.Empty;
@@ -227,7 +237,7 @@ public class NPCData//数据类，用于存储NPC数据
         Hungry_Time = 0f;
     }
 }
-[System.Serializable]
+[Serializable]
 public class GamerData//玩家数据
 {
     //统计部分
@@ -246,7 +256,7 @@ public class GamerData//玩家数据
     public string PlayerTitle;//玩家称号
     public string PlayerMotto;//玩家座右铭
 }
-[System.Serializable]
+[Serializable]
 public class ItemData
 {
     public string Name;//名字
@@ -256,7 +266,7 @@ public class ItemData
     public int Money_Cost_reward;//购买/售卖价格
 
 }
-[System.Serializable]
+[Serializable]
 public class PlantData: ItemData
 {
     [Header("————图像————")]
@@ -288,7 +298,7 @@ public class PlantData: ItemData
     public float Harvest_Time;//收获时间
 
     [Tooltip("收获数量")]
-    public int Num;//   收获数量
+    public int Num;//收获数量
     // 拷贝构造函数
     public PlantData(PlantData other)
     {
@@ -324,14 +334,19 @@ public class PlantData: ItemData
 
             Num = other.Num;
         }
-        
     }
 }
-[System.Serializable]
-public class GiftData: ItemData
+[Serializable]
+public class GiftData
 {
+    public int ID;
+    public string Name;//名字
+    public string Description;//描述
+    public int Cost;//购买/售卖价格
     [Tooltip("好感度加成")]
     public int favorability_Plus_Num;//好感度加成
+    [Tooltip("资源路径")]
+    public string Sprite_ResPath;
 }
 
 

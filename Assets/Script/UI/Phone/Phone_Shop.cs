@@ -1,3 +1,4 @@
+using LitJson;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -17,6 +18,13 @@ public class Phone_Shop : NewUIBase
     public GameObject Gift_UI;
     private void Start()
     {
+        //获取数据列表中的GiftJson数据
+        string GiftData = ResourceManager.GetInstance().Load<TextAsset>("JsonDataAsset/Gift_Data").text;
+        //反序列化解析为对应的数据结构
+        GiftData[] Gift_Datas = JsonMapper.ToObject<GiftData[]>(GiftData);
+        //数组转化为列表
+        product_list = new List<GiftData>(Gift_Datas);
+
         GiftItem_Creat();
 
         //这个是用于送礼物事件后实时更新好感度显示的，虽然确实是有点不美观但就先这样吧
@@ -80,9 +88,9 @@ public class Phone_Shop : NewUIBase
             Gift_Button.GetComponent<Gift>().Data = product_list[i];//给按钮赋值
             Gift data = Gift_Button.GetComponent<Gift>();
             //更改按钮细节
-            Gift_Button.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = data.Data.Description;
-            Gift_Button.transform.GetChild(1).GetComponent<Image>().sprite = data.Data.Sprite;
-            Gift_Button.transform.GetChild(2).GetComponentInChildren<TextMeshProUGUI>().text = data.Data.Name;
+            Gift_Button.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = data.Data.Description;//Gift的描述
+            Gift_Button.transform.GetChild(1).GetComponent<Image>().sprite = ResourceManager.GetInstance().Load<Sprite>(data.Data.Sprite_ResPath);//Gift的Sprite
+            Gift_Button.transform.GetChild(2).GetComponentInChildren<TextMeshProUGUI>().text = data.Data.Name;//Gift的名称
             //为二级界面注册事件
             GameObject Gift_Grade_Two_UI= Gift_Button.transform.GetChild(3).gameObject;
             Gift GiftData = Gift_Button.GetComponent<Gift>();
@@ -128,7 +136,7 @@ public class Phone_Shop : NewUIBase
 
             giftdata.Data = data.Data;
             button.gameObject.name = npcs[i % npcs.Length].name;//将按钮的名字全部转为现有的NPC的名字
-            button.image.sprite = npcs[i % npcs.Length].GetComponent<CharaController>().Template_data.sprite;//按钮Image全部转为NPC的Sprite
+            button.image.sprite = ResourceManager.GetInstance().Load<Sprite>(npcs[i % npcs.Length].GetComponent<CharaController>().Template_data.Sprite_Res);//按钮Image全部转为NPC的Sprite
             favorability.text = npcs[i % npcs.Length].GetComponent<CharaController>().data.Favorability.ToString();//更新送礼的NPC的好感度
 
             //注册送礼事件

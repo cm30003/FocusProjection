@@ -9,7 +9,7 @@ using UnityEngine.Events;
 public class ResourceManager : BaseManager<ResourceManager>
 {
     /// <summary>
-    /// 同步加载资源
+    /// 同步加载资源（读取Json文件时，其类型应该为TextAsset类型）
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="name"></param>
@@ -24,7 +24,7 @@ public class ResourceManager : BaseManager<ResourceManager>
             return res;
     }
     /// <summary>
-    /// 异步加载资源
+    /// 异步加载资源（读取Json文件时，其类型应该为TextAsset类型）
     /// </summary>
     /// <typeparam name="T">类</typeparam>
     /// <param name="name">名字</param>

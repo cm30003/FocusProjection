@@ -50,13 +50,13 @@ public class Phone_NPCManager : NewUIBase
 
             child.AddComponent<NPCData_Data>();
             child.GetComponent<NPCData_Data>().data= npc[i].GetComponent<CharaController>().Template_data;
-            image.sprite = child.GetComponent<NPCData_Data>().data.sprite;
+            image.sprite = ResourceManager.GetInstance().Load<Sprite>(child.GetComponent<NPCData_Data>().data.Sprite_Res) ;
             image.SetNativeSize();
         }
     }
     public void UpdateInfo(Button button)
     {
-        Info_Group.transform.GetChild(0).GetComponent<Image>().sprite= button.GetComponentInChildren<NPCData_Data>().data.sprite;
+        Info_Group.transform.GetChild(0).GetComponent<Image>().sprite=ResourceManager.GetInstance().Load<Sprite>(button.GetComponentInChildren<NPCData_Data>().data.Sprite_Res) ;
         Info_Group.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text= button.GetComponentInChildren<NPCData_Data>().data.Name;
         Info_Group.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text= button.GetComponentInChildren<NPCData_Data>().data.Description;
 

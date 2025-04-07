@@ -3079,22 +3079,7 @@ MonoBehaviour:
     Cost: 0
     Buff: 0
     ResPath: 
-    Sprite: {fileID: 0}
-  Food_List:
-  - ID: 1001
-    Name: "\u5065\u5EB7\u5957\u9910"
-    Description: "\u5065\u5EB7\u7684\u5957\u9910"
-    Cost: 10
-    Buff: 1
-    ResPath: 
-    Sprite: {fileID: 21300000, guid: 9ff6e38bd8b4f2c44949613f23060ea2, type: 3}
-  - ID: 1002
-    Name: "\u5361\u5E03\u5947\u8BFA"
-    Description: "\u5361\u5E03\u7684\u5947\u8BFA"
-    Cost: 20
-    Buff: 2
-    ResPath: 
-    Sprite: {fileID: 21300000, guid: 5d7ba9da50d178248b3442abfe5e27dc, type: 3}
+  Food_List: []
   Buttons_Group: {fileID: 1909297469}
   Quit_Button: {fileID: 1771803633}
   Item_button: {fileID: 517418957961238382, guid: f4f60cf3074c5bf41b120c652fd41754, type: 3}
@@ -3278,8 +3263,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: -0.05304998, y: -0.20610005, z: 0}
-    m_Extent: {x: 1.8884499, y: 2.1598, z: 0}
+    m_Center: {x: -0.05344999, y: -0.20670003, z: 0}
+    m_Extent: {x: 1.88765, y: 2.1599, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -3434,7 +3419,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: 0.36190772}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -3445,7 +3430,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1, y: 0.58541465}
   m_EdgeRadius: 0
 --- !u!212 &240020036
 SpriteRenderer:
@@ -11414,8 +11399,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: -0.06920004, y: 0.049650073, z: 0}
-    m_Extent: {x: 1.6179, y: 2.39845, z: 0}
+    m_Center: {x: -0.06889999, y: 0.049999952, z: 0}
+    m_Extent: {x: 1.6179, y: 2.3991, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -11698,8 +11683,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: 3.82025, y: -0.28420007, z: 0}
-    m_Extent: {x: 3.45325, y: 4.0158, z: 0}
+    m_Center: {x: 3.8197, y: -0.2840501, z: 0}
+    m_Extent: {x: 3.4522002, y: 4.01595, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -12730,8 +12715,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: -0.78095, y: -0.033849955, z: 0}
-    m_Extent: {x: 2.55315, y: 2.94395, z: 0}
+    m_Center: {x: -0.78175, y: -0.034099936, z: 0}
+    m_Extent: {x: 2.55345, y: 2.9453, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -16736,7 +16721,7 @@ MonoBehaviour:
     Harvest_Time: 0
     Num: 0
   Template_data:
-    sprite: {fileID: 21300000, guid: 06d35c33deba3144592c264a5fee9c55, type: 3}
+    ID: 0
     Name: 
     Hobby: 
     Personality: 
@@ -16749,8 +16734,9 @@ MonoBehaviour:
     Work_Time: 0
     Eat_Time: 0
     Hungry_Time: 0
+    Sprite_Res: 
   data:
-    sprite: {fileID: 21300000, guid: 06d35c33deba3144592c264a5fee9c55, type: 3}
+    ID: 0
     Name: "\u745E\u8D1D\u7279"
     Hobby: "\u5047\u88C5\u81EA\u5DF1\u662F\u4E95\u76D6"
     Personality: "\u4E56\u5F20"
@@ -16763,6 +16749,7 @@ MonoBehaviour:
     Work_Time: 40
     Eat_Time: 10
     Hungry_Time: 100
+    Sprite_Res: 
   animator: {fileID: 0}
 --- !u!50 &1177463141
 Rigidbody2D:
@@ -17476,7 +17463,6 @@ MonoBehaviour:
     Cost: 0
     Buff: 0
     ResPath: 
-    Sprite: {fileID: 0}
   WareHouse: {fileID: 0}
   Farm_Group: {fileID: 0}
   Freight_Target: []
@@ -23135,7 +23121,7 @@ MonoBehaviour:
     Harvest_Time: 0
     Num: 0
   Template_data:
-    sprite: {fileID: 21300000, guid: 564fd19bda493634f86fdba49a613387, type: 3}
+    ID: 0
     Name: 
     Hobby: 
     Personality: 
@@ -23148,8 +23134,9 @@ MonoBehaviour:
     Work_Time: 0
     Eat_Time: 0
     Hungry_Time: 0
+    Sprite_Res: 
   data:
-    sprite: {fileID: 21300000, guid: 564fd19bda493634f86fdba49a613387, type: 3}
+    ID: 0
     Name: "\u7F8A\u7AE5\u6728"
     Hobby: "\u98DE\u8D77\u6765"
     Personality: "\u6C89\u7A33"
@@ -23162,6 +23149,7 @@ MonoBehaviour:
     Work_Time: 40
     Eat_Time: 10
     Hungry_Time: 100
+    Sprite_Res: 
   animator: {fileID: 0}
 --- !u!58 &1633545490
 CircleCollider2D:
@@ -23291,7 +23279,7 @@ Transform:
   m_GameObject: {fileID: 1633545488}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.6500001, y: -4.92, z: 0}
+  m_LocalPosition: {x: -0.15, y: -5.34, z: 0}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -26976,26 +26964,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   product_list:
-  - Name: "\u6BCF\u5E74\u8FBE"
-    Sprite: {fileID: 21300000, guid: a2fa2a7d8ff1084499a4fa0c30f9f51f, type: 3}
+  - ID: 0
+    Name: "\u6BCF\u5E74\u8FBE"
     Description: "\u6BCF\u5E74\u90FD\u53D1\u8FBE"
-    Money_Cost_reward: -10
+    Cost: 0
     favorability_Plus_Num: 1
-  - Name: "\u8001\u9655\u7F8E\u98DF"
-    Sprite: {fileID: 21300000, guid: 8599c99f7d9bc9344b9ddb1a05345dd1, type: 3}
+    Sprite_ResPath: 
+  - ID: 0
+    Name: "\u8001\u9655\u7F8E\u98DF"
     Description: "\u5D02\u5C71\u7F8E\u5F0F"
-    Money_Cost_reward: -20
+    Cost: 0
     favorability_Plus_Num: 2
-  - Name: "\u8349\u8393\u5976\u6614"
-    Sprite: {fileID: 21300000, guid: 9aec595f6d047b24695938d197daf3b8, type: 3}
+    Sprite_ResPath: 
+  - ID: 0
+    Name: "\u8349\u8393\u5976\u6614"
     Description: "\u8349\u8393\u7684\u5976\u6614"
-    Money_Cost_reward: -30
+    Cost: 0
     favorability_Plus_Num: 3
-  - Name: "\u9E21\u6392\u996D"
-    Sprite: {fileID: 21300000, guid: b7e9fe3394d82e34ca33793c0233356b, type: 3}
+    Sprite_ResPath: 
+  - ID: 0
+    Name: "\u9E21\u6392\u996D"
     Description: "\u9E21\u6392\u7684\u996D"
-    Money_Cost_reward: -40
+    Cost: 0
     favorability_Plus_Num: 4
+    Sprite_ResPath: 
   Gift_Buttons_Prefab:
   - {fileID: 2000428432012216613, guid: faaae59ef51f09448be6955b49bacaee, type: 3}
   - {fileID: 2000428432012216613, guid: 748aca699c266324c8dc169fc90d0ed3, type: 3}
@@ -31221,11 +31213,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Data:
+    ID: 0
     Name: 
-    Sprite: {fileID: 0}
     Description: 
-    Money_Cost_reward: 0
+    Cost: 0
     favorability_Plus_Num: 0
+    Sprite_ResPath: 
 --- !u!114 &5158365489979614166
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31501,11 +31494,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Data:
+    ID: 0
     Name: 
-    Sprite: {fileID: 0}
     Description: 
-    Money_Cost_reward: 0
+    Cost: 0
     favorability_Plus_Num: 0
+    Sprite_ResPath: 
 --- !u!114 &5695345443411681096
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31726,11 +31720,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Data:
+    ID: 0
     Name: 
-    Sprite: {fileID: 0}
     Description: 
-    Money_Cost_reward: 0
+    Cost: 0
     favorability_Plus_Num: 0
+    Sprite_ResPath: 
 --- !u!224 &7241287079065668853
 RectTransform:
   m_ObjectHideFlags: 0
@@ -31960,11 +31955,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Data:
+    ID: 0
     Name: 
-    Sprite: {fileID: 0}
     Description: 
-    Money_Cost_reward: 0
+    Cost: 0
     favorability_Plus_Num: 0
+    Sprite_ResPath: 
 --- !u!114 &7782703978259412127
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using LitJson;
 
 public class DiningHall : UIBase
 {
@@ -21,9 +22,14 @@ public class DiningHall : UIBase
 
     private void Start()
     {
-        
-        InitClick();
+        //读取Json数据
+        string FoodInfo = ResourceManager.GetInstance().Load<TextAsset>("JsonDataAsset/FoodItem_Data").text;
+        //反序列化解析为对应的数据结构
+        FoodItem_Data[] foodItem_Datas = JsonMapper.ToObject<FoodItem_Data[]>(FoodInfo);
+        //依托得到的数组生成列表
+        Food_List = new List<FoodItem_Data>(foodItem_Datas);
 
+        InitClick();
     }
     private void InitClick()
     {
@@ -41,7 +47,7 @@ public class DiningHall : UIBase
             Button button = Instantiate(Item_button, Buttons_Group).GetComponent<Button>();
             Button Buy_Button = button.transform.GetChild(0).GetComponent<Button>();
 
-            button.transform.GetChild(1).GetComponent<Image>().sprite = Food_List[i].Sprite;
+            button.transform.GetChild(1).GetComponent<Image>().sprite = ResourceManager.GetInstance().Load<Sprite>(Food_List[i].ResPath);
             button.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = Food_List[i].Name;
             button.GetComponent<Item_Food>().Data = Food_List[i];
             button.onClick.AddListener(() => Click(button));
@@ -81,6 +87,7 @@ public class DiningHall : UIBase
 
         ObjectKeeper_Singleton.Instance.foodData = Current_Food;
         ObjectKeeper_Singleton.Instance.gamerData.Money+=Current_Food.Cost;
+        //购买后触发信息更新事件
         EventCenter.GetInstance().EventTrigger("Info_Update");
     }
     /// <summary>

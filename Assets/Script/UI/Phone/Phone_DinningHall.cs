@@ -1,3 +1,4 @@
+using LitJson;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -9,7 +10,6 @@ public class Phone_DinningHall : NewUIBase
     [Header("————食物————")]
     public FoodItem_Data Current_Food;
 
-    public FoodData foodData;
     public List<FoodItem_Data> Food_List;//要读表的数据列表
 
     public Transform Buttons_Group;//按钮生成的位置
@@ -19,7 +19,10 @@ public class Phone_DinningHall : NewUIBase
     public Sprite Stat_Sprite;
     private void Start()
     {
-        //Food_List=foodData.Food_List;
+        string FoodInfo = ResourceManager.GetInstance().Load<TextAsset>("JsonDataAsset/FoodItem_Data").text;
+        //反序列化解析为对应的数据结构
+        FoodItem_Data[] foodItem_Datas = JsonMapper.ToObject<FoodItem_Data[]>(FoodInfo);
+        Food_List = new List<FoodItem_Data>(foodItem_Datas);
         Food_SignIn();
     }
 
@@ -45,7 +48,7 @@ public class Phone_DinningHall : NewUIBase
             Button Buy_Button = button.transform.GetChild(3).GetComponent<Button>();
             //修改按钮细节
             button.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = Food_List[i].Description;
-            button.transform.GetChild(1).GetComponent<Image>().sprite = Food_List[i].Sprite;
+            button.transform.GetChild(1).GetComponent<Image>().sprite = ResourceManager.GetInstance().Load<Sprite>(Food_List[i].ResPath);
             button.transform.GetChild(2).GetComponentInChildren<TextMeshProUGUI>().text = Food_List[i].Name;
             //赋值
             button.GetComponent<Item_Food>().Data = Food_List[i];
