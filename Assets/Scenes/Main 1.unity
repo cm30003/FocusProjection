@@ -3263,8 +3263,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: -0.05344999, y: -0.20670003, z: 0}
-    m_Extent: {x: 1.88765, y: 2.1599, z: 0}
+    m_Center: {x: -0.05334997, y: -0.20595002, z: 0}
+    m_Extent: {x: 1.88755, y: 2.16045, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -6480,7 +6480,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: -0.082474455}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -6491,7 +6491,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1, y: 0.83505106}
   m_EdgeRadius: 0
 --- !u!212 &456950633
 SpriteRenderer:
@@ -6553,13 +6553,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 456950631}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: 0.2856641, w: 0.95832986}
+  m_LocalRotation: {x: -0, y: -0, z: 0.26821116, w: 0.9633602}
   m_LocalPosition: {x: -0.4406, y: -7.967, z: 0}
   m_LocalScale: {x: 5.724571, y: 3.0224495, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 33.197}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 31.116}
 --- !u!1 &457375765
 GameObject:
   m_ObjectHideFlags: 0
@@ -11399,8 +11399,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: -0.06889999, y: 0.049999952, z: 0}
-    m_Extent: {x: 1.6179, y: 2.3991, z: 0}
+    m_Center: {x: -0.068399966, y: 0.04854989, z: 0}
+    m_Extent: {x: 1.6187999, y: 2.39905, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -11683,8 +11683,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: 3.8197, y: -0.2840501, z: 0}
-    m_Extent: {x: 3.4522002, y: 4.01595, z: 0}
+    m_Center: {x: 3.8202999, y: -0.28380013, z: 0}
+    m_Extent: {x: 3.4535, y: 4.0162, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -12715,8 +12715,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: -0.78175, y: -0.034099936, z: 0}
-    m_Extent: {x: 2.55345, y: 2.9453, z: 0}
+    m_Center: {x: -0.78175, y: -0.033750057, z: 0}
+    m_Extent: {x: 2.55235, y: 2.94575, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -16699,9 +16699,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d0884758937c3f45b4d94c828374880, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  RestWalk_InRest_RangeY: 0.5
+  RestWalk_InRest_RangeX: 3
+  RestIde_Time: 5
+  CurrentRestIde_Time: 0
   Distance: 0
   Target: {fileID: 0}
-  NPC_Status: 1
+  NPC_Status: 0
   Work_Field: {fileID: 0}
   freight:
     Name: 
@@ -16750,7 +16754,6 @@ MonoBehaviour:
     Eat_Time: 10
     Hungry_Time: 100
     Sprite_Res: 
-  animator: {fileID: 0}
 --- !u!50 &1177463141
 Rigidbody2D:
   serializedVersion: 4
@@ -17546,7 +17549,7 @@ SpriteRenderer:
   m_SortingLayer: 3
   m_SortingOrder: 1
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -17565,7 +17568,7 @@ Transform:
   m_GameObject: {fileID: 1215237714}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.76, y: -5.71, z: 0}
+  m_LocalPosition: {x: -1.91, y: -6.03, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -20059,7 +20062,7 @@ Transform:
   m_GameObject: {fileID: 1427071416}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2.19, y: -5.16, z: 0}
+  m_LocalPosition: {x: -2.19, y: -5.24, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -20928,7 +20931,7 @@ Transform:
   m_GameObject: {fileID: 1474333527}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.59, y: -4.87, z: 0}
+  m_LocalPosition: {x: -2.019, y: -5.43, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -23099,9 +23102,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d0884758937c3f45b4d94c828374880, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  RestWalk_InRest_RangeY: 1
+  RestWalk_InRest_RangeX: 3
+  RestIde_Time: 5
+  CurrentRestIde_Time: 0
   Distance: 0
   Target: {fileID: 0}
-  NPC_Status: 1
+  NPC_Status: 0
   Work_Field: {fileID: 0}
   freight:
     Name: 
@@ -23150,7 +23157,6 @@ MonoBehaviour:
     Eat_Time: 10
     Hungry_Time: 100
     Sprite_Res: 
-  animator: {fileID: 0}
 --- !u!58 &1633545490
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -23216,7 +23222,7 @@ MonoBehaviour:
   radius: 2
   height: 2
   canMove: 1
-  maxSpeed: 1
+  maxSpeed: 1.5
   gravity: {x: 0, y: 0, z: 0}
   groundMask:
     serializedVersion: 2

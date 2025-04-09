@@ -47,7 +47,7 @@ public class Phone_NPCManager : NewUIBase
             //设置waiting内容
             Button button= waiting.AddComponent<Button>();
             button.onClick.AddListener(() => UpdateInfo(button));
-
+            //为每个waiting添加NPCData_Data组件/添加其NPC数据
             child.AddComponent<NPCData_Data>();
             child.GetComponent<NPCData_Data>().data= npc[i].GetComponent<CharaController>().Template_data;
             image.sprite = ResourceManager.GetInstance().Load<Sprite>(child.GetComponent<NPCData_Data>().data.Sprite_Res) ;

@@ -6,9 +6,17 @@ using Unity.VisualScripting;
 using UnityEngine.UI;
 using TMPro;
 using LitJson;
+using UnityEngine.AI;
 
 public class CharaController : MonoBehaviour
 {
+    [Header("————需要交互的动态对象————")]
+    public float RestWalk_InRest_RangeY;//漫游范围
+    public float RestWalk_InRest_RangeX;//漫游范围
+
+    public float RestIde_Time;//完成一个漫游后的待机时间
+    public float CurrentRestIde_Time;//完成一个漫游后的待机时间
+
     public float Distance;//人物与目标之间的距离
 
     public AIDestinationSetter Target;//目标地点
@@ -22,7 +30,7 @@ public class CharaController : MonoBehaviour
     public NPCData Template_data;
     public NPCData data;
     [Header("————组件————")]
-    public Animator animator;//动画状态机
+    private Animator animator;//动画状态机
     private AIPath aiPath;//A Star 寻路
     private void Start()
     {
@@ -42,8 +50,6 @@ public class CharaController : MonoBehaviour
         }
 
         animator = GetComponentInChildren<Animator>();//获取动画状态机
-
-
 
         Event_SignIn();//事件注册
 
@@ -143,8 +149,8 @@ public class CharaController : MonoBehaviour
     #endregion
     private void FixedUpdate()
     {
-        //专注时间结束了就不管三七二十一下班
-        if (!ObjectKeeper_Singleton.Instance.Is_Set)
+        //专注时间结束了就不管三七二十一下班,除非已经在休息室休息了
+        if (!ObjectKeeper_Singleton.Instance.Is_Set&&NPC_Status!=NPC_status.Rest)
         {
             NPC_Status = NPC_status.Go_To_Rest;
         }
@@ -227,13 +233,53 @@ public class CharaController : MonoBehaviour
 
                 Leave_Field();//离开田地，田地的负责人置空
                 Target.target = ObjectKeeper_Singleton.Instance.Rest_Area.transform;//目标为休息室
-
+                //当小动物抵达休息室时，进入休息状态
+                if(aiPath.reachedEndOfPath)
+                {
+                    NPC_Status = NPC_status.Rest;
+                }
 
                 break;
+
+
             case NPC_status.Rest://小动物休息
+                                 
+                if (aiPath.reachedEndOfPath)
+                {
+                    //在散步目标上的等待时间
+                    CurrentRestIde_Time -= Time.deltaTime;
 
+                    animator.Play("z_idle");
+
+                    if (CurrentRestIde_Time <= 0)
+                    {
+                        float randomX = Random.Range(-RestWalk_InRest_RangeX, RestWalk_InRest_RangeX);//随机X
+                        float randomY = Random.Range(-RestWalk_InRest_RangeY, RestWalk_InRest_RangeY);//随机Y
+
+                        float RestArea_X = ObjectKeeper_Singleton.Instance.Rest_Area.transform.position.x;//休息区域x
+                        float RestArea_Y = ObjectKeeper_Singleton.Instance.Rest_Area.transform.position.y;//休息区域Y
+
+                        Vector2 stroll = new Vector2(RestArea_X + randomX, RestArea_Y + randomY);
+
+                        GameObject storll_target = new GameObject();
+                        storll_target.transform.position = stroll;
+
+                        Target.target = storll_target.transform;
+
+                        CurrentRestIde_Time = RestIde_Time;
+                    }
+                }
+                else
+                {
+                    animator.Play("z_move");//行走动画
+
+                    Move_Right_OR_Left();
+                }
+                
 
                 break;
+
+
             case NPC_status.GoTo_TouchFish://小动物去摸鱼
 
                 Move_Right_OR_Left();
@@ -265,7 +311,7 @@ public class CharaController : MonoBehaviour
             
         
             case NPC_status.GoToEat://小动物去吃东西
-
+                //判断左右
                 Move_Right_OR_Left();
 
                 animator.Play("z_move");//行走动画
@@ -287,7 +333,7 @@ public class CharaController : MonoBehaviour
             case NPC_status.Eat://小动物吃东西
 
                 animator.Play("b_sit");//播放 背对 坐姿动画
-
+                //重置田地状态
                 Leave_Field();
                 //开始吃饭倒计时
                 GameManager.GetInstance().FixedUpdate_Timer(ref data.Eat_Time,1f);
@@ -301,7 +347,7 @@ public class CharaController : MonoBehaviour
                     ObjectKeeper_Singleton.Instance.gamerData.Money += ObjectKeeper_Singleton.Instance.foodData.Cost;
                     //更新数值显示
                     EventCenter.GetInstance().EventTrigger("Info_Update");
-
+                    //更新NPC状态
                     NPC_Status = NPC_status.GoToWork;
                     //重置所有时间
                     Time_Data_Reset();
