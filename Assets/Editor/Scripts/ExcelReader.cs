@@ -45,6 +45,35 @@ public class ExcelReader : Editor
         favorability_Plus_Num,//好感度加值
         Sprite_ResPath,//资源路径
     }
+    private enum Cloth_ExcelTitleEnum
+    {
+        ID,//ID
+        Name,//名字
+        Description,//描述
+        Cost,//价格
+        Sprite_ResPath,//资源路径
+    }
+    private enum Plant_ExcelTitleEnum
+    {
+        ID,
+        Name,
+        Description,
+        Cost,
+        Sell_Price,//出售价格
+        Germinate_Time,//发芽时间
+        Grown_Time,//成长时间
+        Mature_Time,//成熟时间
+        Plant_Time,//种植时间
+        Water_Time,//浇水时间
+        fertilize_Time,//施肥时间
+        BugControl_Time,//虫子控制时间
+        Harvest_Time,//收获时间
+        Harvest_Num,//数量
+        Germainate_SpriteResPath,//发芽图片资源路径
+        Grown_SpriteResPath,//生长图片资源路径
+        Mature_SpriteResPath,//资源路径
+    }
+
     [MenuItem("Tools/CreatAsset_From_Excel")]
     static void CreateAssets_Form_Excel()
     {
@@ -58,11 +87,15 @@ public class ExcelReader : Editor
             ExcelWorksheet workSheet_NPCData = excel.Workbook.Worksheets[1];
             ExcelWorksheet workSheet_Food = excel.Workbook.Worksheets[2];
             ExcelWorksheet workSheet_Gift= excel.Workbook.Worksheets[3];
+            ExcelWorksheet workSheet_Cloth = excel.Workbook.Worksheets[4];
+            ExcelWorksheet workSheet_Plant = excel.Workbook.Worksheets[5];
+            //Debug.Log(excel.Workbook.Worksheets[5].Cells[4, 1].Text);
 
             NPC_DataJson_Create(workSheet_NPCData);
             FoodDataJson_Create(workSheet_Food);
             Gift_DataJson_Create(workSheet_Gift);
-
+            Cloth_DataJson_Create(workSheet_Cloth);
+            Plant_DataJson_Create(workSheet_Plant);
         }
     }
     /// <summary>
@@ -142,7 +175,10 @@ public class ExcelReader : Editor
 
         Debug.Log("生成JsonData于：" + savePath);
     }
-
+    /// <summary>
+    /// 创建商店礼物数据Gift_Data.json文件
+    /// </summary>
+    /// <param name="worksheet"></param>
     private static void Gift_DataJson_Create(ExcelWorksheet worksheet)
     {
         int StartRow = 4, StartCol = 1;//起始行列
@@ -153,7 +189,6 @@ public class ExcelReader : Editor
         {
             GiftData giftData = new GiftData();
 
-            Debug.Log(worksheet.Cells[i, StartCol].Text);
             giftData.ID = int.Parse(worksheet.Cells[i, StartCol].Text);
             giftData.Name = worksheet.Cells[i, StartCol + (int)Gift_ExcelTitleEnum.Name].Text;
             giftData.Description = worksheet.Cells[i, StartCol + (int)Gift_ExcelTitleEnum.Description].Text;
@@ -165,6 +200,94 @@ public class ExcelReader : Editor
         }
         //将可序列化数据转为Json数据并保存到目标路径
         string savePath = Path.Combine(Application.dataPath, "Resources/JsonDataAsset/Gift_Data.json");
+        //检测路径是否存在
+        if (!Directory.Exists(Path.GetDirectoryName(savePath)))
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(savePath));
+        }
+        File.WriteAllText(savePath, JsonConvert.SerializeObject(list, Formatting.Indented));
+
+        Debug.Log("生成JsonData于：" + savePath);
+    }
+    /// <summary>
+    /// 创建商城服装数据Cloth_Data.json文件
+    /// </summary>
+    /// <param name="worksheet"></param>
+    private static void Cloth_DataJson_Create(ExcelWorksheet worksheet)
+    {
+        int StartRow = 4, StartCol = 1;//起始行列
+
+        List<ClothItem_Data> list = new List<ClothItem_Data>();
+
+        //将读取到的Excel数据填充到相应的可序列化字段中
+        for (int i = StartRow; i < worksheet.Dimension.Rows; i++)
+        {
+            //Debug.Log(worksheet.Cells[i, StartCol + (int)Cloth_ExcelTitleEnum.Cost].Text);
+
+            ClothItem_Data ClothData = new ClothItem_Data();
+
+            ClothData.ID = int.Parse(worksheet.Cells[i, StartCol].Text);
+            ClothData.Name = worksheet.Cells[i, StartCol + (int)Cloth_ExcelTitleEnum.Name].Text;
+            ClothData.Description = worksheet.Cells[i, StartCol + (int)Cloth_ExcelTitleEnum.Description].Text;
+            ClothData.Cost = int.Parse(worksheet.Cells[i, StartCol + (int)Cloth_ExcelTitleEnum.Cost].Text);
+            
+            ClothData.ResPath = worksheet.Cells[i, StartCol + (int)Cloth_ExcelTitleEnum.Sprite_ResPath].Text;
+
+            list.Add(ClothData);
+
+            //Debug.Log(i);
+        }
+        //将可序列化数据转为Json数据并保存到目标路径
+        string savePath = Path.Combine(Application.dataPath, "Resources/JsonDataAsset/Cloth_Data.json");
+        //检测路径是否存在
+        if (!Directory.Exists(Path.GetDirectoryName(savePath)))
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(savePath));
+        }
+        File.WriteAllText(savePath, JsonConvert.SerializeObject(list, Formatting.Indented));
+
+        Debug.Log("生成JsonData于：" + savePath);
+    }
+    /// <summary>
+    /// 创建植物数据Plant_Data.json文件
+    /// </summary>
+    /// <param name="worksheet"></param>
+    private static void Plant_DataJson_Create(ExcelWorksheet worksheet)
+    {
+        int StartRow = 4, StartCol = 1;//起始行列
+
+        List<PlantItem_Data> list = new List<PlantItem_Data>();
+
+        //将读取到的Excel数据填充到相应的可序列化字段中
+        for (int i = StartRow; i < worksheet.Dimension.Rows-9; i++)
+        {
+            PlantItem_Data plantData = new PlantItem_Data();
+            
+            Debug.Log(worksheet.Cells[i, StartCol + (int)Plant_ExcelTitleEnum.Name].Text);
+            plantData.ID = int.Parse(worksheet.Cells[i, StartCol].Text);
+            plantData.Name = worksheet.Cells[i, StartCol + (int)Plant_ExcelTitleEnum.Name].Text;
+            plantData.Description = worksheet.Cells[i, StartCol + (int)Plant_ExcelTitleEnum.Description].Text;
+            plantData.Cost = int.Parse(worksheet.Cells[i, StartCol + (int)Plant_ExcelTitleEnum.Cost].Text);
+            plantData.Sell_Price = int.Parse(worksheet.Cells[i, StartCol + (int)Plant_ExcelTitleEnum.Sell_Price].Text);
+            plantData.Germinate_Time = float.Parse(worksheet.Cells[i, StartCol + (int)Plant_ExcelTitleEnum.Germinate_Time].Text);
+            plantData.Grown_Time = float.Parse(worksheet.Cells[i, StartCol + (int)Plant_ExcelTitleEnum.Grown_Time].Text);
+            plantData.Mature_Time = float.Parse(worksheet.Cells[i, StartCol + (int)Plant_ExcelTitleEnum.Mature_Time].Text);
+            plantData.Plant_Time = float.Parse(worksheet.Cells[i, StartCol + (int)Plant_ExcelTitleEnum.Plant_Time].Text);
+            plantData.Water_Time = float.Parse(worksheet.Cells[i, StartCol + (int)Plant_ExcelTitleEnum.Water_Time].Text);
+            plantData.fertilize_Time = float.Parse(worksheet.Cells[i, StartCol + (int)Plant_ExcelTitleEnum.fertilize_Time].Text);
+            plantData.BugControl_Time = float.Parse(worksheet.Cells[i, StartCol + (int)Plant_ExcelTitleEnum.BugControl_Time].Text);
+            plantData.Harvest_Time = float.Parse(worksheet.Cells[i, StartCol + (int)Plant_ExcelTitleEnum.Harvest_Time].Text);
+            plantData.Harvest_Num = int.Parse(worksheet.Cells[i, StartCol + (int)Plant_ExcelTitleEnum.Harvest_Num].Text);
+            plantData.Germinate_SpriteResPath = worksheet.Cells[i, StartCol + (int)Plant_ExcelTitleEnum.Germainate_SpriteResPath].Text;
+            plantData.Grown_SpriteResPath = worksheet.Cells[i, StartCol + (int)Plant_ExcelTitleEnum.Grown_SpriteResPath].Text;
+            plantData.Mature_SpriteResPath = worksheet.Cells[i, StartCol + (int)Plant_ExcelTitleEnum.Mature_SpriteResPath].Text;
+
+            list.Add(plantData);
+
+            Debug.Log(i);
+        }
+        //将可序列化数据转为Json数据并保存到目标路径
+        string savePath = Path.Combine(Application.dataPath, "Resources/JsonDataAsset/Plant_Data.json");
         //检测路径是否存在
         if (!Directory.Exists(Path.GetDirectoryName(savePath)))
         {

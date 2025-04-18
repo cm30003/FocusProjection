@@ -8,7 +8,9 @@ using UnityEngine.UI;
 public class Phone_Shop : NewUIBase
 {
     [Header("————表————")]
-    public List<GiftData> product_list;
+    public List<GiftData> Gift_list;
+    public List<ClothItem_Data>Cloth_list;
+
     public List<Button> Gift_Buttons_Prefab;
     [Header("————用于更换的图片素材————")]
     public Sprite Start_Button_Image;
@@ -18,12 +20,17 @@ public class Phone_Shop : NewUIBase
     public GameObject Gift_UI;
     private void Start()
     {
+        #region 获取Json文件中的数据
         //获取数据列表中的GiftJson数据
         string GiftData = ResourceManager.GetInstance().Load<TextAsset>("JsonDataAsset/Gift_Data").text;
+        string ClothData = ResourceManager.GetInstance().Load<TextAsset>("JsonDataAsset/Cloth_Data").text;
         //反序列化解析为对应的数据结构
         GiftData[] Gift_Datas = JsonMapper.ToObject<GiftData[]>(GiftData);
+        ClothItem_Data[] Cloth_Datas = JsonMapper.ToObject<ClothItem_Data[]>(ClothData);
         //数组转化为列表
-        product_list = new List<GiftData>(Gift_Datas);
+        Gift_list = new List<GiftData>(Gift_Datas);
+        Cloth_list = new List<ClothItem_Data>(Cloth_Datas);
+        #endregion
 
         GiftItem_Creat();
 
@@ -81,11 +88,11 @@ public class Phone_Shop : NewUIBase
     /// </summary>
     public void GiftItem_Creat()
     {
-        for (int i = 0; i < product_list.Count; i++)
+        for (int i = 0; i < Gift_list.Count; i++)
         {
             //创建按钮
             Button Gift_Button = Instantiate(Gift_Buttons_Prefab[i % Gift_Buttons_Prefab.Count], Gift_UI.transform);//生成按钮
-            Gift_Button.GetComponent<Gift>().Data = product_list[i];//给按钮赋值
+            Gift_Button.GetComponent<Gift>().Data = Gift_list[i];//给按钮赋值
             Gift data = Gift_Button.GetComponent<Gift>();
             //更改按钮细节
             Gift_Button.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = data.Data.Description;//Gift的描述
