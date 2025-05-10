@@ -5,8 +5,6 @@ using OfficeOpenXml;
 using System.IO;
 using UnityEditor;
 using Unity.Plastic.Newtonsoft.Json;
-using NUnit.Framework;
-using PlasticPipe.PlasticProtocol.Client;
 
 public class ExcelReader : Editor
 {
@@ -19,16 +17,12 @@ public class ExcelReader : Editor
         Buff,// buff
         ResPath,//资源路径
     }
-    private enum NcpData_ExcelTitleEnum
+    private enum NpcData_ExcelTitleEnum
     {
         ID,//ID
-        Name,//名字
-        Hobby,//爱好
-        Personality,//个性
-        Description,//描述
-        Birthday,//生日
         Favorability,// 好感度
-        FavorvateThing,//喜欢的事务
+        FavorvateThing_ID,//喜欢的事务
+        CherishThing_ID,//珍爱的事物
         MoveSpeed,//移动速度
         WorkSpeed,//工作速度
         Work_Time,//工作时间/偷懒结算倒数时间
@@ -36,13 +30,24 @@ public class ExcelReader : Editor
         Hungry_Time,//饥饿倒数时间
         Res,//NPC图片资源路径
     }
+    private enum NPCInformation_ExcelTitleEnum
+    {
+        ID,//ID
+        Name,//名字
+        Hobby,//爱好
+        Personality,//个性
+        Description,//角色描述
+        Birthday,//生日
+    }
     private enum Gift_ExcelTitleEnum
     {
         ID,//ID
         Name,//名字
         Description,//描述
         Cost,//价格
-        favorability_Plus_Num,//好感度加值
+        Default_Affinity,//默认好感度
+        Like_Affinity,//喜爱好感度
+        Favorate_Affinity,//
         Sprite_ResPath,//资源路径
     }
     private enum Cloth_ExcelTitleEnum
@@ -58,22 +63,26 @@ public class ExcelReader : Editor
         ID,
         Name,
         Description,
-        Cost,
         Sell_Price,//出售价格
-        Germinate_Time,//发芽时间
-        Grown_Time,//成长时间
-        Mature_Time,//成熟时间
+        Cost,
         Plant_Time,//种植时间
-        Water_Time,//浇水时间
+        Germinate_Time,//发芽时间
         fertilize_Time,//施肥时间
+        Grown_Time1,//成长时间
+        Water_Time1,//浇水时间
+        Grown_Time2,//成长时间
+        Water_Time2,//浇水时间
+        Mature_Time,//成熟时间
         BugControl_Time,//虫子控制时间
         Harvest_Time,//收获时间
-        Harvest_Num,//数量
+        Harvest_Num,//s收获数量
         Germainate_SpriteResPath,//发芽图片资源路径
         Grown_SpriteResPath,//生长图片资源路径
         Mature_SpriteResPath,//资源路径
     }
-
+    /// <summary>
+    /// 从Excel创建Json数据文件
+    /// </summary>
     [MenuItem("Tools/CreatAsset_From_Excel")]
     static void CreateAssets_Form_Excel()
     {
@@ -84,19 +93,59 @@ public class ExcelReader : Editor
 
         using (ExcelPackage excel = new ExcelPackage(fileInfo))
         {
-            ExcelWorksheet workSheet_NPCData = excel.Workbook.Worksheets[1];
-            ExcelWorksheet workSheet_Food = excel.Workbook.Worksheets[2];
-            ExcelWorksheet workSheet_Gift= excel.Workbook.Worksheets[3];
-            ExcelWorksheet workSheet_Cloth = excel.Workbook.Worksheets[4];
-            ExcelWorksheet workSheet_Plant = excel.Workbook.Worksheets[5];
-            //Debug.Log(excel.Workbook.Worksheets[5].Cells[4, 1].Text);
+            //Debug.Log(excel.Workbook.Worksheets.Count);
+
+            ExcelWorksheet workSheet_NPCData = excel.Workbook.Worksheets[1];//小动物角色数据
+            ExcelWorksheet workSheet_NPCInformation = excel.Workbook.Worksheets[2];//小动物角色描述信息
+            ExcelWorksheet workSheet_Gift = excel.Workbook.Worksheets[3];//礼物数据
+            ExcelWorksheet workSheet_Food = excel.Workbook.Worksheets[4];//食物数据
+            ExcelWorksheet workSheet_Cloth = excel.Workbook.Worksheets[5];//衣物数据
+            ExcelWorksheet workSheet_Plant = excel.Workbook.Worksheets[6];//植物数据
 
             NPC_DataJson_Create(workSheet_NPCData);
+            NPC_InformationJson_Create(workSheet_NPCInformation);
             FoodDataJson_Create(workSheet_Food);
             Gift_DataJson_Create(workSheet_Gift);
             Cloth_DataJson_Create(workSheet_Cloth);
             Plant_DataJson_Create(workSheet_Plant);
         }
+    }
+    /// <summary>
+    /// 创建小动物角色描述信息NPCInformation.jsonw文件
+    /// </summary>
+    /// <param name="worksheet"></param>
+    private static void NPC_InformationJson_Create(ExcelWorksheet worksheet)
+    {
+        int StartRow = 4, StartCol = 1;//起始行列
+
+        Debug.Log("NPCInformation:行:" + worksheet.Dimension.Rows + "列：" + worksheet.Dimension.Columns);
+
+        List<NPCInformation> list = new List<NPCInformation>();
+
+        //将读取到的Excel数据填充到相应的可序列化字段中
+        for (int i = StartRow; i <= worksheet.Dimension.Rows; i++)
+        {
+            NPCInformation npcInformation = new NPCInformation();
+            npcInformation.ID = int.Parse(worksheet.Cells[i, StartCol].Text+(int)NPCInformation_ExcelTitleEnum.ID);
+            npcInformation.Name = worksheet.Cells[i, StartCol + (int)NPCInformation_ExcelTitleEnum.Name].Text;
+            npcInformation.Hobby = worksheet.Cells[i, StartCol + (int)NPCInformation_ExcelTitleEnum.Hobby].Text;
+            npcInformation.Personality = worksheet.Cells[i, StartCol + (int)NPCInformation_ExcelTitleEnum.Personality].Text;
+            npcInformation.Description = worksheet.Cells[i, StartCol + (int)NPCInformation_ExcelTitleEnum.Description].Text;
+            npcInformation.BirthDay = worksheet.Cells[i, StartCol + (int)NPCInformation_ExcelTitleEnum.Birthday].Text;
+
+            list.Add(npcInformation);
+        }
+        //将可序列化数据转为Json数据并保存到目标路径
+        string savePath = Path.Combine(Application.dataPath, "Resources/JsonDataAsset/NPCInformation.json");
+        //检测路径是否存在
+        if (!Directory.Exists(Path.GetDirectoryName(savePath)))
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(savePath));
+        }
+        //将对象列表序列化为 JSON 格式，并写入到指定路径的文件中。
+        File.WriteAllText(savePath, JsonConvert.SerializeObject(list, Formatting.Indented));
+
+        Debug.Log("生成JsonData于：" + savePath);
     }
     /// <summary>
     /// 创建食物数据FoodItem_Data.json文件
@@ -105,6 +154,8 @@ public class ExcelReader : Editor
     private static void FoodDataJson_Create(ExcelWorksheet worksheet)
     {
         int StartRow = 4,StartCol=1;//起始行列
+
+        Debug.Log("FoodData:行:"+worksheet.Dimension.Rows+"列："+ worksheet.Dimension.Columns);
 
         List<FoodItem_Data> list = new List<FoodItem_Data>();
         //将读取到的Excel数据填充到相应的可序列化字段中
@@ -140,26 +191,24 @@ public class ExcelReader : Editor
     {
         int StartRow = 4, StartCol = 1;//起始行列
 
+        Debug.Log("NPCData:行:" + worksheet.Dimension.Rows + "列：" + worksheet.Dimension.Columns);
+
         List<NPCData> list = new List<NPCData>();
         //将读取到的Excel数据填充到相应的可序列化字段中
-        for (int i = StartRow; i < worksheet.Dimension.Rows+1; i++)
+        for (int i = StartRow; i <= worksheet.Dimension.Rows; i++)
         {
             NPCData npc_data = new NPCData();
 
-            npc_data.ID = int.Parse(worksheet.Cells[i, StartCol].Text);
-            npc_data.Name = worksheet.Cells[i, StartCol + (int)NcpData_ExcelTitleEnum.Name].Text;
-            npc_data.Hobby = worksheet.Cells[i, StartCol + (int)NcpData_ExcelTitleEnum.Hobby].Text;
-            npc_data.Personality = worksheet.Cells[i, StartCol + (int)NcpData_ExcelTitleEnum.Personality].Text;
-            npc_data.Description = worksheet.Cells[i, StartCol + (int)NcpData_ExcelTitleEnum.Description].Text;
-            npc_data.BirthDay = worksheet.Cells[i, StartCol + (int)NcpData_ExcelTitleEnum.Birthday].Text;
-            npc_data.Favorability = int.Parse(worksheet.Cells[i, StartCol + (int)NcpData_ExcelTitleEnum.Favorability].Text);
-            npc_data.FavorvateThing = worksheet.Cells[i, StartCol + (int)NcpData_ExcelTitleEnum.FavorvateThing].Text;
-            npc_data.MoveSpeed = float.Parse(worksheet.Cells[i, StartCol + (int)NcpData_ExcelTitleEnum.MoveSpeed].Text);
-            npc_data.Work_Speed = float.Parse(worksheet.Cells[i, StartCol + (int)NcpData_ExcelTitleEnum.WorkSpeed].Text);
-            npc_data.Work_Time = float.Parse(worksheet.Cells[i, StartCol + (int)NcpData_ExcelTitleEnum.Work_Time].Text);
-            npc_data.Eat_Time = float.Parse(worksheet.Cells[i, StartCol + (int)NcpData_ExcelTitleEnum.Eat_Time].Text);
-            npc_data.Hungry_Time = float.Parse(worksheet.Cells[i, StartCol + (int)NcpData_ExcelTitleEnum.Hungry_Time].Text);
-            npc_data.Sprite_Res = worksheet.Cells[i, StartCol + (int)NcpData_ExcelTitleEnum.Res].Text;
+            npc_data.ID = int.Parse(worksheet.Cells[i, StartCol].Text+(int)NpcData_ExcelTitleEnum.ID);
+            npc_data.Favorability = int.Parse(worksheet.Cells[i, StartCol + (int)NpcData_ExcelTitleEnum.Favorability].Text);
+            npc_data.FavorvateThing_ID = int.Parse(worksheet.Cells[i, StartCol + (int)NpcData_ExcelTitleEnum.FavorvateThing_ID].Text);
+            npc_data.CherishThing_ID = int.Parse(worksheet.Cells[i, StartCol + (int)NpcData_ExcelTitleEnum.CherishThing_ID].Text);
+            npc_data.MoveSpeed = float.Parse(worksheet.Cells[i, StartCol + (int)NpcData_ExcelTitleEnum.MoveSpeed].Text);
+            npc_data.Work_Speed = float.Parse(worksheet.Cells[i, StartCol + (int)NpcData_ExcelTitleEnum.WorkSpeed].Text);
+            npc_data.Work_Time = float.Parse(worksheet.Cells[i, StartCol + (int)NpcData_ExcelTitleEnum.Work_Time].Text);
+            npc_data.Eat_Time = float.Parse(worksheet.Cells[i, StartCol + (int)NpcData_ExcelTitleEnum.Eat_Time].Text);
+            npc_data.Hungry_Time = float.Parse(worksheet.Cells[i, StartCol + (int)NpcData_ExcelTitleEnum.Hungry_Time].Text);
+            npc_data.Sprite_Res = worksheet.Cells[i, StartCol + (int)NpcData_ExcelTitleEnum.Res].Text;
 
             list.Add(npc_data);
         }
@@ -183,6 +232,8 @@ public class ExcelReader : Editor
     {
         int StartRow = 4, StartCol = 1;//起始行列
 
+        Debug.Log("GiftData:行:" + worksheet.Dimension.Rows + "列：" + worksheet.Dimension.Columns);
+
         List<GiftData> list = new List<GiftData>();
         //将读取到的Excel数据填充到相应的可序列化字段中
         for (int i = StartRow; i < worksheet.Dimension.Rows-3; i++)
@@ -193,7 +244,9 @@ public class ExcelReader : Editor
             giftData.Name = worksheet.Cells[i, StartCol + (int)Gift_ExcelTitleEnum.Name].Text;
             giftData.Description = worksheet.Cells[i, StartCol + (int)Gift_ExcelTitleEnum.Description].Text;
             giftData.Cost = int.Parse(worksheet.Cells[i, StartCol + (int)Gift_ExcelTitleEnum.Cost].Text);
-            giftData.favorability_Plus_Num = int.Parse(worksheet.Cells[i, StartCol + (int)Gift_ExcelTitleEnum.favorability_Plus_Num].Text);
+            giftData.Default_Affinity = int.Parse(worksheet.Cells[i, StartCol + (int)Gift_ExcelTitleEnum.Default_Affinity].Text);
+            giftData.Like_Affinity = int.Parse(worksheet.Cells[i, StartCol + (int)Gift_ExcelTitleEnum.Like_Affinity].Text);
+            giftData.Favorate_Affinity = int.Parse(worksheet.Cells[i, StartCol + (int)Gift_ExcelTitleEnum.Favorate_Affinity].Text);
             giftData.Sprite_ResPath = worksheet.Cells[i, StartCol + (int)Gift_ExcelTitleEnum.Sprite_ResPath].Text;
 
             list.Add(giftData);
@@ -217,6 +270,8 @@ public class ExcelReader : Editor
     {
         int StartRow = 4, StartCol = 1;//起始行列
 
+        Debug.Log("ClothData:行:" + worksheet.Dimension.Rows + "列：" + worksheet.Dimension.Columns);
+
         List<ClothItem_Data> list = new List<ClothItem_Data>();
 
         //将读取到的Excel数据填充到相应的可序列化字段中
@@ -234,8 +289,6 @@ public class ExcelReader : Editor
             ClothData.ResPath = worksheet.Cells[i, StartCol + (int)Cloth_ExcelTitleEnum.Sprite_ResPath].Text;
 
             list.Add(ClothData);
-
-            //Debug.Log(i);
         }
         //将可序列化数据转为Json数据并保存到目标路径
         string savePath = Path.Combine(Application.dataPath, "Resources/JsonDataAsset/Cloth_Data.json");
@@ -267,14 +320,16 @@ public class ExcelReader : Editor
             plantData.ID = int.Parse(worksheet.Cells[i, StartCol].Text);
             plantData.Name = worksheet.Cells[i, StartCol + (int)Plant_ExcelTitleEnum.Name].Text;
             plantData.Description = worksheet.Cells[i, StartCol + (int)Plant_ExcelTitleEnum.Description].Text;
-            plantData.Cost = int.Parse(worksheet.Cells[i, StartCol + (int)Plant_ExcelTitleEnum.Cost].Text);
             plantData.Sell_Price = int.Parse(worksheet.Cells[i, StartCol + (int)Plant_ExcelTitleEnum.Sell_Price].Text);
-            plantData.Germinate_Time = float.Parse(worksheet.Cells[i, StartCol + (int)Plant_ExcelTitleEnum.Germinate_Time].Text);
-            plantData.Grown_Time = float.Parse(worksheet.Cells[i, StartCol + (int)Plant_ExcelTitleEnum.Grown_Time].Text);
-            plantData.Mature_Time = float.Parse(worksheet.Cells[i, StartCol + (int)Plant_ExcelTitleEnum.Mature_Time].Text);
+            plantData.Cost = int.Parse(worksheet.Cells[i, StartCol + (int)Plant_ExcelTitleEnum.Cost].Text);
             plantData.Plant_Time = float.Parse(worksheet.Cells[i, StartCol + (int)Plant_ExcelTitleEnum.Plant_Time].Text);
-            plantData.Water_Time = float.Parse(worksheet.Cells[i, StartCol + (int)Plant_ExcelTitleEnum.Water_Time].Text);
+            plantData.Germinate_Time = float.Parse(worksheet.Cells[i, StartCol + (int)Plant_ExcelTitleEnum.Germinate_Time].Text);
             plantData.fertilize_Time = float.Parse(worksheet.Cells[i, StartCol + (int)Plant_ExcelTitleEnum.fertilize_Time].Text);
+            plantData.Grown_Time1 = float.Parse(worksheet.Cells[i, StartCol + (int)Plant_ExcelTitleEnum.Grown_Time1].Text);
+            plantData.Water_Time1 = float.Parse(worksheet.Cells[i, StartCol + (int)Plant_ExcelTitleEnum.Water_Time1].Text);
+            plantData.Grown_Time2 = float.Parse(worksheet.Cells[i, StartCol + (int)Plant_ExcelTitleEnum.Grown_Time2].Text);
+            plantData.Water_Time2 = float.Parse(worksheet.Cells[i, StartCol + (int)Plant_ExcelTitleEnum.Water_Time2].Text);
+            plantData.Mature_Time = float.Parse(worksheet.Cells[i, StartCol + (int)Plant_ExcelTitleEnum.Mature_Time].Text);
             plantData.BugControl_Time = float.Parse(worksheet.Cells[i, StartCol + (int)Plant_ExcelTitleEnum.BugControl_Time].Text);
             plantData.Harvest_Time = float.Parse(worksheet.Cells[i, StartCol + (int)Plant_ExcelTitleEnum.Harvest_Time].Text);
             plantData.Harvest_Num = int.Parse(worksheet.Cells[i, StartCol + (int)Plant_ExcelTitleEnum.Harvest_Num].Text);
@@ -284,7 +339,7 @@ public class ExcelReader : Editor
 
             list.Add(plantData);
 
-            Debug.Log(i);
+            //Debug.Log(i);
         }
         //将可序列化数据转为Json数据并保存到目标路径
         string savePath = Path.Combine(Application.dataPath, "Resources/JsonDataAsset/Plant_Data.json");

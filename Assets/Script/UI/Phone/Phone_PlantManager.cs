@@ -1,3 +1,4 @@
+using LitJson;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -8,9 +9,9 @@ public class Phone_PlantManager : NewUIBase
 {
     [Header("————列表————")]
 
-    public List<PlantData> PlantItem_List;
+    public List<PlantItem_Data> PlantItem_List;
 
-    public List<GameObject> PlantItem_Prefab_List;
+    public List<GameObject> PlantItem_Prefab_List;//装植物按钮的列表
     [Header("————组————")]
     public Transform PlantItem_Group;
     [Header("————素材————")]
@@ -19,6 +20,11 @@ public class Phone_PlantManager : NewUIBase
 
     private void Start()
     {
+        string PlantInfo = ResourceManager.GetInstance().Load<TextAsset>("JsonDataAsset/Plant_Data").text;
+        //反序列化解析为对应的数据结构
+        PlantItem_Data[] PlantItem_Datas = JsonMapper.ToObject<PlantItem_Data[]>(PlantInfo);
+        PlantItem_List = new List<PlantItem_Data>(PlantItem_Datas);
+
         PlantItem_Creat();
     }
     protected override void OnClick(string btnName, Button button)
@@ -44,7 +50,7 @@ public class Phone_PlantManager : NewUIBase
             Button_SignIn(Plant_Button);
             //更改按钮细节
             Plant_Button.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = data.Data.Description;
-            Plant_Button.transform.GetChild(1).GetComponent<Image>().sprite = data.Data.Sprite;
+            Plant_Button.transform.GetChild(1).GetComponent<Image>().sprite = ResourceManager.GetInstance().Load<Sprite>(data.Data.Mature_SpriteResPath); ;
             Plant_Button.transform.GetChild(2).GetComponentInChildren<TextMeshProUGUI>().text = data.Data.Name;
         }
     }
@@ -56,7 +62,7 @@ public class Phone_PlantManager : NewUIBase
     {
         //暂存按钮
         Button button = Plant_Button.GetComponent<Button>();
-        PlantData plant_Data = button.GetComponent<Plant>().Data;
+        PlantItem_Data plant_Data = button.GetComponent<Plant>().Data;
         Button Buy_Button = button.transform.GetChild(3).GetComponent<Button>();
 
         Buy_Button.onClick.AddListener(() => Field(button));
@@ -94,7 +100,7 @@ public class Phone_PlantManager : NewUIBase
         //暂存所有田地
         GameObject[] fileds = ObjectKeeper_Singleton.Instance.Farm_Field;
         //更新数据
-        ObjectKeeper_Singleton.Instance.gamerData.Money += button.GetComponent<Plant>().Data.Money_Cost_reward;
+        ObjectKeeper_Singleton.Instance.gamerData.Money -= button.GetComponent<Plant>().Data.Cost;
         EventCenter.GetInstance().EventTrigger("Info_Update");
         //更新田地状态
         for (int i = 0; i < fileds.Length; i++)
@@ -119,8 +125,8 @@ public class Phone_PlantManager : NewUIBase
     {
         for (int i = 0; i < field.transform.childCount; i++)
         {
-            field.GetComponent<plant_State>().data = button.GetComponent<Plant>().Data;
-            field.GetComponent<plant_State>().Temple_Data = new PlantData(button.GetComponent<Plant>().Data);
+            field.GetComponent<plant_State>().Temple_Data = button.GetComponent<Plant>().Data;
+            field.GetComponent<plant_State>().data=new PlantItem_Data(field.GetComponent<plant_State>().Temple_Data);
         }
     }
 }

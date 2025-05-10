@@ -1,6 +1,6 @@
 [
   {
-    "ID": 1001,
+    "ID": 3001,
     "Name": "健康套餐",
     "Description": "健康的套餐",
     "Cost": 10,
@@ -8,7 +8,7 @@
     "ResPath": "UI/Sprite/Food/健康套餐"
   },
   {
-    "ID": 1002,
+    "ID": 3002,
     "Name": "卡布奇诺",
     "Description": "卡不得奇诺",
     "Cost": 20,
@@ -16,7 +16,7 @@
     "ResPath": "UI/Sprite/Food/卡布奇诺"
   },
   {
-    "ID": 1003,
+    "ID": 3003,
     "Name": "咖喱饭",
     "Description": "咖喱的饭",
     "Cost": 30,
@@ -24,7 +24,7 @@
     "ResPath": "UI/Sprite/Food/咖喱饭"
   },
   {
-    "ID": 1004,
+    "ID": 3004,
     "Name": "拿铁",
     "Description": "拿拿的铁",
     "Cost": 40,
@@ -32,7 +32,7 @@
     "ResPath": "UI/Sprite/Food/拿铁"
   },
   {
-    "ID": 1005,
+    "ID": 3005,
     "Name": "有猫可乐",
     "Description": "有猫的可乐",
     "Cost": 50,
@@ -40,7 +40,7 @@
     "ResPath": "UI/Sprite/Food/有猫可乐"
   },
   {
-    "ID": 1006,
+    "ID": 3006,
     "Name": "每年达",
     "Description": "每年都达",
     "Cost": 60,
@@ -48,7 +48,7 @@
     "ResPath": "UI/Sprite/Food/每年达"
   },
   {
-    "ID": 1007,
+    "ID": 3007,
     "Name": "老山美式",
     "Description": "崂山的美式",
     "Cost": 70,
@@ -56,7 +56,7 @@
     "ResPath": "UI/Sprite/Food/老山美式"
   },
   {
-    "ID": 1008,
+    "ID": 3008,
     "Name": "草莓奶昔",
     "Description": "草莓的奶昔",
     "Cost": 80,
@@ -64,7 +64,7 @@
     "ResPath": "UI/Sprite/Food/草莓奶昔"
   },
   {
-    "ID": 1009,
+    "ID": 3009,
     "Name": "鸡排饭",
     "Description": "鸡鸡的排",
     "Cost": 90,

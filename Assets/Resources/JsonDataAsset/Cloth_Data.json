@@ -1,55 +1,55 @@
 [
   {
-    "ID": 1001,
+    "ID": 4001,
     "Name": "帽子01",
     "Description": "帽子01",
     "Cost": 10,
     "ResPath": "UI/Sprite/Cloth/帽子01"
   },
   {
-    "ID": 1002,
+    "ID": 4002,
     "Name": "帽子02",
     "Description": "帽子02",
     "Cost": 20,
     "ResPath": "UI/Sprite/Cloth/帽子02"
   },
   {
-    "ID": 1003,
+    "ID": 4003,
     "Name": "帽子03",
     "Description": "帽子03",
     "Cost": 30,
     "ResPath": "UI/Sprite/Cloth/帽子03"
   },
   {
-    "ID": 1004,
+    "ID": 4004,
     "Name": "帽子04",
     "Description": "帽子04",
     "Cost": 40,
     "ResPath": "UI/Sprite/Cloth/帽子04"
   },
   {
-    "ID": 1005,
+    "ID": 4005,
     "Name": "帽子05",
     "Description": "帽子05",
     "Cost": 50,
     "ResPath": "UI/Sprite/Cloth/帽子05"
   },
   {
-    "ID": 1006,
+    "ID": 4006,
     "Name": "帽子06",
     "Description": "帽子06",
     "Cost": 60,
     "ResPath": "UI/Sprite/Cloth/帽子06"
   },
   {
-    "ID": 1007,
+    "ID": 4007,
     "Name": "帽子07",
     "Description": "帽子07",
     "Cost": 70,
     "ResPath": "UI/Sprite/Cloth/帽子07"
   },
   {
-    "ID": 1008,
+    "ID": 4008,
     "Name": "帽子08",
     "Description": "帽子08",
     "Cost": 80,

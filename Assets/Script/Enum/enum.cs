@@ -28,16 +28,18 @@ public enum Plant_State
 
     plant,//播种
 
-    Grown,//成长阶段
+    Grown1,//成长阶段1
+    Grown2,//成长阶段2
 
-    water,//浇水
+    water1,//浇水1
+    water2,//浇水2
     [Tooltip("成熟阶段")]
     Mature,//成熟阶段
     [Tooltip("施肥阶段")]
     fertilize,//施肥
     bug_control,//除虫
-
-    harvest//收获
+    harvest,//收获
+    Package,//打包
 }
 
 

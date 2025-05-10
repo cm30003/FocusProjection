@@ -7,21 +7,19 @@ public class plant_State : MonoBehaviour
 {
     public NPCData npc_Data;
 
-    public PlantData Temple_Data;
-    public PlantData data;
+    public PlantItem_Data Temple_Data;
+    public PlantItem_Data data;
     public Plant_State State;
 
-    private int Water_Num = 2;
-    private float Standard_Second = 1;
+    public float Standard_Second = 1;
     private void Start()
     {
         npc_Data = new NPCData(null);
     }
     private void Update()
     {
-
-        //print(npc_Data.Name);
         Switch_Sate();
+        //Debug.Log(State);
     }
     public void Switch_Sate()
     {
@@ -33,9 +31,15 @@ public class plant_State : MonoBehaviour
 
             case Plant_State.plant://播種
                 //变更所有图片
-                Sprit_Change(data.Germinate_Image);
+                Sprit_Change(ResourceManager.GetInstance().Load<Sprite>(data.Germinate_SpriteResPath) );
                 //计算时间
-                Time_calculation(ref data.Plant_Time);
+                Standard_Second-=Time.deltaTime;
+                if(Standard_Second<=0)
+                {
+                    data.Plant_Time-=npc_Data.Work_Speed;
+                    Standard_Second = 1;
+                }
+
                 //时间走完，切换到发芽状态
                 if (data.Plant_Time <= 0)
                 {
@@ -43,57 +47,90 @@ public class plant_State : MonoBehaviour
                 }
                 break;
 
+            case Plant_State.Germinate://发芽阶段 自然生长
 
-            case Plant_State.Germinate://发芽阶段
-                //自然生长
-                GameManager.GetInstance().Update_Timer(ref data.Germinate_Time, 1f);
+                data.Germinate_Time -= Time.deltaTime;
 
                 if (data.Germinate_Time <= 0)
                 {
-                    State = Plant_State.Grown;
+                    State = Plant_State.Grown1;
                 }
                 break;
 
 
-            case Plant_State.Grown://成长阶段
+            case Plant_State.Grown1://成长阶段
 
-                Sprit_Change(data.Grown_Image);
+                Sprit_Change(ResourceManager.GetInstance().Load<Sprite>(data.Grown_SpriteResPath) );
 
-                GameManager.GetInstance().Update_Timer(ref data.Grown_Time, 1f);
+                data.Grown_Time1 -= Time.deltaTime;
 
-                if (data.Grown_Time <= 0)
+                if (data.Grown_Time1 <= 0)
                 {
-                    State = Plant_State.water;
+                    State = Plant_State.water1;
+                    Standard_Second = 1;
                 }
 
                 break;
 
 
-            case Plant_State.water://浇水
-
-                Time_calculation(ref data.Water_Time);
-
-                if (data.Plant_Time <= 0)
+            case Plant_State.water1://浇水
+                if(npc_Data.ID!=0)
                 {
-                    State = Plant_State.water;
+                    Standard_Second -= Time.deltaTime;
 
-                    if (Water_Num == 0)
+                    if (Standard_Second <= 0)
                     {
-                        State = Plant_State.Mature;
-                    }
-                    else
-                    {
-                        Water_Num--;
-                        data.Water_Time = Temple_Data.Water_Time;
-                        data.Grown_Time = Temple_Data.Grown_Time;
-                        State = Plant_State.Grown;
+                        data.Water_Time1 -= npc_Data.Work_Speed;
+                        Standard_Second = 1;
                     }
                 }
+
+                if (data.Water_Time1 <= 0)
+                {
+                    State = Plant_State.Grown2;
+                }
                 break;
 
+            case Plant_State.Grown2://成长阶段
+
+                data.Grown_Time2 -= Time.deltaTime; 
+
+                if (data.Grown_Time2 <= 0)
+                {
+                    State = Plant_State.water2;
+                    Standard_Second = 1;
+                }
+
+                break;
+
+            case Plant_State.water2://浇水
+
+                if (npc_Data.ID != 0)
+                {
+                    Standard_Second -= Time.deltaTime;
+
+                    if (Standard_Second <= 0)
+                    {
+                        data.Water_Time2 -= npc_Data.Work_Speed;
+                        Standard_Second = 1;
+                    }
+                }
+
+                if (Standard_Second <= 0)
+                {
+                    data.Water_Time2 -= npc_Data.Work_Speed;
+                    Standard_Second = 1;
+                }
+
+                if (data.Water_Time2 <= 0)
+                {
+                    State = Plant_State.Mature;
+                }
+                break;
 
             case Plant_State.Mature://成熟阶段
-                GameManager.GetInstance().Update_Timer(ref data.Mature_Time, 1f);
+
+                data.Mature_Time-= Time.deltaTime;
 
                 if (data.Mature_Time <= 0)
                 {
@@ -104,55 +141,87 @@ public class plant_State : MonoBehaviour
 
             case Plant_State.fertilize://施肥
 
-                Time_calculation(ref data.fertilize_Time);
+                if(npc_Data.ID!=0)
+                {
+                    Standard_Second -= Time.deltaTime;
+
+                    if (Standard_Second <= 0)
+                    {
+                        data.fertilize_Time -= npc_Data.Work_Speed;
+                        Standard_Second = 1;
+                    }
+                }
+                
 
                 if (data.fertilize_Time <= 0)
                 {
                     State = Plant_State.bug_control;
+                    Standard_Second = 1;
                 }
                 break;
 
 
             case Plant_State.bug_control://除虫
 
-                Time_calculation(ref data.BugControl_Time);
+                if (npc_Data.ID != 0)
+                {
+                    Standard_Second -= Time.deltaTime;
+
+                    if (Standard_Second <= 0)
+                    {
+                        data.BugControl_Time -= npc_Data.Work_Speed;
+                        Standard_Second = 1;
+                    }
+                }
 
                 if (data.BugControl_Time <= 0)
                 {
                     State = Plant_State.harvest;
+                    Standard_Second = 1;
                 }
                 break;
 
 
             case Plant_State.harvest://收获
 
-                Time_calculation(ref data.Harvest_Time);
-
-                if (data.Harvest_Time <= 0 && data.Name != null)
+                if (npc_Data.ID != 0)
                 {
-                    GameObject[] gameObjects = ObjectKeeper_Singleton.Instance.Freight_Target;
+                    Standard_Second -= Time.deltaTime;
 
-                    for (int i = 0; i < gameObjects.Length; i++)
+                    if (Standard_Second <= 0)
                     {
-                        GameObject gameObject = gameObjects[i];
-                        Map_Target target = gameObject.GetComponent<Map_Target>();
-                        if (target.Freight.Name == null)
-                        {
-                            target.GetComponent<SpriteRenderer>().enabled = true;
-
-                            target.Freight = data;
-
-                            //print(target.name);
-                            break;
-                        }
+                        data.Harvest_Time -= npc_Data.Work_Speed;
+                        Standard_Second = 1;
                     }
-                    Reset_AllTime();
-                    data = new PlantData(null);
-
-                    Sprit_Change(null);
-                    State = Plant_State.Empty;
                 }
 
+                if (data.Harvest_Time <= 0 && data.ID != 0)
+                {
+                    State=Plant_State.Package;
+                }
+
+                break;
+            case Plant_State.Package:
+                GameObject[] gameObjects = ObjectKeeper_Singleton.Instance.Freight_Target;
+
+                for (int i = 0; i < gameObjects.Length; i++)
+                {
+                    GameObject gameObject = gameObjects[i];
+                    Map_Target target = gameObject.GetComponent<Map_Target>();
+                    if (target.Freight.Name == null)
+                    {
+                        target.GetComponent<SpriteRenderer>().enabled = true;
+
+                        target.Freight = data;
+
+                        break;
+                    }
+                }
+                //Reset_AllTime();
+                data = null;
+
+                Sprit_Change(null);
+                State = Plant_State.Empty;
                 break;
         }
     }
@@ -174,9 +243,9 @@ public class plant_State : MonoBehaviour
     /// <param name="time">本阶段时间</param>
     public void Time_calculation(ref float time)
     {
-        if (npc_Data.Name != null)
+        if (npc_Data.ID != 0)
         {
-            GameManager.GetInstance().Update_Timer(ref time, npc_Data.Work_Speed);
+            GameManager.GetInstance().Update_Timer(ref time, npc_Data.Work_Speed,ref Standard_Second);
         }
         else
         {
@@ -187,21 +256,14 @@ public class plant_State : MonoBehaviour
     {
         data.Plant_Time = Temple_Data.Plant_Time;
         data.Germinate_Time = Temple_Data.Germinate_Time;
-        data.Water_Time = Temple_Data.Water_Time;
-        data.Grown_Time = Temple_Data.Grown_Time;
+        data.Water_Time1 = Temple_Data.Water_Time1;
+        data.Water_Time2 = Temple_Data.Water_Time2;
+        data.Grown_Time1 = Temple_Data.Grown_Time1;
+        data.Grown_Time2 = Temple_Data.Grown_Time2;
         data.Mature_Time = Temple_Data.Mature_Time;
         data.fertilize_Time = Temple_Data.fertilize_Time;
         data.BugControl_Time = Temple_Data.BugControl_Time;
         data.Harvest_Time = Temple_Data.Harvest_Time;
-    }
-    public void Timer(ref float time, float speed)
-    {
-        Standard_Second -= Time.deltaTime;
-        if (Standard_Second <= 0)
-        {
-            Standard_Second = 1;
-            time -= speed;
-        }
     }
 }
 

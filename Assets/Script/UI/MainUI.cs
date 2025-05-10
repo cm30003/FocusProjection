@@ -258,8 +258,9 @@ public class MainUI : UIBase
     }
     public void QuitGame()
     {
-        ObjectKeeper_Singleton.Instance.Save_GamerData();
-        Timer_Button.GetComponent<Timer>().calculate_FocusTime();
+        Debug.Log("Quit");
         Application.Quit();
+        ObjectKeeper_Singleton.Instance.Save_GamerData();
+        //Timer_Button.GetComponent<Timer>().calculate_FocusTime();
     }
 }

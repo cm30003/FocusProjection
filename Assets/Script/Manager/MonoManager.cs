@@ -25,6 +25,8 @@ public class MonoManager : BaseManager<MonoManager>
     {
         contorl.RemoveUpdateLisener(action);
     }
+
+
     // µœ÷–Ø≥Ã
     public Coroutine StartCoroutine(IEnumerator coroutine)
     {

@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
-using static Pathfinding.Util.RetainedGizmos;
-using static UnityEditor.Experimental.GraphView.GraphView;
 /// <summary>
 /// UI层级
 /// </summary>
@@ -113,7 +111,7 @@ public class UIManager : BaseManager<UIManager>
             //把他作为Cnavas的子对象
             //并且要设置它的相对位置
         });
-        Debug.Log("UIShow");
+        //Debug.Log("UIShow");
     }
     /// <summary>
     /// 显示面板，用于显示继承NewBaseUI的UI

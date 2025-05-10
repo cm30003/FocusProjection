@@ -50,6 +50,7 @@ public class Phone_NPCManager : NewUIBase
             //为每个waiting添加NPCData_Data组件/添加其NPC数据
             child.AddComponent<NPCData_Data>();
             child.GetComponent<NPCData_Data>().data= npc[i].GetComponent<CharaController>().Template_data;
+            child.GetComponent<NPCData_Data>().npcInformation= npc[i].GetComponent<CharaController>().npc_Information;
             image.sprite = ResourceManager.GetInstance().Load<Sprite>(child.GetComponent<NPCData_Data>().data.Sprite_Res) ;
             image.SetNativeSize();
         }
@@ -57,8 +58,8 @@ public class Phone_NPCManager : NewUIBase
     public void UpdateInfo(Button button)
     {
         Info_Group.transform.GetChild(0).GetComponent<Image>().sprite=ResourceManager.GetInstance().Load<Sprite>(button.GetComponentInChildren<NPCData_Data>().data.Sprite_Res) ;
-        Info_Group.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text= button.GetComponentInChildren<NPCData_Data>().data.Name;
-        Info_Group.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text= button.GetComponentInChildren<NPCData_Data>().data.Description;
+        Info_Group.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text= button.GetComponentInChildren<NPCData_Data>().npcInformation.Name;
+        Info_Group.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text= button.GetComponentInChildren<NPCData_Data>().npcInformation.Description;
 
     }
 }

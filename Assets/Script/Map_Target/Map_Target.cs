@@ -10,7 +10,7 @@ public class Map_Target:MonoBehaviour
     public Sprite Fertilize_Sprite;
     public Sprite BugControl_Sprite;
     [Header("————货物数据————")]
-    public PlantData Freight;//货物
+    public PlantItem_Data Freight;//货物
     [Header("————动态数据————")]
     public GameObject npc;//当前占据该点的npc
 
@@ -28,19 +28,19 @@ public class Map_Target:MonoBehaviour
         switch (tag)
         {
             case "Farm_Machine":
-                kind = Map_Target_Kind.Farm_Machine;
+                kind = Map_Target_Kind.Farm_Machine;//种地机器
                 break;
             case "Eat_Area":
-                kind = Map_Target_Kind.Eat_Area;
+                kind = Map_Target_Kind.Eat_Area;//餐厅
                 break;
             case "Freight_Target":
-                kind = Map_Target_Kind.Freight_Target;
+                kind = Map_Target_Kind.Freight_Target;//货物目标
                 break;
             case "WareHouse_Area":
-                kind = Map_Target_Kind.WareHouse_Area;
+                kind = Map_Target_Kind.WareHouse_Area;//仓库
                 break;
             case "TouchFish_Area":
-                kind = Map_Target_Kind.TouchFish_Area;
+                kind = Map_Target_Kind.TouchFish_Area;//摸鱼区域
                 break;
         }
 
@@ -51,7 +51,7 @@ public class Map_Target:MonoBehaviour
     public void Freight_SignIn()
     {
         //货物初始化
-        Freight = new PlantData(null);
+        Freight = new PlantItem_Data();
         //如果是货物目标，则隐藏其Sprite
         if (kind == Map_Target_Kind.Freight_Target)
         {
@@ -104,9 +104,13 @@ public class Map_Target:MonoBehaviour
                 if(Is_Empty)
                 {
                     charaController.NPC_Status = NPC_status.Work;
-                    if(charaController.Work_Field !=null&& charaController.Work_Field.State==Plant_State.water)
+
+                    if(charaController.Work_Field !=null)
                     {
-                        GetComponent<SpriteRenderer>().sprite = Water_Sprite;
+                        if(charaController.Work_Field.State == Plant_State.water1||charaController.Work_Field.State == Plant_State.water2)
+                        {
+                            GetComponent<SpriteRenderer>().sprite = Water_Sprite;
+                        }
                     }
                     if(charaController.Work_Field != null&&charaController.Work_Field.State == Plant_State.fertilize)
                     {
@@ -131,7 +135,6 @@ public class Map_Target:MonoBehaviour
                 }
 
                 break;
-
             
 
             case Map_Target_Kind.Freight_Target:
@@ -143,7 +146,7 @@ public class Map_Target:MonoBehaviour
                     //切换NPC状态
                     charaController.NPC_Status = NPC_status.Transport;
                     //清空自身
-                    Freight = new PlantData(null);
+                    Freight = new PlantItem_Data();
                     GetComponent<SpriteRenderer>().enabled = false;
 
                     Is_Empty = false;
@@ -152,33 +155,33 @@ public class Map_Target:MonoBehaviour
 
             case Map_Target_Kind.WareHouse_Area:
 
-                PlantData plantData = npc.GetComponent<CharaController>().freight;
+                PlantItem_Data plantData = npc.GetComponent<CharaController>().freight;
                 GamerData gamerData = ObjectKeeper_Singleton.Instance.gamerData;
 
                 //print(gamerData);
-                print(gamerData.Items == null);
-                if(plantData.Name!=string.Empty&&plantData.Name!=null)
+                print(gamerData.HarvestItems == null);
+                if(plantData.ID!=0&&plantData.ID!=0)
                 {
-                    if (gamerData.Items == null || gamerData.Items.Count == 0)
+                    if (gamerData.HarvestItems == null || gamerData.HarvestItems.Count == 0)
                     {
-                        gamerData.Items.Add(plantData);
+                        gamerData.HarvestItems.Add(plantData);
                     }
                     else
                     {
-                        PlantData foundItem = gamerData.Items.Find(item => item.Name == plantData.Name);
+                        PlantItem_Data foundItem = gamerData.HarvestItems.Find(item => item.ID == plantData.ID);
                         if (foundItem != null)
                         {
-                            foundItem.Num += plantData.Num;
+                            foundItem.Gamer_Num += plantData.Harvest_Num;
                         }
                         else
                         {
-                            gamerData.Items.Add(plantData);
+                            gamerData.HarvestItems.Add(plantData);
                         }
                     }
                 }
                 
                 EventCenter.GetInstance().EventTrigger("ItemList_Update");
-                npc.GetComponent<CharaController>().freight = new PlantData(null);
+                npc.GetComponent<CharaController>().freight = new PlantItem_Data();
                 npc.GetComponent<CharaController>().NPC_Status = NPC_status.GoToWork;
 
                 break;

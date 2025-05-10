@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Plant : MonoBehaviour
 {
-    public PlantData Data;
+    public PlantItem_Data Data;
     //private void Update()
     //{
     //    transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = " 种植时间：" + Data.Plant_Time.ToString() + " 发芽时间：" + Data.Germinate_Time.ToString()

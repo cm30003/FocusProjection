@@ -33,7 +33,7 @@ public class ObjectKeeper_Singleton:SingletonMono<ObjectKeeper_Singleton>
     public GameObject[] TouchFish_Area;//摸鱼的区域
 
 
-    private void Awake()
+    protected override void Awake()
     {
         base.Awake();
         //存储在场对象
@@ -112,9 +112,9 @@ public class ObjectKeeper_Singleton:SingletonMono<ObjectKeeper_Singleton>
             //保存第一次进入游戏的时间
             JsonManager.Instance.SaveData(gamerData, "GamerData");
         }
-        if(gamerData.Items==null)
+        if(gamerData.HarvestItems==null)
         {
-            gamerData.Items=new List<PlantData>();
+            gamerData.HarvestItems=new List<PlantItem_Data>();
             JsonManager.Instance.SaveData(gamerData, "GamerData");
         }
         for(int i=0;i<NPCs.Length;i++)
@@ -132,23 +132,13 @@ public class ObjectKeeper_Singleton:SingletonMono<ObjectKeeper_Singleton>
         //存储NPC数据
         for (int i = 0; i < NPCs.Length; i++)
         {
-            NPCData npcData = NPCs[i].GetComponent<CharaController>().data;
+            NPCInformation npcData = NPCs[i].GetComponent<CharaController>().npc_Information;
             JsonManager.Instance.SaveData(npcData, npcData.Name);
         }
         //存储玩家数据
         JsonManager.Instance.SaveData(gamerData, "GamerData");
     }
 }
-
-
-
-
-
-
-
-
-
-
 [Serializable]
 public class Mission_ADay//数据类，统计玩家每天完成的任务及其专注时间
 {
@@ -157,85 +147,6 @@ public class Mission_ADay//数据类，统计玩家每天完成的任务及其专注时间
     public List<string> Options=new List<string>();//完成项目
     public Dictionary<string,int> ADay_FocusTime_Dic=new Dictionary<string, int>();//该日期的专注时间
     public Dictionary<string, List<string>> ADay_Options_Dic=new Dictionary<string, List<string>>();//该日期下的完成项目
-}
-[Serializable]
-public class NPCData//数据类，用于存储NPC数据
-{
-    [Header("————基本信息————")]
-    public int ID;
-    public string Name;//名字
-    public string Hobby;//爱好
-    public string Personality;//性格
-    public string Description;//描述文本
-    public string BirthDay;//生日
-    [Header("————喜好————")]
-    public int Favorability;//好感度
-    public string FavorvateThing;//喜好物
-    [Header("————效率————")]
-    public float MoveSpeed;//移动速度
-    public float Work_Speed;//工作速度
-    [Header("————时间————")]
-    public float Work_Time;//工作时间
-
-    public float Eat_Time;//吃饭时间
-
-    public float Hungry_Time;//饥饿时间
-    [Header("————资源————")]
-    public string Sprite_Res;
-    // 拷贝构造函数
-    public NPCData(NPCData other)
-    {
-        if (other == null)
-        {
-            // 如果传入的参数为 null，则初始化为默认值
-            ID = 0;
-            Name = string.Empty;
-            Hobby = string.Empty;
-            Personality = string.Empty;
-            Description = string.Empty;
-            BirthDay = string.Empty;
-            Favorability = 0;
-            FavorvateThing = string.Empty;
-            MoveSpeed = 0f;
-            Work_Speed = 0f;
-            Work_Time = 0f;
-            Eat_Time = 0f;
-            Hungry_Time = 0f;
-        }
-        else
-        {
-            ID = other.ID;
-            Name = other.Name;
-            Hobby = other.Hobby;
-            Personality = other.Personality;
-            Description = other.Description;
-            BirthDay = other.BirthDay;
-            Favorability = other.Favorability;
-            FavorvateThing = other.FavorvateThing;
-            MoveSpeed = other.MoveSpeed;
-            Work_Speed = other.Work_Speed;
-            Work_Time = other.Work_Time;
-            Eat_Time = other.Eat_Time;
-            Hungry_Time = other.Hungry_Time;
-        }
-    }
-    // 公共无参构造函数
-    public NPCData()
-    {
-        ID = 0;
-        Name = string.Empty;
-        Hobby = string.Empty;
-        Personality = string.Empty;
-        Description = string.Empty;
-        BirthDay = string.Empty;
-        Favorability = 0;
-        FavorvateThing = string.Empty;
-        MoveSpeed = 0f;
-        Work_Speed = 0f;
-        Work_Time = 0f;
-        Eat_Time = 0f;
-        Hungry_Time = 0f;
-    }
 }
 [Serializable]
 public class GamerData//玩家数据
@@ -248,7 +159,7 @@ public class GamerData//玩家数据
     public int Level;//玩家等级
     public float Current_XP;//玩家经验
     public float Max_XP;//玩家最大经验
-    public List<PlantData> Items;
+    public List<PlantItem_Data> HarvestItems;//收获的作物
     //自定义部分
     public Sprite Player_HeadImage;//玩家头像
     public string PlayerBirthDay;//玩家生日
@@ -292,8 +203,6 @@ public class PlantData: ItemData
     public float fertilize_Time;//施肥时间
     [Tooltip("除虫时间")]
     public float BugControl_Time;//除虫时间
-    //[Tooltip("松土时间")]
-    //public float plow_Time;//松土时间
     [Tooltip("收获时间")]
     public float Harvest_Time;//收获时间
 
@@ -336,18 +245,7 @@ public class PlantData: ItemData
         }
     }
 }
-[Serializable]
-public class GiftData
-{
-    public int ID;
-    public string Name;//名字
-    public string Description;//描述
-    public int Cost;//购买/售卖价格
-    [Tooltip("好感度加成")]
-    public int favorability_Plus_Num;//好感度加成
-    [Tooltip("资源路径")]
-    public string Sprite_ResPath;
-}
+
 
 
 

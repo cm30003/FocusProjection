@@ -10,6 +10,12 @@ public class Phone_WareHouse : NewUIBase
 
     public List<GameObject> Items_Button_Prefab;
 
+    private void Start()
+    {
+        EventCenter.GetInstance().AddEventListener("ItemList_Update", Update_Evnet);
+
+        Update_Evnet();
+    }
     protected override void OnClick(string btnName, Button button)
     {
         switch (btnName)
@@ -29,19 +35,19 @@ public class Phone_WareHouse : NewUIBase
     /// </summary>
     public void Item_Sign_In()
     {
-        if (ObjectKeeper_Singleton.Instance.gamerData.Items != null && ObjectKeeper_Singleton.Instance.gamerData.Items.Count > 0)
+        if (ObjectKeeper_Singleton.Instance.gamerData.HarvestItems != null && ObjectKeeper_Singleton.Instance.gamerData.HarvestItems.Count > 0)
         {
-            for (int i = 0; i < ObjectKeeper_Singleton.Instance.gamerData.Items.Count; i++)
+            for (int i = 0; i < ObjectKeeper_Singleton.Instance.gamerData.HarvestItems.Count; i++)
             {
                 //创建Item
                 GameObject Item = Instantiate(Items_Button_Prefab[i % Items_Button_Prefab.Count], Object_Group);
                 //为Item赋值
-                Item.GetComponent<Plant>().Data = ObjectKeeper_Singleton.Instance.gamerData.Items[i];
+                Item.GetComponent<Plant>().Data = ObjectKeeper_Singleton.Instance.gamerData.HarvestItems[i];
                 //获取卖出按钮
                 Button Sell_Button = Item.transform.GetChild(2).GetComponent<Button>();
                 //创建Item信息
-                Item.transform.GetChild(0).GetComponent<Image>().sprite = ObjectKeeper_Singleton.Instance.gamerData.Items[i].Sprite;
-                Item.transform.GetChild(1).GetComponentInChildren<TextMeshProUGUI>().text = ObjectKeeper_Singleton.Instance.gamerData.Items[i].Description;
+                Item.transform.GetChild(0).GetComponent<Image>().sprite =ResourceManager.GetInstance().Load<Sprite>(ObjectKeeper_Singleton.Instance.gamerData.HarvestItems[i].Mature_SpriteResPath);
+                Item.transform.GetChild(1).GetComponentInChildren<TextMeshProUGUI>().text = ObjectKeeper_Singleton.Instance.gamerData.HarvestItems[i].Description;
                 //创建卖出事件
                 Sell_Button.onClick.AddListener(() => Sell(Item));
             }
@@ -88,12 +94,12 @@ public class Phone_WareHouse : NewUIBase
     /// <param name="Item">挂载数据的Item</param>
     public void Sell(GameObject Item)
     {
-        PlantData plantData = Item.GetComponent<Plant>().Data;
-        foreach (PlantData item in ObjectKeeper_Singleton.Instance.gamerData.Items)
+        PlantItem_Data plantData = Item.GetComponent<Plant>().Data;
+        foreach (PlantItem_Data item in ObjectKeeper_Singleton.Instance.gamerData.HarvestItems)
         {
-            if (item == plantData && item.Num > 0)
+            if (item == plantData && item.Gamer_Num > 0)
             {
-                item.Num--;
+                item.Gamer_Num--;
                 ObjectKeeper_Singleton.Instance.gamerData.Money++;
             }
         }

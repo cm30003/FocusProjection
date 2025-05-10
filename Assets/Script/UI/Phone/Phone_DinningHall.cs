@@ -90,7 +90,7 @@ public class Phone_DinningHall : NewUIBase
         Current_Food = button.GetComponent<Item_Food>().Data;
 
         ObjectKeeper_Singleton.Instance.foodData = Current_Food;
-        ObjectKeeper_Singleton.Instance.gamerData.Money += Current_Food.Cost;
+        ObjectKeeper_Singleton.Instance.gamerData.Money -= Current_Food.Cost;
         EventCenter.GetInstance().EventTrigger("Info_Update");
     }
 }

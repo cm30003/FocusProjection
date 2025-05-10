@@ -490,12 +490,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 643051be5611c104296ee814bdc01307, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Object_Group: {fileID: 7448108773703210432}
   Items_Button_Prefab:
   - {fileID: 3462985163776561893, guid: 2c9299bf94f79d4488cd3173e2c653e7, type: 3}
   - {fileID: 3462985163776561893, guid: 4ad2180a0a9a11d4ea2958f7f3da7046, type: 3}
   - {fileID: 3462985163776561893, guid: b23243e4d0ba2c24993c2f90eed608f1, type: 3}
-  Start_Image: {fileID: 0}
-  Choosen_Image: {fileID: 0}
 --- !u!1 &4362006071982441671
 GameObject:
   m_ObjectHideFlags: 0

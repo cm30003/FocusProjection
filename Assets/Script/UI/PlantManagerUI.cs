@@ -9,7 +9,7 @@ public class PlantManagerUI : UIBase
 {
     [Header("————列表————")]
 
-    public List<PlantData> PlantItem_List;
+    public List<PlantItem_Data> PlantItem_List;
 
     public List<GameObject> PlantItem_Prefab_List;
     [Header("————组————")]
@@ -47,9 +47,9 @@ public class PlantManagerUI : UIBase
     {
         //暂存按钮
         Button button = Plant_Button.GetComponent<Button>();
-        PlantData plant_Data = button.GetComponent<Plant>().Data;
+        PlantItem_Data plant_Data = button.GetComponent<Plant>().Data;
         //
-        button.GetComponent<Image>().sprite = plant_Data.Sprite;
+        button.GetComponent<Image>().sprite = ResourceManager.GetInstance().Load<Sprite>(plant_Data.Mature_SpriteResPath); ;
         button.transform.GetChild(0).GetComponentInChildren<TextMeshProUGUI>().text = plant_Data.Name;
         button.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = plant_Data.Description;
 
@@ -63,7 +63,7 @@ public class PlantManagerUI : UIBase
         //暂存所有田地
         GameObject[] fileds= ObjectKeeper_Singleton.Instance.Farm_Field;
         //更新数据
-        ObjectKeeper_Singleton.Instance.gamerData.Money+=button.GetComponent<Plant>().Data.Money_Cost_reward;
+        ObjectKeeper_Singleton.Instance.gamerData.Money-=button.GetComponent<Plant>().Data.Cost;
         EventCenter.GetInstance().EventTrigger("Info_Update");
         //更新田地状态
         for(int i=0;i<fileds.Length;i++)
@@ -89,7 +89,7 @@ public class PlantManagerUI : UIBase
         for(int i=0; i< field.transform.childCount; i++)
         {
             field.GetComponent<plant_State>().data= button.GetComponent<Plant>().Data;
-            field.GetComponent<plant_State>().Temple_Data = new PlantData(button.GetComponent<Plant>().Data);
+            field.GetComponent<plant_State>().Temple_Data = button.GetComponent<Plant>().Data;
         }
     }
     private void Quit_UI()

@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class WarehouseUI : UIBase
+public class WarehouseUI : UIBase//仓库UI
 {
     public GameObject Object_Group;
     [Header("————Button————")]
@@ -37,14 +37,15 @@ public class WarehouseUI : UIBase
     /// </summary>
     public void Item_Sign_In()
     {
-        if(ObjectKeeper_Singleton.Instance.gamerData.Items != null && ObjectKeeper_Singleton.Instance.gamerData.Items.Count > 0)
+        if(ObjectKeeper_Singleton.Instance.gamerData.HarvestItems != null && ObjectKeeper_Singleton.Instance.gamerData.HarvestItems.Count > 0)
         {
-            for (int i = 0; i < ObjectKeeper_Singleton.Instance.gamerData.Items.Count; i++)
+            for (int i = 0; i < ObjectKeeper_Singleton.Instance.gamerData.HarvestItems.Count; i++)
             {
                 Button button = Instantiate(Item_Button, Object_Group.transform).GetComponent<Button>();
                 Button Sell_Button = button.transform.GetChild(0).GetComponent<Button>();
-                button.transform.GetChild(1).GetComponent<Image>().sprite = ObjectKeeper_Singleton.Instance.gamerData.Items[i].Sprite;
-                button.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = ObjectKeeper_Singleton.Instance.gamerData.Items[i].Num.ToString();
+                //物品图标为已成熟的植物图标
+                button.transform.GetChild(1).GetComponent<Image>().sprite =ResourceManager.GetInstance().Load<Sprite>(ObjectKeeper_Singleton.Instance.gamerData.HarvestItems[i].Mature_SpriteResPath) ;
+                button.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = ObjectKeeper_Singleton.Instance.gamerData.HarvestItems[i].Gamer_Num.ToString();
                 button.onClick.AddListener(() => Click(Sell_Button));
                 Sell_Button.onClick.AddListener(() => Sell(button));
             }
@@ -86,12 +87,12 @@ public class WarehouseUI : UIBase
     /// <param name="button"></param>
     public void Sell(Button button)
     {
-        PlantData plantData=button.GetComponent<Plant>().Data;
-        foreach(PlantData item in ObjectKeeper_Singleton.Instance.gamerData.Items)
+        PlantItem_Data plantData=button.GetComponent<Plant>().Data;
+        foreach(PlantItem_Data item in ObjectKeeper_Singleton.Instance.gamerData.HarvestItems)
         {
-            if(item==plantData&&item.Num>0)
+            if(item==plantData&&item.Gamer_Num>0)
             {
-                item.Num--;
+                item.Gamer_Num--;
                 ObjectKeeper_Singleton.Instance.gamerData.Money++;
             }
         }

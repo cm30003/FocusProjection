@@ -11,8 +11,6 @@ public class ShopUI : UIBase
     [Header("！！！！燕！！！！")]
     public List<GiftData> product_list;
     public List<Button> Gift_Buttons_Prefab;
-    //[Header("！！！！怏！！！！")]
-    //public List<TextMeshProUGUI> TextMeshProUGUIs;
     [Header("！！！！匝扮延楚！！！！")]
     public float x;
     public float y;

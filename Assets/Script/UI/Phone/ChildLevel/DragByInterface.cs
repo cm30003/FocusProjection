@@ -28,7 +28,7 @@ public class DragByInterface : MonoBehaviour,IDragHandler,IBeginDragHandler,IEnd
 
     public void OnDrag(PointerEventData eventData)
     {
-        Debug.Log(eventData.pointerCurrentRaycast.gameObject.name);
+        //Debug.Log(eventData.pointerCurrentRaycast.gameObject.name);
         //定义：eventData.delta 是 eventData 中的一个属性，表示事件的增量变化。具体类型取决于 eventData 的子类。
         //类型：通常为 Vector2，表示在某个事件（如拖动）中位置的变化量。
         //用途：在拖动事件中，eventData.delta 表示鼠标或触摸点在当前帧和上一帧之间的移动距离。
@@ -53,7 +53,7 @@ public class DragByInterface : MonoBehaviour,IDragHandler,IBeginDragHandler,IEnd
             CanvasGroup.blocksRaycasts = true;
 
             //玩家选中事件
-            EventCenter.GetInstance().EventTrigger<string>("Is_Choosen",GetComponent<NPCData_Data>().data.Name);
+            EventCenter.GetInstance().EventTrigger<string>("Is_Choosen",GetComponent<NPCData_Data>().npcInformation.Name);
         }
         else
         {
@@ -63,7 +63,7 @@ public class DragByInterface : MonoBehaviour,IDragHandler,IBeginDragHandler,IEnd
             GetComponent<RectTransform>().localScale = new Vector3(0.1f, 0.1f, 0.1f);
             GetComponent<RectTransform>().sizeDelta = new Vector2(900, 1289);
             //待命事件
-            EventCenter.GetInstance().EventTrigger<string>("Is_Waiting", GetComponent<NPCData_Data>().data.Name);
+            EventCenter.GetInstance().EventTrigger<string>("Is_Waiting", GetComponent<NPCData_Data>().npcInformation.Name);
         }
 
     }

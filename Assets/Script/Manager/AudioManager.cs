@@ -20,7 +20,13 @@ public class AudioManager : BaseManager<AudioManager>
     {
         for(int i=soundList.Count-1; i>=0; i++)
         {
-            if(!soundList[i].isPlaying)//如果音频播放完毕
+            // 增加 null 检查
+            if (soundList[i] == null)
+            {
+                soundList.RemoveAt(i);
+                continue;
+            }
+            if (!soundList[i].isPlaying)//如果音频播放完毕
             {
                 GameObject.Destroy(soundList[i]);//销毁该音效
                 soundList.RemoveAt(i);//从音效列表中移除

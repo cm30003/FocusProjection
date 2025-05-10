@@ -61,6 +61,7 @@ public class Phone_Shop : NewUIBase
     /// </summary>
     private void Open_Gift_UI(Button button)
     {
+        Clear_All_Button();
         Current_Button = button;
         Button_Image_Change(Top_Button_Group, After_Button_Image, Start_Button_Image);
     }
@@ -69,6 +70,7 @@ public class Phone_Shop : NewUIBase
     /// </summary>
     private void Open_Building_UI(Button button)
     {
+        Clear_All_Button();
         Current_Button = button;
         Button_Image_Change(Top_Button_Group, After_Button_Image, Start_Button_Image);
     }
@@ -78,11 +80,11 @@ public class Phone_Shop : NewUIBase
     /// </summary>
     private void Open_Cloth_UI(Button button)
     {
+        Clear_All_Button();
         Current_Button = button;
         Button_Image_Change(Top_Button_Group, After_Button_Image, Start_Button_Image);
     }
-    //#region 商城 礼物界面
-
+    #region 商城 礼物界面
     /// <summary>
     /// 根据读表动态生成商品按钮
     /// </summary>
@@ -173,5 +175,25 @@ public class Phone_Shop : NewUIBase
         }
         
         
+    }
+    #endregion
+    /// <summary>
+    /// 清空礼物二级界面所有的按钮事件
+    /// </summary>
+    public void Clear_All_Button()
+    {
+        Button[] buttons = Gift_UI.GetComponentsInChildren<Button>();
+        if(buttons.Length>0)
+        {
+            foreach (Button button in buttons)
+            {
+                button.onClick.RemoveAllListeners();
+                Destroy(button.gameObject);
+            }
+        }
+        else
+        {
+            return;
+        }
     }
 }

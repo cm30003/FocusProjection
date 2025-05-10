@@ -25,29 +25,25 @@ public class CharaController : MonoBehaviour
     [Tooltip("工作的田地")]
     public plant_State Work_Field;
     [Tooltip("搬运的货物")]
-    public PlantData freight;//货物
+    public PlantItem_Data freight;//货物
     [Header("————动物/数据————")]
+    public string NPC_DATA_PATH = "JsonDataAsset/NPC_Data";
+    public string NPC_INFO_PATH = "JsonDataAsset/NPCInformation";
+
+    public NPCInformation npc_Information;
+    
     public NPCData Template_data;
     public NPCData data;
     [Header("————组件————")]
     private Animator animator;//动画状态机
     private AIPath aiPath;//A Star 寻路
+
+    [Header("————计时————")]
+    private float Standard_Second = 1;
+
     private void Start()
     {
-        //获取数据列表中的NPCJson数据
-        string NPCInfo = ResourceManager.GetInstance().Load<TextAsset>("JsonDataAsset/NPC_Data").text;
-        //反序列化解析为对应的数据结构
-        NPCData[] NPC_Datas = JsonMapper.ToObject<NPCData[]>(NPCInfo);
-        //遍历数据结构，寻找对应名字的小动物
-        for (int i = 0; i < NPC_Datas.Length; i++)
-        {
-            string name = NPC_Datas[i].Name;
-            if (name == this.name)
-            {
-                Template_data = NPC_Datas[i];
-                break;
-            }
-        }
+        NPCData_Information_SignIn();
 
         animator = GetComponentInChildren<Animator>();//获取动画状态机
 
@@ -58,6 +54,39 @@ public class CharaController : MonoBehaviour
         Target.target = null;
 
         aiPath = GetComponent<AIPath>();
+    }
+   /// <summary>
+   /// 注册NPC数据与描述信息
+   /// </summary>
+    public void NPCData_Information_SignIn()
+    {
+        //获取数据列表中的NPCJson数据
+        string NPCData = ResourceManager.GetInstance().Load<TextAsset>(NPC_DATA_PATH).text;
+        string NPCInfo = ResourceManager.GetInstance().Load<TextAsset>(NPC_INFO_PATH).text;
+        //反序列化解析为对应的数据结构
+        NPCData[] NPC_Data = JsonMapper.ToObject<NPCData[]>(NPCData);
+        NPCInformation[] NPC_Info = JsonMapper.ToObject<NPCInformation[]>(NPCInfo);
+        //遍历数据结构，寻找对应名字的小动物,获取小动物信息
+        for (int i = 0; i < NPC_Info.Length; i++)
+        {
+            string name = NPC_Info[i].Name;
+            if (name == this.name)
+            {
+                npc_Information = NPC_Info[i];
+                break;
+            }
+        }
+        //小动物信息获取后，通过其信息获取其数据
+        for (int i = 0; i < NPC_Data.Length; i++)
+        {
+            int ID = NPC_Data[i].ID;
+            if (ID == npc_Information.ID)
+            {
+                Template_data = NPC_Data[i];
+                data=new NPCData(Template_data);
+                break;
+            }
+        }
     }
     #region 事件
     /// <summary>
@@ -83,14 +112,14 @@ public class CharaController : MonoBehaviour
     }
     public void IsChoosen(string name)
     {
-        if (ObjectKeeper_Singleton.Instance.Is_Set&&name==data.Name)
+        if (ObjectKeeper_Singleton.Instance.Is_Set&&name==npc_Information.Name)
         {
             NPC_Status = NPC_status.GoToWork;
         }
     }
     public void IsWaiting(string name)
     {
-        if (ObjectKeeper_Singleton.Instance.Is_Set&&name==data.Name)
+        if (ObjectKeeper_Singleton.Instance.Is_Set&&name== npc_Information.Name)
         {
             NPC_Status = NPC_status.Go_To_Rest;
         }
@@ -101,26 +130,29 @@ public class CharaController : MonoBehaviour
     /// <param name="Info">礼物信息</param>
     public void Gifted(Button Info)
     {
-        if(Info.name==data.Name)
+        if(Info.name== npc_Information.Name)
         {
             GiftData gift_data = Info.GetComponent<Gift>().Data;
-            //如果小动物喜欢这个礼物，则增加好感度增加
-            if(data.FavorvateThing==gift_data.Name)
+            //比对小动物ID。如果小动物喜欢这个礼物，则增加好感度增加
+            if(data.CherishThing_ID == gift_data.ID)
             {
-                data.Favorability += gift_data.favorability_Plus_Num+5;
+                data.Favorability += gift_data.Favorate_Affinity;
             }
-            else//如果普通，则按数值增加
+            else if(data.FavorvateThing_ID==gift_data.ID)
             {
-                data.Favorability += gift_data.favorability_Plus_Num;
+                data.Favorability += gift_data.Like_Affinity;
             }
-            
+            else//如果普通，则按默认数值增加
+            {
+                data.Favorability += gift_data.Default_Affinity;
+            }
         }
     }
-
+    #region 小动物指令
     public void Order_Work(Button info)
     {
         string button_Name= info.transform.parent.gameObject.transform.parent.gameObject.transform.parent.gameObject.name;
-        if (button_Name == data.Name)
+        if (button_Name == npc_Information.Name)
         {
             NPC_Status= NPC_status.GoToWork;
             data.Favorability--;
@@ -131,7 +163,7 @@ public class CharaController : MonoBehaviour
     public void Order_Rest(Button info)
     {
         string button_Name = info.transform.parent.gameObject.transform.parent.gameObject.transform.parent.gameObject.name;
-        if (button_Name == data.Name)
+        if (button_Name == npc_Information.Name)
         {
             NPC_Status = NPC_status.Go_To_Rest;
             print("强制休息指令");
@@ -140,12 +172,13 @@ public class CharaController : MonoBehaviour
     public void Order_Eat(Button info)
     {
         string button_Name = info.transform.parent.gameObject.transform.parent.gameObject.transform.parent.gameObject.name;
-        if (button_Name == data.Name)
+        if (button_Name == npc_Information.Name)
         {
             NPC_Status = NPC_status.GoToEat;
             print("强制恰饭指令");
         }
     }
+    #endregion
     #endregion
     private void FixedUpdate()
     {
@@ -170,7 +203,9 @@ public class CharaController : MonoBehaviour
                 animator.Play("z_move");//行走动画
 
                 Target.target = null;//首先目标置空
-                HungryTime_calculation();//开始计算饥饿时间
+
+                HungryTime_calculation();
+
                 Freight_Wait();//查找是否存在货物需要搬运，若有则优先搬运货物
                 if (Target.target==null)//如果没有找到工作地点，则搜寻最近的
                 {
@@ -188,18 +223,25 @@ public class CharaController : MonoBehaviour
 
                 animator.Play("b_work1");//播放 工作动画
 
-                HungryTime_calculation();//计算饥饿时间
+                HungryTime_calculation();
 
                 //若查找到的田地不为空，
-                if(Work_Field != null)
+                if (Work_Field != null)
                 {
-                    //工作的田地上的植物处于收获状态，则进入运输状态
-                    if (Work_Field.State == Plant_State.harvest)
+                    //如果田地状态进入自由生长的状态，则重新计算玩家状态
+                    if(Work_Field.State == Plant_State.Germinate||Work_Field.State == Plant_State.Grown1||Work_Field.State == Plant_State.Grown2||Work_Field.State == Plant_State.Mature||Work_Field.State == Plant_State.Empty)
                     {
-                        NPC_Status = NPC_status.Transport;
+                        Leave_Field();
+                        NPC_Status = NPC_status.GoToWork;
+
                     }
+                    //工作的田地上的植物处于收获状态，则进入运输状态
+                    //if (Work_Field.State == Plant_State.harvest)
+                    //{
+                    //    NPC_Status = NPC_status.Transport;
+                    //}
                     //小动物进入工作状态，开始进入工作时间倒计时,在这里使用GameManager中的公用计时器方法
-                    GameManager.GetInstance().FixedUpdate_Timer(ref data.Work_Time, 1f);
+                    GameManager.GetInstance().FixedUpdate_Timer(ref data.Work_Time, 1f,ref Standard_Second);
                     //工作时间归零进入偷懒结算
                     if (data.Work_Time <= 0)
                     {
@@ -217,11 +259,6 @@ public class CharaController : MonoBehaviour
                 {
                     //查找存在工作的田地
                     Work_Field = Choosen_Field();
-                    //找不到，就摸鱼！
-                    if (Work_Field == null)
-                    {
-                        NPC_Status = NPC_status.GoTo_TouchFish;
-                    }
                 }
                 break;
 
@@ -253,6 +290,8 @@ public class CharaController : MonoBehaviour
 
                     if (CurrentRestIde_Time <= 0)
                     {
+                        Target.target  = null;
+
                         float randomX = Random.Range(-RestWalk_InRest_RangeX, RestWalk_InRest_RangeX);//随机X
                         float randomY = Random.Range(-RestWalk_InRest_RangeY, RestWalk_InRest_RangeY);//随机Y
 
@@ -261,10 +300,7 @@ public class CharaController : MonoBehaviour
 
                         Vector2 stroll = new Vector2(RestArea_X + randomX, RestArea_Y + randomY);
 
-                        GameObject storll_target = new GameObject();
-                        storll_target.transform.position = stroll;
-
-                        Target.target = storll_target.transform;
+                        aiPath.destination = stroll;
 
                         CurrentRestIde_Time = RestIde_Time;
                     }
@@ -296,7 +332,7 @@ public class CharaController : MonoBehaviour
                 }
                 
                 Leave_Field();//离开田地，田地的负责人置空
-                HungryTime_calculation();//计算饥饿时间
+                HungryTime_calculation();
                 break;
 
             case NPC_status.TouchFish://摸鱼
@@ -305,7 +341,7 @@ public class CharaController : MonoBehaviour
 
                 animator.Play("b_sit");//坐
 
-                HungryTime_calculation();//计算饥饿时间
+                HungryTime_calculation();
 
                 break;
             
@@ -336,13 +372,13 @@ public class CharaController : MonoBehaviour
                 //重置田地状态
                 Leave_Field();
                 //开始吃饭倒计时
-                GameManager.GetInstance().FixedUpdate_Timer(ref data.Eat_Time,1f);
+                GameManager.GetInstance().FixedUpdate_Timer(ref data.Eat_Time,1f, ref Standard_Second);
                 //就餐完毕
                 if(data.Eat_Time<=0)
                 {
                     //加食物Buff
-                    data.Work_Speed += ObjectKeeper_Singleton.Instance.foodData.Buff;
-                    data.MoveSpeed += ObjectKeeper_Singleton.Instance.foodData.Buff;
+                    //data.Work_Speed += ObjectKeeper_Singleton.Instance.foodData.Buff;
+                    //data.MoveSpeed += ObjectKeeper_Singleton.Instance.foodData.Buff;
                     //进行数值计算(小动物每次进食扣除餐费)
                     ObjectKeeper_Singleton.Instance.gamerData.Money += ObjectKeeper_Singleton.Instance.foodData.Cost;
                     //更新数值显示
@@ -360,7 +396,7 @@ public class CharaController : MonoBehaviour
 
                 Move_Right_OR_Left();//判断左右并进行翻转
 
-                if (freight.Name!=null)
+                if (freight.ID!=0)
                 {
                     Target.target = ObjectKeeper_Singleton.Instance.WareHouse.transform;
                 }
@@ -413,22 +449,29 @@ public class CharaController : MonoBehaviour
     /// </summary>
     public void HungryTime_calculation()
     {
-        GameManager.GetInstance().FixedUpdate_Timer(ref data.Hungry_Time, 1f);
-        if (data.Hungry_Time <= 0)
+        Standard_Second -= Time.fixedDeltaTime;
+        if (Standard_Second <= 0)
         {
-            NPC_Status = NPC_status.GoToEat;
-            //重置数据
-            Time_Data_Reset();
+            Standard_Second = 1;
+            data.Hungry_Time -= 1;
+            if (data.Hungry_Time <= 0)
+            {
+                NPC_Status = NPC_status.GoToEat;
+                //重置数据
+                Time_Data_Reset();
+                
+            }
         }
+        
     }
     /// <summary>
     /// 重置时间/工作 吃饭 饥饿等时间
     /// </summary>
     public void Time_Data_Reset()
     {
-        data.Work_Time = Template_data.Work_Time;
-        data.Eat_Time= Template_data.Eat_Time;
-        data.Hungry_Time = Template_data.Hungry_Time;
+        data.Work_Time = Template_data.Work_Time;//重置工作时间
+        data.Eat_Time= Template_data.Eat_Time;//重置吃饭时间
+        data.Hungry_Time = Template_data.Hungry_Time;//重置饥饿时间
     }
     /// <summary>
     /// 随着好感度更新，更新偷懒概率
@@ -452,13 +495,19 @@ public class CharaController : MonoBehaviour
             GameObject Field = ObjectKeeper_Singleton.Instance.Farm_Field[i];
             plant_State plant_State = Field.GetComponent<plant_State>();
             //当该土地确实存在植物，且没有小动物在土地上工作,且植物没有处于自由生长状态时
-            if(plant_State.State!= Plant_State.Empty&&plant_State.State!=Plant_State.Germinate&& plant_State.State!=Plant_State.Grown&& 
-                plant_State.State!=Plant_State.Mature && plant_State.npc_Data.Name=="")
+            if (plant_State.State != Plant_State.Empty &&//不为空
+                plant_State.State != Plant_State.Germinate &&//不在发芽阶段
+                plant_State.State != Plant_State.Grown1 && plant_State.State != Plant_State.Grown2&&//不在成长阶段
+                plant_State.State!=Plant_State.Mature &&//不在成熟阶段
+                plant_State.npc_Data.ID==0)
             {
+
                 plant_State.npc_Data = data;//为田地设置工作者
+
                 return plant_State;
             }
         }
+        NPC_Status = NPC_status.GoTo_TouchFish;
         return null;
     }
     /// <summary>
@@ -468,7 +517,6 @@ public class CharaController : MonoBehaviour
     {
         if(Work_Field!=null)//如果有工作田地
         {
-            //print(Target.target);
             Target.target= null;//将目标置空
             Work_Field.npc_Data = new NPCData(null);//使田地回到无主之地状态
             Work_Field = null;//置空工作田地
