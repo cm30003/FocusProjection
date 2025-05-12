@@ -65,7 +65,17 @@ public class Phone_PlantManager : NewUIBase
         PlantItem_Data plant_Data = button.GetComponent<Plant>().Data;
         Button Buy_Button = button.transform.GetChild(3).GetComponent<Button>();
 
-        Buy_Button.onClick.AddListener(() => Field(button));
+        Buy_Button.onClick.AddListener(() => 
+        { 
+            if (ObjectKeeper_Singleton.Instance.gamerData.Money>=plant_Data.Cost)
+            {
+                Field(button); 
+            }
+            else
+            {
+                return;
+            }
+        });
         button.onClick.AddListener(() => Click(button));
     }
     /// <summary>
@@ -93,25 +103,30 @@ public class Phone_PlantManager : NewUIBase
         }
     }
     /// <summary>
-    ///田地/种植事件
+    /// 植物购买事件 田地/种植事件
     /// </summary>
+    /// <param name="button">Item按钮</param>
     public void Field(Button button)
     {
+
         //暂存所有田地
         GameObject[] fileds = ObjectKeeper_Singleton.Instance.Farm_Field;
-        //更新数据
-        ObjectKeeper_Singleton.Instance.gamerData.Money -= button.GetComponent<Plant>().Data.Cost;
-        EventCenter.GetInstance().EventTrigger("Info_Update");
+
         //更新田地状态
         for (int i = 0; i < fileds.Length; i++)
         {
-            //
+            
+            //获取田地
             GameObject field = fileds[i];
+            //获取田地状态
             plant_State plant_State = field.GetComponent<plant_State>();
-            if (plant_State.State == Plant_State.Empty)
+            if (plant_State.State == Plant_State.Empty)//如果田地为空
             {
                 plant_State.State = Plant_State.plant;
+
                 Plant(field, button);
+                //更新数据
+                ObjectKeeper_Singleton.Instance.Planted(button);
                 break;
             }
         }

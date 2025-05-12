@@ -87,10 +87,18 @@ public class Phone_DinningHall : NewUIBase
     /// <param name="button">µ±Ç°Item</param>
     public void Buy(Button button)
     {
-        Current_Food = button.GetComponent<Item_Food>().Data;
+        if(ObjectKeeper_Singleton.Instance.gamerData.Money< button.GetComponent<Item_Food>().Data.Cost)
+        {
+            return;
+        }
+        else
+        {
+            Current_Food = button.GetComponent<Item_Food>().Data;
 
-        ObjectKeeper_Singleton.Instance.foodData = Current_Food;
-        ObjectKeeper_Singleton.Instance.gamerData.Money -= Current_Food.Cost;
-        EventCenter.GetInstance().EventTrigger("Info_Update");
+            ObjectKeeper_Singleton.Instance.foodData = Current_Food;
+            ObjectKeeper_Singleton.Instance.gamerData.Money -= Current_Food.Cost;
+            EventCenter.GetInstance().EventTrigger("Info_Update");
+        }
+        
     }
 }

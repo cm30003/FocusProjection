@@ -13,7 +13,7 @@ public class MainUI : UIBase
     public CanvasGroup ShopUI;//商店界面
 
     public CanvasGroup NCP_Manager_UI;//动物管理
-    public CanvasGroup Plant_Manage_UI;//植物管理
+    //public CanvasGroup Plant_Manage_UI;//植物管理
 
     public CanvasGroup WareHouse_UI;//仓库
     public CanvasGroup DiningHall_UI;//食堂
@@ -70,7 +70,7 @@ public class MainUI : UIBase
         NPCManager_Button.onClick.AddListener(Open_NCP_Manager_UI);//动物管理
         DiningHall_Button.onClick.AddListener(Open_DiningHall_UI);//食堂
         WareHouse_Button.onClick.AddListener(Open_WareHouse_UI);//仓库
-        PlantManager_Button.onClick.AddListener(Open_Plant_Manage_UI);//植物管理
+        //PlantManager_Button.onClick.AddListener(Open_Plant_Manage_UI);//植物管理
         Timer_Button.onClick.AddListener(Open_Timer_UI);//计时器
 
         Player_IDCard_Button.onClick.AddListener(Open_Player_IDCard);//打开玩家名片
@@ -236,10 +236,10 @@ public class MainUI : UIBase
     //{
     //    OpenUI(Calendar_UI);
     //}
-    public void Open_Plant_Manage_UI()
-    {
-        OpenUI(Plant_Manage_UI);
-    }
+    //public void Open_Plant_Manage_UI()
+    //{
+    //    OpenUI(Plant_Manage_UI);
+    //}
     //public void Open_System_Menue_UI()
     //{
     //    OpenUI(System_Menue_UI);

@@ -19,7 +19,6 @@ public class NewUIBase : MonoBehaviour
     private Dictionary<string,List<UIBehaviour>>ControlDic=new Dictionary<string, List<UIBehaviour>>();
 
     protected Button Current_Button;
-
     protected virtual void Awake()
     {
         FindChildrenControl<Button>();

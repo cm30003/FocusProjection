@@ -1,4 +1,5 @@
 using LitJson;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -122,11 +123,16 @@ public class Phone_Shop : NewUIBase
             GameObject BaseImage = button1.transform.GetChild(3).gameObject;
             if(Current_Button==button1)
             {
-                BaseImage.transform.localScale = Vector3.one;
+                BaseImage.GetComponent<CanvasGroup>().alpha = 1;
+                BaseImage.GetComponent<CanvasGroup>().blocksRaycasts = true;
+                BaseImage.GetComponent<CanvasGroup>().interactable = true;
+
             }
             else
             {
-                BaseImage.transform.localScale = Vector3.zero;
+                BaseImage.GetComponent<CanvasGroup>().alpha=0;
+                BaseImage.GetComponent<CanvasGroup>().blocksRaycasts = false;
+                BaseImage.GetComponent<CanvasGroup>().interactable = false;
             }
         }
     }
@@ -140,21 +146,30 @@ public class Phone_Shop : NewUIBase
         for (int i = 0; i < buttons.Length; i++)
         {
             Button button = buttons[i];
-            TextMeshProUGUI favorability = button.transform.parent.transform.parent.transform.GetChild(1).GetComponentInChildren<TextMeshProUGUI>();//获取二级界面中的好感度
+            TextMeshProUGUI favorability = button.transform.parent.transform.parent.transform.GetChild(1).GetComponentInChildren<TextMeshProUGUI>();//获取二级界面中的好感度显示文本
             Gift giftdata = button.GetComponent<Gift>();//获取按钮上的商品数据
 
-            giftdata.Data = data.Data;
+            giftdata.Data = data.Data;//获取数据
             button.gameObject.name = npcs[i % npcs.Length].name;//将按钮的名字全部转为现有的NPC的名字
             button.image.sprite = ResourceManager.GetInstance().Load<Sprite>(npcs[i % npcs.Length].GetComponent<CharaController>().Template_data.Sprite_Res);//按钮Image全部转为NPC的Sprite
-            favorability.text = npcs[i % npcs.Length].GetComponent<CharaController>().data.Favorability.ToString();//更新送礼的NPC的好感度
-
-            //注册送礼事件
-            button.onClick.AddListener(() => EventCenter.GetInstance().EventTrigger("Gifted", button));
-            button.onClick.AddListener(() => EventCenter.GetInstance().EventTrigger("Info_Update"));
+            
+            //为二级界面按钮注册送礼事件
+            button.onClick.AddListener(() =>
+            {
+                if (ObjectKeeper_Singleton.Instance.gamerData.Money< giftdata.Data.Cost)//玩家钱不够
+                {
+                    return;
+                }
+                else
+                {
+                    EventCenter.GetInstance().EventTrigger("Gifted", button);
+                    favorability.text = npcs[i % npcs.Length].GetComponent<CharaController>().data.Favorability.ToString();//更新送礼的NPC的好感度
+                }
+            } );
         }
     }
     /// <summary>
-    /// 二级界面信息更新方法
+    /// 二级界面信息更新方法，被引用于信息更新事件
     /// </summary>
     public void Grade_Two_Info_Update()
     {
@@ -173,8 +188,6 @@ public class Phone_Shop : NewUIBase
                 favorability.text = npcs[a % npcs.Length].GetComponent<CharaController>().data.Favorability.ToString();//更新送礼的NPC的好感度
             }
         }
-        
-        
     }
     #endregion
     /// <summary>

@@ -4,6 +4,8 @@ using UnityEngine.UI;
 public class UIBase : MonoBehaviour
 {
     protected Button Current_Button;
+
+
     protected void CloseUI(CanvasGroup canvasGroup)
     {
         canvasGroup.alpha = 0f;

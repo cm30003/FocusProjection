@@ -79,15 +79,17 @@ public class UIManager : BaseManager<UIManager>
     /// <param name="callBack"></param>
     public void ShowOldUI<T>(string uiName, UnityAction<T> callBack = null) where T : UIBase 
     {
-        if (LoadedNewUIDic.ContainsKey(uiName))
+        if (LoadedOldUIDic.ContainsKey(uiName))
         {
-            LoadedNewUIDic[uiName].ShowMe();
+            Debug.Log("UI已经存在");
+            //LoadedOldUIDic[uiName].ShowMe();
             if (callBack != null)
             {
-                callBack(LoadedNewUIDic[uiName] as T);
+                callBack(LoadedOldUIDic[uiName] as T);
             }
             //避免面板重复加载 如果存在该面板 直接显示 调用回调函数后 直接Return 不再处理后面的异步加载逻辑
             return;
+
         }
 
         ResourceManager.GetInstance().LoadAsync<GameObject>("UI/" + uiName, (obj) =>

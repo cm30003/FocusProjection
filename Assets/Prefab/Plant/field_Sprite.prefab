@@ -82,7 +82,7 @@ SpriteRenderer:
   m_SortingLayerID: 593256009
   m_SortingLayer: 2
   m_SortingOrder: 8
-  m_Sprite: {fileID: 21300000, guid: 718074e4e56a5404e824bf8e6571ea7d, type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -90,7 +90,7 @@ SpriteRenderer:
   m_Size: {x: 0.96, y: 1.46}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &3063530636227718601
@@ -175,7 +175,7 @@ SpriteRenderer:
   m_SortingLayerID: 593256009
   m_SortingLayer: 2
   m_SortingOrder: 8
-  m_Sprite: {fileID: 21300000, guid: 718074e4e56a5404e824bf8e6571ea7d, type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -183,7 +183,7 @@ SpriteRenderer:
   m_Size: {x: 0.96, y: 1.46}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &6456823266662459021
@@ -268,7 +268,7 @@ SpriteRenderer:
   m_SortingLayerID: 593256009
   m_SortingLayer: 2
   m_SortingOrder: 8
-  m_Sprite: {fileID: 21300000, guid: 718074e4e56a5404e824bf8e6571ea7d, type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -276,7 +276,7 @@ SpriteRenderer:
   m_Size: {x: 0.96, y: 1.46}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &6457609850575511345
@@ -361,7 +361,7 @@ SpriteRenderer:
   m_SortingLayerID: 593256009
   m_SortingLayer: 2
   m_SortingOrder: 8
-  m_Sprite: {fileID: 21300000, guid: 718074e4e56a5404e824bf8e6571ea7d, type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -369,7 +369,7 @@ SpriteRenderer:
   m_Size: {x: 0.96, y: 1.46}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &6932973723568679492
@@ -454,7 +454,7 @@ SpriteRenderer:
   m_SortingLayerID: 593256009
   m_SortingLayer: 2
   m_SortingOrder: 8
-  m_Sprite: {fileID: 21300000, guid: 718074e4e56a5404e824bf8e6571ea7d, type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -462,7 +462,7 @@ SpriteRenderer:
   m_Size: {x: 0.96, y: 1.46}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &7892728847479766238
@@ -547,7 +547,7 @@ SpriteRenderer:
   m_SortingLayerID: 593256009
   m_SortingLayer: 2
   m_SortingOrder: 8
-  m_Sprite: {fileID: 21300000, guid: 718074e4e56a5404e824bf8e6571ea7d, type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -555,7 +555,7 @@ SpriteRenderer:
   m_Size: {x: 0.96, y: 1.46}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &8923348949970662300
@@ -640,7 +640,7 @@ SpriteRenderer:
   m_SortingLayerID: 593256009
   m_SortingLayer: 2
   m_SortingOrder: 8
-  m_Sprite: {fileID: 21300000, guid: 718074e4e56a5404e824bf8e6571ea7d, type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -648,7 +648,7 @@ SpriteRenderer:
   m_Size: {x: 0.96, y: 1.46}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &8958451099454776256
@@ -733,7 +733,7 @@ SpriteRenderer:
   m_SortingLayerID: 593256009
   m_SortingLayer: 2
   m_SortingOrder: 8
-  m_Sprite: {fileID: 21300000, guid: 718074e4e56a5404e824bf8e6571ea7d, type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -741,7 +741,7 @@ SpriteRenderer:
   m_Size: {x: 0.32, y: 0.32}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &8983646225441032632
@@ -806,51 +806,57 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   npc_Data:
-    sprite: {fileID: 0}
-    Name: 
-    Hobby: 
-    Personality: 
-    Description: 
-    BirthDay: 
+    ID: 0
     Favorability: 0
-    FavorvateThing: 
+    FavorvateThing_ID: 0
+    CherishThing_ID: 0
     MoveSpeed: 0
     Work_Speed: 0
     Work_Time: 0
     Eat_Time: 0
     Hungry_Time: 0
+    Sprite_Res: 
   Temple_Data:
+    ID: 0
     Name: 
-    Sprite: {fileID: 0}
     Description: 
-    Money_Cost_reward: 0
-    Germinate_Image: {fileID: 0}
-    Grown_Image: {fileID: 0}
-    Mature_Image: {fileID: 0}
+    Sell_Price: 0
+    Cost: 0
     Germinate_Time: 0
-    Grown_Time: 0
+    Grown_Time1: 0
+    Grown_Time2: 0
     Mature_Time: 0
     Plant_Time: 0
-    Water_Time: 0
+    Water_Time1: 0
+    Water_Time2: 0
     fertilize_Time: 0
     BugControl_Time: 0
     Harvest_Time: 0
-    Num: 0
+    Harvest_Num: 0
+    Gamer_Num: 0
+    Germinate_SpriteResPath: 
+    Grown_SpriteResPath: 
+    Mature_SpriteResPath: 
   data:
+    ID: 0
     Name: 
-    Sprite: {fileID: 0}
     Description: 
-    Money_Cost_reward: 0
-    Germinate_Image: {fileID: 0}
-    Grown_Image: {fileID: 0}
-    Mature_Image: {fileID: 0}
+    Sell_Price: 0
+    Cost: 0
     Germinate_Time: 0
-    Grown_Time: 0
+    Grown_Time1: 0
+    Grown_Time2: 0
     Mature_Time: 0
     Plant_Time: 0
-    Water_Time: 0
+    Water_Time1: 0
+    Water_Time2: 0
     fertilize_Time: 0
     BugControl_Time: 0
     Harvest_Time: 0
-    Num: 0
+    Harvest_Num: 0
+    Gamer_Num: 0
+    Germinate_SpriteResPath: 
+    Grown_SpriteResPath: 
+    Mature_SpriteResPath: 
   State: 0
+  Standard_Second: 1

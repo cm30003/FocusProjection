@@ -441,55 +441,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e68479ebeb8e06649b0fa7cdfe0566c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlantItem_List:
-  - Name: "\u5065\u5EB7\u5957\u9910"
-    Sprite: {fileID: 21300000, guid: 9ff6e38bd8b4f2c44949613f23060ea2, type: 3}
-    Description: "\u5F88\u5065\u5EB7\u7684\u5957\u9910"
-    Money_Cost_reward: -10
-    Germinate_Image: {fileID: 21300000, guid: 9ff6e38bd8b4f2c44949613f23060ea2, type: 3}
-    Grown_Image: {fileID: 21300000, guid: 57a92e9db8ec377489f189764e63254d, type: 3}
-    Mature_Image: {fileID: 21300000, guid: b7e9fe3394d82e34ca33793c0233356b, type: 3}
-    Germinate_Time: 60
-    Grown_Time: 30
-    Mature_Time: 30
-    Plant_Time: 30
-    Water_Time: 30
-    fertilize_Time: 30
-    BugControl_Time: 30
-    Harvest_Time: 30
-    Num: 5
-  - Name: "\u5361\u5E03\u5947\u8BFA"
-    Sprite: {fileID: 21300000, guid: 5d7ba9da50d178248b3442abfe5e27dc, type: 3}
-    Description: "\u5361\u5E03\u7684\u5947\u8BFA"
-    Money_Cost_reward: -20
-    Germinate_Image: {fileID: 21300000, guid: 5d7ba9da50d178248b3442abfe5e27dc, type: 3}
-    Grown_Image: {fileID: 21300000, guid: 36dc00c805d59ae4099b14b35d0968e9, type: 3}
-    Mature_Image: {fileID: 21300000, guid: be903c84cd158bc4085ea660b1809b33, type: 3}
-    Germinate_Time: 80
-    Grown_Time: 40
-    Mature_Time: 40
-    Plant_Time: 40
-    Water_Time: 40
-    fertilize_Time: 40
-    BugControl_Time: 40
-    Harvest_Time: 40
-    Num: 5
-  - Name: "\u7F8E\u5E74\u8FBE"
-    Sprite: {fileID: 21300000, guid: a2fa2a7d8ff1084499a4fa0c30f9f51f, type: 3}
-    Description: "\u5496\u55B1\u7684\u996D"
-    Money_Cost_reward: -30
-    Germinate_Image: {fileID: 21300000, guid: a2fa2a7d8ff1084499a4fa0c30f9f51f, type: 3}
-    Grown_Image: {fileID: 21300000, guid: 8599c99f7d9bc9344b9ddb1a05345dd1, type: 3}
-    Mature_Image: {fileID: 21300000, guid: 9aec595f6d047b24695938d197daf3b8, type: 3}
-    Germinate_Time: 100
-    Grown_Time: 50
-    Mature_Time: 50
-    Plant_Time: 50
-    Water_Time: 50
-    fertilize_Time: 50
-    BugControl_Time: 50
-    Harvest_Time: 50
-    Num: 5
+  PlantItem_List: []
   PlantItem_Prefab_List:
   - {fileID: 736983264420854470, guid: a9d54e251a3e93347982fad07bb266f4, type: 3}
   - {fileID: 736983264420854470, guid: bbdc068ae9f24c347ad55cd431dd80a8, type: 3}

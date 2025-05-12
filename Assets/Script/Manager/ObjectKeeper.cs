@@ -31,7 +31,9 @@ public class ObjectKeeper_Singleton:SingletonMono<ObjectKeeper_Singleton>
     public GameObject Rest_Area;//休息的区域
 
     public GameObject[] TouchFish_Area;//摸鱼的区域
-
+    [Header("————音效————")]
+    public string DayBGM_Path;
+    public string NightBGM_Path;
 
     protected override void Awake()
     {
@@ -47,7 +49,23 @@ public class ObjectKeeper_Singleton:SingletonMono<ObjectKeeper_Singleton>
         Rest_Area = GameObject.FindGameObjectWithTag("Rest_Area");
         TouchFish_Area = GameObject.FindGameObjectsWithTag("TouchFish_Area");
         //注册事件
-        EventCenter.GetInstance().AddEventListener<Button>("Gifted", Gifted);//送礼事件
+        EventCenter.GetInstance().AddEventListener<Button>("Gifted", Buy);//送礼事件
+    }
+    private void Start()
+    {
+        PlayerFirst_SignIn();
+
+        Farm_Field = Field_SignIn();
+
+        Current_Food(null);
+    }
+    public void Buy(Button Info)
+    {
+        if(Info.GetComponent<Gift>()!=null)
+        {
+            gamerData.Money -= Info.GetComponent<Gift>().Data.Cost;//玩家扣除相应的礼物花销
+            EventCenter.GetInstance().EventTrigger("Info_Update");
+        }
     }
     /// <summary>
     /// 送礼后扣款了，更新金钱
@@ -55,17 +73,16 @@ public class ObjectKeeper_Singleton:SingletonMono<ObjectKeeper_Singleton>
     /// <param name="Info">礼品信息</param>
     private void Gifted(Button Info)
     {
-        gamerData.Money += Info.GetComponent<Gift>().Data.Cost;
-        EventCenter.GetInstance().EventTrigger("Info_Update");
+        
     }
-
-    private void Start()
+    /// <summary>
+    /// 玩家种植了,更新金钱
+    /// </summary>
+    /// <param name="Info"></param>
+    public void Planted(Button Info)
     {
-        PlayerFirst_SignIn();
-
-        Farm_Field=Field_SignIn();
-
-        Current_Food(null);
+        gamerData.Money -= Info.GetComponent<Plant>().Data.Cost;//玩家扣除相应的植物花销
+        EventCenter.GetInstance().EventTrigger("Info_Update");
     }
     /// <summary>
     /// 当前在食堂选择的食物
@@ -167,84 +184,84 @@ public class GamerData//玩家数据
     public string PlayerTitle;//玩家称号
     public string PlayerMotto;//玩家座右铭
 }
-[Serializable]
-public class ItemData
-{
-    public string Name;//名字
-    public Sprite Sprite;//图像
-    public string Description;//描述
+//[Serializable] //物品数据 已弃用
+//public class ItemData
+//{
+//    public string Name;//名字
+//    public Sprite Sprite;//图像
+//    public string Description;//描述
 
-    public int Money_Cost_reward;//购买/售卖价格
+//    public int Money_Cost_reward;//购买/售卖价格
 
-}
-[Serializable]
-public class PlantData: ItemData
-{
-    [Header("————图像————")]
-    [Tooltip("发芽图像")]
-    public Sprite Germinate_Image;//发芽图像
-    [Tooltip("成长图像")]
-    public Sprite Grown_Image;
-    [Tooltip("成熟图像")]
-    public Sprite Mature_Image;
+//}
+//[Serializable]
+//public class PlantData: ItemData
+//{
+//    [Header("————图像————")]
+//    [Tooltip("发芽图像")]
+//    public Sprite Germinate_Image;//发芽图像
+//    [Tooltip("成长图像")]
+//    public Sprite Grown_Image;
+//    [Tooltip("成熟图像")]
+//    public Sprite Mature_Image;
 
-    [Header("————时间————")]
-    [Tooltip("发芽时间")]
-    public float Germinate_Time;
-    [Tooltip("生长时间")]
-    public float Grown_Time;
-    [Tooltip("成熟时间")]
-    public float Mature_Time;
-    [Tooltip("播种时间")]
-    public float Plant_Time;//播种时间
-    [Tooltip("浇水时间")]
-    public float Water_Time;//浇水时间
-    [Tooltip("施肥时间")]
-    public float fertilize_Time;//施肥时间
-    [Tooltip("除虫时间")]
-    public float BugControl_Time;//除虫时间
-    [Tooltip("收获时间")]
-    public float Harvest_Time;//收获时间
+//    [Header("————时间————")]
+//    [Tooltip("发芽时间")]
+//    public float Germinate_Time;
+//    [Tooltip("生长时间")]
+//    public float Grown_Time;
+//    [Tooltip("成熟时间")]
+//    public float Mature_Time;
+//    [Tooltip("播种时间")]
+//    public float Plant_Time;//播种时间
+//    [Tooltip("浇水时间")]
+//    public float Water_Time;//浇水时间
+//    [Tooltip("施肥时间")]
+//    public float fertilize_Time;//施肥时间
+//    [Tooltip("除虫时间")]
+//    public float BugControl_Time;//除虫时间
+//    [Tooltip("收获时间")]
+//    public float Harvest_Time;//收获时间
 
-    [Tooltip("收获数量")]
-    public int Num;//收获数量
-    // 拷贝构造函数
-    public PlantData(PlantData other)
-    {
-        if (other == null)
-        {
-            Germinate_Image = null;
-            Grown_Image = null;
-            Mature_Image = null;
+//    [Tooltip("收获数量")]
+//    public int Num;//收获数量
+//    // 拷贝构造函数
+//    public PlantData(PlantData other)
+//    {
+//        if (other == null)
+//        {
+//            Germinate_Image = null;
+//            Grown_Image = null;
+//            Mature_Image = null;
 
-            Germinate_Time = 0;
-            Grown_Time = 0;
-            Mature_Time = 0;
-            Plant_Time = 0;
-            Water_Time = 0;
-            fertilize_Time = 0;
-            BugControl_Time = 0;
-            Harvest_Time = 0;
-        }
-        else
-        {
-            Germinate_Image = other.Germinate_Image;
-            Grown_Image = other.Grown_Image;
-            Mature_Image = other.Mature_Image;
+//            Germinate_Time = 0;
+//            Grown_Time = 0;
+//            Mature_Time = 0;
+//            Plant_Time = 0;
+//            Water_Time = 0;
+//            fertilize_Time = 0;
+//            BugControl_Time = 0;
+//            Harvest_Time = 0;
+//        }
+//        else
+//        {
+//            Germinate_Image = other.Germinate_Image;
+//            Grown_Image = other.Grown_Image;
+//            Mature_Image = other.Mature_Image;
 
-            Germinate_Time = other.Germinate_Time;
-            Grown_Time = other.Grown_Time;
-            Mature_Time = other.Mature_Time;
-            Plant_Time = other.Plant_Time;
-            Water_Time = other.Water_Time;
-            fertilize_Time = other.fertilize_Time;
-            BugControl_Time = other.BugControl_Time;
-            Harvest_Time = other.Harvest_Time;
+//            Germinate_Time = other.Germinate_Time;
+//            Grown_Time = other.Grown_Time;
+//            Mature_Time = other.Mature_Time;
+//            Plant_Time = other.Plant_Time;
+//            Water_Time = other.Water_Time;
+//            fertilize_Time = other.fertilize_Time;
+//            BugControl_Time = other.BugControl_Time;
+//            Harvest_Time = other.Harvest_Time;
 
-            Num = other.Num;
-        }
-    }
-}
+//            Num = other.Num;
+//        }
+//    }
+//}
 
 
 

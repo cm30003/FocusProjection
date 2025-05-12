@@ -22,6 +22,7 @@ public class DayAndNight : MonoBehaviour
     {
         volume.TryGet(out bloom);
         EventCenter.GetInstance().AddEventListener("Day_Night",Day_Night);
+        AudioManager.GetInstance().PlayBKMusic(BKMusic_Name);
     }
     private void Update()
     {
@@ -35,7 +36,8 @@ public class DayAndNight : MonoBehaviour
             Globallight.intensity = 1f;
             bloom.intensity.value = 0.25f;
             BKMusic_Name = "德国傍晚的休闲广场";
-            for(int i=0;i<light2Ds.Count;i++)
+
+            for (int i=0;i<light2Ds.Count;i++)
             {
                 light2Ds[i].enabled = false;
             }
@@ -45,19 +47,20 @@ public class DayAndNight : MonoBehaviour
             Globallight.intensity = 0.65f;
             bloom.intensity.value = 2f;
             BKMusic_Name = "德国傍晚的休闲广场";
+
             for (int i = 0; i < light2Ds.Count; i++)
             {
                 light2Ds[i].enabled = true;
             }
         }
     }
-    public void Change_BKMusic()
-    {
-        if (BKMusic_Name!=Current_BKMusic_Name)
-        {
-            Current_BKMusic_Name = BKMusic_Name;
-            AudioManager.GetInstance().PlayBKMusic(BKMusic_Name);
-        }
+    //public void Change_BKMusic()
+    //{
+    //    if (BKMusic_Name!=Current_BKMusic_Name)
+    //    {
+    //        Current_BKMusic_Name = BKMusic_Name;
+    //        AudioManager.GetInstance().PlayBKMusic(BKMusic_Name);
+    //    }
         
-    }
+    //}
 }

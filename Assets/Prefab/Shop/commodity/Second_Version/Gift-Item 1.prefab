@@ -961,6 +961,7 @@ GameObject:
   - component: {fileID: 6685360040669475944}
   - component: {fileID: 6170919770962933196}
   - component: {fileID: 5823378150614005589}
+  - component: {fileID: 8437379880877747415}
   m_Layer: 5
   m_Name: GiftTo
   m_TagString: Untagged
@@ -977,7 +978,7 @@ RectTransform:
   m_GameObject: {fileID: 3014570752707539182}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 6340069794907624086}
@@ -1032,6 +1033,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!225 &8437379880877747415
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3014570752707539182}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &3608684259009337154
 GameObject:
   m_ObjectHideFlags: 0
@@ -2135,13 +2148,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66c1253f1fa40e745bef59dfc4247656, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Data:
-    ID: 0
-    Name: 
-    Description: 
-    Cost: 0
-    favorability_Plus_Num: 0
-    Sprite_ResPath: 
 --- !u!1 &7805436443052190597
 GameObject:
   m_ObjectHideFlags: 0
@@ -2279,13 +2285,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66c1253f1fa40e745bef59dfc4247656, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Data:
-    ID: 0
-    Name: 
-    Description: 
-    Cost: 0
-    favorability_Plus_Num: 0
-    Sprite_ResPath: 
 --- !u!1 &7805550077797373601
 GameObject:
   m_ObjectHideFlags: 0
@@ -2419,13 +2418,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66c1253f1fa40e745bef59dfc4247656, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Data:
-    ID: 0
-    Name: 
-    Description: 
-    Cost: 0
-    favorability_Plus_Num: 0
-    Sprite_ResPath: 
 --- !u!1 &7814148726866282075
 GameObject:
   m_ObjectHideFlags: 0
@@ -2858,13 +2850,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66c1253f1fa40e745bef59dfc4247656, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Data:
-    ID: 0
-    Name: 
-    Description: 
-    Cost: 0
-    favorability_Plus_Num: 0
-    Sprite_ResPath: 
 --- !u!1 &8606445042948754573
 GameObject:
   m_ObjectHideFlags: 0
@@ -2998,10 +2983,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66c1253f1fa40e745bef59dfc4247656, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Data:
-    ID: 0
-    Name: 
-    Description: 
-    Cost: 0
-    favorability_Plus_Num: 0
-    Sprite_ResPath: 
