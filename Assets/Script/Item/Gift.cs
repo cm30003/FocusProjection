@@ -1,9 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
-
+/// <summary>
+/// 挂载在商城礼物按钮上的数据脚本
+/// </summary>
 public class Gift : MonoBehaviour
 {
     public GiftData Data;

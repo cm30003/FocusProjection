@@ -18,7 +18,7 @@ public class ObjectKeeper_Singleton:SingletonMono<ObjectKeeper_Singleton>
 
     public GameObject Farm_Group;
 
-    public GameObject[] Freight_Target;
+    public GameObject[] Freight_Target;//收获的货物
 
     public GameObject[] Farm_Field;//田地组
 
@@ -59,21 +59,21 @@ public class ObjectKeeper_Singleton:SingletonMono<ObjectKeeper_Singleton>
 
         Current_Food(null);
     }
+    /// <summary>
+    /// 公用购买方法
+    /// </summary>
+    /// <param name="Info">被购买的对象的信息</param>
     public void Buy(Button Info)
     {
         if(Info.GetComponent<Gift>()!=null)
         {
             gamerData.Money -= Info.GetComponent<Gift>().Data.Cost;//玩家扣除相应的礼物花销
-            EventCenter.GetInstance().EventTrigger("Info_Update");
         }
-    }
-    /// <summary>
-    /// 送礼后扣款了，更新金钱
-    /// </summary>
-    /// <param name="Info">礼品信息</param>
-    private void Gifted(Button Info)
-    {
-        
+        else if(Info.GetComponent<Item_Gift_Cloth>()!=null)
+        {
+            gamerData.Money -= Info.GetComponent<Item_Gift_Cloth>().Data.Cost;//玩家扣除相应的植物花销
+        }
+        EventCenter.GetInstance().EventTrigger("Info_Update");
     }
     /// <summary>
     /// 玩家种植了,更新金钱

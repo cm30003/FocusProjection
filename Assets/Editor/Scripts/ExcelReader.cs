@@ -56,6 +56,9 @@ public class ExcelReader : Editor
         Name,//名字
         Description,//描述
         Cost,//价格
+
+        Target_Animal_ID,//目标动物ID
+
         Sprite_ResPath,//资源路径
     }
     private enum Plant_ExcelTitleEnum
@@ -126,7 +129,7 @@ public class ExcelReader : Editor
         for (int i = StartRow; i <= worksheet.Dimension.Rows; i++)
         {
             NPCInformation npcInformation = new NPCInformation();
-            npcInformation.ID = int.Parse(worksheet.Cells[i, StartCol].Text+(int)NPCInformation_ExcelTitleEnum.ID);
+            npcInformation.ID = int.Parse(worksheet.Cells[i, StartCol].Text+(int)NPCInformation_ExcelTitleEnum.ID)/10;
             npcInformation.Name = worksheet.Cells[i, StartCol + (int)NPCInformation_ExcelTitleEnum.Name].Text;
             npcInformation.Hobby = worksheet.Cells[i, StartCol + (int)NPCInformation_ExcelTitleEnum.Hobby].Text;
             npcInformation.Personality = worksheet.Cells[i, StartCol + (int)NPCInformation_ExcelTitleEnum.Personality].Text;
@@ -199,7 +202,7 @@ public class ExcelReader : Editor
         {
             NPCData npc_data = new NPCData();
 
-            npc_data.ID = int.Parse(worksheet.Cells[i, StartCol].Text+(int)NpcData_ExcelTitleEnum.ID);
+            npc_data.ID = int.Parse(worksheet.Cells[i, StartCol].Text+(int)NpcData_ExcelTitleEnum.ID)/10;
             npc_data.Favorability = int.Parse(worksheet.Cells[i, StartCol + (int)NpcData_ExcelTitleEnum.Favorability].Text);
             npc_data.FavorvateThing_ID = int.Parse(worksheet.Cells[i, StartCol + (int)NpcData_ExcelTitleEnum.FavorvateThing_ID].Text);
             npc_data.CherishThing_ID = int.Parse(worksheet.Cells[i, StartCol + (int)NpcData_ExcelTitleEnum.CherishThing_ID].Text);
@@ -286,6 +289,8 @@ public class ExcelReader : Editor
             ClothData.Description = worksheet.Cells[i, StartCol + (int)Cloth_ExcelTitleEnum.Description].Text;
             ClothData.Cost = int.Parse(worksheet.Cells[i, StartCol + (int)Cloth_ExcelTitleEnum.Cost].Text);
             
+            ClothData.Target_Animal_ID = int.Parse(worksheet.Cells[i, StartCol + (int)Cloth_ExcelTitleEnum.Target_Animal_ID].Text);
+
             ClothData.ResPath = worksheet.Cells[i, StartCol + (int)Cloth_ExcelTitleEnum.Sprite_ResPath].Text;
 
             list.Add(ClothData);

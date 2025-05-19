@@ -4,6 +4,7 @@
     "Name": "帽子01",
     "Description": "帽子01",
     "Cost": 10,
+    "Target_Animal_ID": 1001,
     "ResPath": "UI/Sprite/Cloth/帽子01"
   },
   {
@@ -11,6 +12,7 @@
     "Name": "帽子02",
     "Description": "帽子02",
     "Cost": 20,
+    "Target_Animal_ID": 1001,
     "ResPath": "UI/Sprite/Cloth/帽子02"
   },
   {
@@ -18,6 +20,7 @@
     "Name": "帽子03",
     "Description": "帽子03",
     "Cost": 30,
+    "Target_Animal_ID": 1001,
     "ResPath": "UI/Sprite/Cloth/帽子03"
   },
   {
@@ -25,6 +28,7 @@
     "Name": "帽子04",
     "Description": "帽子04",
     "Cost": 40,
+    "Target_Animal_ID": 1001,
     "ResPath": "UI/Sprite/Cloth/帽子04"
   },
   {
@@ -32,6 +36,7 @@
     "Name": "帽子05",
     "Description": "帽子05",
     "Cost": 50,
+    "Target_Animal_ID": 1002,
     "ResPath": "UI/Sprite/Cloth/帽子05"
   },
   {
@@ -39,6 +44,7 @@
     "Name": "帽子06",
     "Description": "帽子06",
     "Cost": 60,
+    "Target_Animal_ID": 1002,
     "ResPath": "UI/Sprite/Cloth/帽子06"
   },
   {
@@ -46,6 +52,7 @@
     "Name": "帽子07",
     "Description": "帽子07",
     "Cost": 70,
+    "Target_Animal_ID": 1002,
     "ResPath": "UI/Sprite/Cloth/帽子07"
   },
   {
@@ -53,6 +60,7 @@
     "Name": "帽子08",
     "Description": "帽子08",
     "Cost": 80,
+    "Target_Animal_ID": 1002,
     "ResPath": "UI/Sprite/Cloth/帽子08"
   }
 ]

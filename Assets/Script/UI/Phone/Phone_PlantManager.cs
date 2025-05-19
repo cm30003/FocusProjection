@@ -108,7 +108,6 @@ public class Phone_PlantManager : NewUIBase
     /// <param name="button">Item按钮</param>
     public void Field(Button button)
     {
-
         //暂存所有田地
         GameObject[] fileds = ObjectKeeper_Singleton.Instance.Farm_Field;
 
@@ -144,4 +143,5 @@ public class Phone_PlantManager : NewUIBase
             field.GetComponent<plant_State>().data=new PlantItem_Data(field.GetComponent<plant_State>().Temple_Data);
         }
     }
+
 }

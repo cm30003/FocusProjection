@@ -1,6 +1,6 @@
 [
   {
-    "ID": 10010,
+    "ID": 1001,
     "Favorability": 0,
     "FavorvateThing_ID": 2001,
     "CherishThing_ID": 2003,
@@ -12,7 +12,7 @@
     "Sprite_Res": "UI/Sprite/Role/瑞贝特"
   },
   {
-    "ID": 10020,
+    "ID": 1002,
     "Favorability": 0,
     "FavorvateThing_ID": 2002,
     "CherishThing_ID": 2004,

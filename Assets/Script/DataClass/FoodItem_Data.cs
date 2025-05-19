@@ -3,6 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+/// <summary>
+/// 食物的数据类
+/// </summary>
 [Serializable]
 public class FoodItem_Data
 {
@@ -14,6 +17,9 @@ public class FoodItem_Data
     public float Buff;//增益
     public string ResPath;//资源路径
 }
+/// <summary>
+/// 植物的数据额类
+/// </summary>
 [Serializable]
 public class PlantItem_Data
 {
@@ -101,6 +107,36 @@ public class PlantItem_Data
             Grown_SpriteResPath = other.Grown_SpriteResPath;
             Mature_SpriteResPath = other.Mature_SpriteResPath;
         }
+
+    }
+    public override string ToString()
+    {
+        return
+            $"<color=white>ID:</color> <color=green>{ID}</color>, " +
+            $"<color=white>Name:</color> <color=green>{Name}</color>, " +
+            $"<color=white>Description:</color> <color=green>{Description}</color>, " +
+            $"<color=white>Sell_Price:</color> <color=green>{Sell_Price}</color>, " +
+            $"<color=white>Cost:</color> <color=green>{Cost}</color>\n" +
+
+            $"<color=white>Germinate_Time:</color> <color=green>{Germinate_Time}</color>, " +
+            $"<color=white>Grown_Time1:</color> <color=green>{Grown_Time1}</color>, " +
+            $"<color=white>Grown_Time2:</color> <color=green>{Grown_Time2}</color>, " +
+            $"<color=white>Mature_Time:</color> <color=green>{Mature_Time}</color>\n" +
+
+            $"<color=white>Plant_Time:</color> <color=green>{Plant_Time}</color>, " +
+            $"<color=white>Water_Time1:</color> <color=green>{Water_Time1}</color>, " +
+            $"<color=white>Water_Time2:</color> <color=green>{Water_Time2}</color>\n" +
+
+            $"<color=white>fertilize_Time:</color> <color=green>{fertilize_Time}</color>, " +
+            $"<color=white>BugControl_Time:</color> <color=green>{BugControl_Time}</color>, " +
+            $"<color=white>Harvest_Time:</color> <color=green>{Harvest_Time}</color>\n" +
+
+            $"<color=white>Harvest_Num:</color> <color=green>{Harvest_Num}</color>, " +
+            $"<color=white>Gamer_Num:</color> <color=green>{Gamer_Num}</color>\n" +
+
+            $"<color=white>Germinate_SpriteResPath:</color> <color=green>{Germinate_SpriteResPath}</color>\n" +
+            $"<color=white>Grown_SpriteResPath:</color> <color=green>{Grown_SpriteResPath}</color>\n" +
+            $"<color=white>Mature_SpriteResPath:</color> <color=green>{Mature_SpriteResPath}</color>";
     }
     public PlantItem_Data()//公共无参构造函数
     {
@@ -120,14 +156,19 @@ public class PlantItem_Data
         Mature_SpriteResPath = null;
     }
 }
+/// <summary>
+/// 商城衣物数据类
+/// </summary>
 [Serializable]
-public class ClothItem_Data//商城衣服数据类
+public class ClothItem_Data
 {
     public int ID;
 
     public string Name;
     public string Description;
     public int Cost;
+
+    public int Target_Animal_ID;
 
     public string ResPath;
 }
@@ -252,7 +293,29 @@ public class NPCData//NPC数据类
 
         Sprite_Res = null;
     }
+    public override string ToString()
+    {
+        return
+            $"<color=white>ID:</color> <color=green>{ID}</color>\n" +
+
+            $"<color=white>Favorability:</color> <color=green>{Favorability}</color>, " +
+            $"<color=white>FavorvateThing_ID:</color> <color=green>{FavorvateThing_ID}</color>, " +
+            $"<color=white>CherishThing_ID:</color> <color=green>{CherishThing_ID}</color>\n" +
+
+            $"<color=white>MoveSpeed:</color> <color=green>{MoveSpeed}</color>, " +
+            $"<color=white>Work_Speed:</color> <color=green>{Work_Speed}</color>\n" +
+
+            $"<color=white>Work_Time:</color> <color=green>{Work_Time}</color>, " +
+            $"<color=white>Eat_Time:</color> <color=green>{Eat_Time}</color>, " +
+            $"<color=white>Hungry_Time:</color> <color=green>{Hungry_Time}</color>\n" +
+
+            $"<color=white>Sprite_Res:</color> <color=green>{Sprite_Res}</color>";
+    }
 }
+/// <summary>
+/// 商城礼物数据类
+/// </summary>
+[Serializable]
 public class GiftData
 {
     public int ID;

@@ -793,32 +793,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82ed49cbc496aef45b8b409f21568977, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Gift_Grade_Two: {fileID: 1602270631858995678, guid: ee8f1ffddb7c6fa4a994aa2b25b6fd74, type: 3}
-  product_list:
-  - Name: "\u6BCF\u5E74\u8FBE"
-    Sprite: {fileID: 21300000, guid: a2fa2a7d8ff1084499a4fa0c30f9f51f, type: 3}
-    Description: "\u6BCF\u5E74\u90FD\u53D1\u8FBE"
-    Money_Cost_reward: -10
-    favorability_Plus_Num: 1
-  - Name: "\u8001\u9655\u7F8E\u98DF"
-    Sprite: {fileID: 21300000, guid: 8599c99f7d9bc9344b9ddb1a05345dd1, type: 3}
-    Description: "\u5D02\u5C71\u7F8E\u5F0F"
-    Money_Cost_reward: -20
-    favorability_Plus_Num: 2
-  - Name: "\u8349\u8393\u5976\u6614"
-    Sprite: {fileID: 21300000, guid: 9aec595f6d047b24695938d197daf3b8, type: 3}
-    Description: "\u8349\u8393\u7684\u5976\u6614"
-    Money_Cost_reward: -30
-    favorability_Plus_Num: 3
-  - Name: "\u9E21\u6392\u996D"
-    Sprite: {fileID: 21300000, guid: b7e9fe3394d82e34ca33793c0233356b, type: 3}
-    Description: "\u9E21\u6392\u7684\u996D"
-    Money_Cost_reward: -40
-    favorability_Plus_Num: 4
+  Cloth_list: []
   Gift_Buttons_Prefab:
   - {fileID: 7303791856664385785, guid: 853bfc131c637e04bbab7728dfc4be48, type: 3}
   - {fileID: 7303791856664385785, guid: 4460fc83809f3ba49a893d68f21c1405, type: 3}
   - {fileID: 7303791856664385785, guid: abefa48d435e7574a95ee6a040f0c6d5, type: 3}
+  Cloth_Buttons_Prefab:
+  - {fileID: 7303791856664385785, guid: 4ed5b4e44167e564ba81e9776dd886f1, type: 3}
+  - {fileID: 7303791856664385785, guid: 00dce7d856af97e4da177690d2dc0b81, type: 3}
+  - {fileID: 7303791856664385785, guid: 2a6a7a10500dea24880cc8dd4d4946ad, type: 3}
   Start_Button_Image: {fileID: 21300000, guid: 359f36a86eaf1f7458b0feaad35eaa9c, type: 3}
   After_Button_Image: {fileID: 21300000, guid: 10a99ebe105aa634094d594cadd5963c, type: 3}
   Top_Button_Group: {fileID: 8338129098090758452}

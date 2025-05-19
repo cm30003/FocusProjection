@@ -39,6 +39,16 @@ public class MonoContorl : MonoBehaviour
     /// <param name="action"></param>
     public void RemoveUpdateLisener(UnityAction action)
     {
-        UpdateEvent -= action;
+        if (registeredActions.Contains(action))
+        {
+            registeredActions.Remove(action);
+            UpdateEvent -= action;
+        }
+        else
+        {
+            Debug.Log("ÖØ¸´É¾³ýÊÂ¼þ");
+            return;
+        }
+
     }
 }
