@@ -25,6 +25,22 @@ public class NewUIBase : MonoBehaviour
         FindChildrenControl<Image>();
         FindChildrenControl<InputField>();
     }
+    protected virtual void Update()
+    {
+        // 监听 Esc 键
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            OnEscapePressed();
+        }
+    }
+    /// <summary>
+    /// 当 Esc 键被按下时调用，默认隐藏自身
+    /// 子类可重写以实现自定义关闭逻辑（如播放动画后关闭）
+    /// </summary>
+    protected virtual void OnEscapePressed()
+    {
+        UIManager.GetInstance().HideUI(gameObject.name);
+    }
     /// <summary>
     /// 显示控件
     /// </summary>

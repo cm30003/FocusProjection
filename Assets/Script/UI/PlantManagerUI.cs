@@ -8,7 +8,6 @@ using UnityEngine.UI;
 public class PlantManagerUI : UIBase
 {
     [Header("！！！！双燕！！！！")]
-
     public List<PlantItem_Data> PlantItem_List;
 
     public List<GameObject> PlantItem_Prefab_List;

@@ -37,13 +37,12 @@ public class CharaController : MonoBehaviour
     [Header("————组件————")]
     private Animator animator;//动画状态机
     private AIPath aiPath;//A Star 寻路
-
     [Header("————计时————")]
     private float Standard_Second = 1;
 
     private void Start()
     {
-        NPCData_Information_SignIn();
+        NPCData_Information_SignIn();//注册NPC描述信息
 
         animator = GetComponentInChildren<Animator>();//获取动画状态机
 
@@ -119,7 +118,7 @@ public class CharaController : MonoBehaviour
     }
     public void IsWaiting(string name)
     {
-        if (ObjectKeeper_Singleton.Instance.Is_Set&&name== npc_Information.Name)
+        if (name== npc_Information.Name)
         {
             NPC_Status = NPC_status.Go_To_Rest;
         }
@@ -182,12 +181,13 @@ public class CharaController : MonoBehaviour
     #endregion
     private void FixedUpdate()
     {
+        #region 专注时间结束小动物回房的逻辑 已弃用
         //专注时间结束了就不管三七二十一下班,除非已经在休息室休息了
-        if (!ObjectKeeper_Singleton.Instance.Is_Set&&NPC_Status!=NPC_status.Rest)
+        if (!ObjectKeeper_Singleton.Instance.Is_Set && NPC_Status != NPC_status.Rest&&!Check_PlantedField())
         {
             NPC_Status = NPC_status.Go_To_Rest;
         }
-
+        #endregion
         Switch_Status();
         aiPath.maxSpeed = data.MoveSpeed;
     }
@@ -200,6 +200,8 @@ public class CharaController : MonoBehaviour
         {
             case NPC_status.GoToWork://当小动物处于去工作状态，则寻找距离最近的种田机器
 
+                ObjectKeeper_Singleton.Instance.Add_WorkNpcs(gameObject);//添加到工作NPC列表
+
                 animator.Play("z_move");//行走动画
 
                 Target.target = null;//首先目标置空
@@ -207,6 +209,7 @@ public class CharaController : MonoBehaviour
                 HungryTime_calculation();
 
                 Freight_Wait();//查找是否存在货物需要搬运，若有则优先搬运货物
+
                 if (Target.target==null)//如果没有找到工作地点，则搜寻最近的
                 {
                     ShortestPath(ObjectKeeper_Singleton.Instance.Farm_Machine);
@@ -225,22 +228,15 @@ public class CharaController : MonoBehaviour
 
                 HungryTime_calculation();
 
-                //若查找到的田地不为空，
+                //如果NPC找到了自己的工作田地
                 if (Work_Field != null)
                 {
-                    //如果田地状态进入自由生长的状态，则重新计算玩家状态
+                    //如果田地状态进入自由生长的状态，则重新计算NPC状态
                     if(Work_Field.State == Plant_State.Germinate||Work_Field.State == Plant_State.Grown1||Work_Field.State == Plant_State.Grown2||Work_Field.State == Plant_State.Mature||Work_Field.State == Plant_State.Empty)
                     {
                         Leave_Field();
                         NPC_Status = NPC_status.GoToWork;
-
                     }
-                    //工作的田地上的植物处于收获状态，则进入运输状态
-                    //if (Work_Field.State == Plant_State.harvest)
-                    //{
-                    //    NPC_Status = NPC_status.Transport;
-                    //}
-                    //小动物进入工作状态，开始进入工作时间倒计时,在这里使用GameManager中的公用计时器方法
                     GameManager.GetInstance().FixedUpdate_Timer(ref data.Work_Time, 1f,ref Standard_Second);
                     //工作时间归零进入偷懒结算
                     if (data.Work_Time <= 0)
@@ -264,6 +260,8 @@ public class CharaController : MonoBehaviour
 
             case NPC_status.Go_To_Rest://小动物回休息室
 
+                ObjectKeeper_Singleton.Instance.Remove_WorkNpc(gameObject);
+
                 Move_Right_OR_Left();
                 
                 animator.Play("z_move");//行走动画
@@ -275,12 +273,12 @@ public class CharaController : MonoBehaviour
                 {
                     NPC_Status = NPC_status.Rest;
                 }
-
                 break;
 
-
             case NPC_status.Rest://小动物休息
-                                 
+
+                ObjectKeeper_Singleton.Instance.Remove_WorkNpc(gameObject);
+
                 if (aiPath.reachedEndOfPath)
                 {
                     //在散步目标上的等待时间
@@ -311,8 +309,6 @@ public class CharaController : MonoBehaviour
 
                     Move_Right_OR_Left();
                 }
-                
-
                 break;
 
 
@@ -344,7 +340,6 @@ public class CharaController : MonoBehaviour
                 HungryTime_calculation();
 
                 break;
-            
         
             case NPC_status.GoToEat://小动物去吃东西
                 //判断左右
@@ -407,6 +402,19 @@ public class CharaController : MonoBehaviour
                 break;
         }
     }
+    public bool Check_PlantedField()
+    {
+        for(int i = 0; i < ObjectKeeper_Singleton.Instance.Farm_Group.transform.childCount; i++)
+        {
+            plant_State state= ObjectKeeper_Singleton.Instance.Farm_Group.transform.GetChild(i).GetComponent<plant_State>();
+            if(state.State!=Plant_State.Empty)
+            {
+                return true;
+                
+            }
+        }
+        return false;
+    }
     /// <summary>
     /// 判断小动物是往右还是往左走了
     /// </summary>
@@ -459,10 +467,8 @@ public class CharaController : MonoBehaviour
                 NPC_Status = NPC_status.GoToEat;
                 //重置数据
                 Time_Data_Reset();
-                
             }
         }
-        
     }
     /// <summary>
     /// 重置时间/工作 吃饭 饥饿等时间
@@ -499,7 +505,7 @@ public class CharaController : MonoBehaviour
                 plant_State.State != Plant_State.Germinate &&//不在发芽阶段
                 plant_State.State != Plant_State.Grown1 && plant_State.State != Plant_State.Grown2&&//不在成长阶段
                 plant_State.State!=Plant_State.Mature &&//不在成熟阶段
-                plant_State.npc_Data.ID==0)
+                plant_State.npc_Data.ID==0)// 没有小动物在田地工作
             {
 
                 plant_State.npc_Data = data;//为田地设置工作者

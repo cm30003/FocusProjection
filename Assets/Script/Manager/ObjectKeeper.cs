@@ -22,8 +22,6 @@ public class ObjectKeeper_Singleton:SingletonMono<ObjectKeeper_Singleton>
 
     public GameObject[] Farm_Field;//田地组
 
-    public GameObject[] NPCs;//NPC
-
     public GameObject[] Farm_Machine;//平板触摸屏
 
     public GameObject[] Eat_Area;//吃饭的区域
@@ -34,6 +32,10 @@ public class ObjectKeeper_Singleton:SingletonMono<ObjectKeeper_Singleton>
     [Header("————音效————")]
     public string DayBGM_Path;
     public string NightBGM_Path;
+    [Header("————小动物————")]
+    public List<GameObject> Work_NPCs;//工作的NPC
+    public GameObject[] NPCs;//NPC总组
+    public List<GameObject> Waiting_NPCs;
 
     protected override void Awake()
     {
@@ -58,6 +60,42 @@ public class ObjectKeeper_Singleton:SingletonMono<ObjectKeeper_Singleton>
         Farm_Field = Field_SignIn();
 
         Current_Food(null);
+    }
+    /// <summary>
+    /// 添加工作NPC到列表,列表最大值为3
+    /// </summary>
+    /// <param name="worknpc"></param>
+    public void Add_WorkNpcs(GameObject worknpc)
+    {
+        if(Work_NPCs.Contains(worknpc)||Work_NPCs.Count>=3)
+        {
+            return;
+        }
+        else
+        {
+            Work_NPCs.Add(worknpc);
+            Waiting_NPCs.Remove(worknpc);
+        }
+    }
+    /// <summary>
+    /// 移除在列表中的工作小动物，这通常代表小动物去休息了
+    /// </summary>
+    /// <param name="worknpc"></param>
+    public void Remove_WorkNpc(GameObject worknpc)
+    {
+        if (Work_NPCs.Contains(worknpc))
+        {
+            Work_NPCs.Remove(worknpc);
+            Waiting_NPCs.Add(worknpc);
+        }
+        else if (Waiting_NPCs.Contains(worknpc))
+        {
+            return ;
+        }
+        else
+        {
+            Waiting_NPCs.Add(worknpc);
+        }
     }
     /// <summary>
     /// 公用购买方法
@@ -184,89 +222,3 @@ public class GamerData//玩家数据
     public string PlayerTitle;//玩家称号
     public string PlayerMotto;//玩家座右铭
 }
-//[Serializable] //物品数据 已弃用
-//public class ItemData
-//{
-//    public string Name;//名字
-//    public Sprite Sprite;//图像
-//    public string Description;//描述
-
-//    public int Money_Cost_reward;//购买/售卖价格
-
-//}
-//[Serializable]
-//public class PlantData: ItemData
-//{
-//    [Header("————图像————")]
-//    [Tooltip("发芽图像")]
-//    public Sprite Germinate_Image;//发芽图像
-//    [Tooltip("成长图像")]
-//    public Sprite Grown_Image;
-//    [Tooltip("成熟图像")]
-//    public Sprite Mature_Image;
-
-//    [Header("————时间————")]
-//    [Tooltip("发芽时间")]
-//    public float Germinate_Time;
-//    [Tooltip("生长时间")]
-//    public float Grown_Time;
-//    [Tooltip("成熟时间")]
-//    public float Mature_Time;
-//    [Tooltip("播种时间")]
-//    public float Plant_Time;//播种时间
-//    [Tooltip("浇水时间")]
-//    public float Water_Time;//浇水时间
-//    [Tooltip("施肥时间")]
-//    public float fertilize_Time;//施肥时间
-//    [Tooltip("除虫时间")]
-//    public float BugControl_Time;//除虫时间
-//    [Tooltip("收获时间")]
-//    public float Harvest_Time;//收获时间
-
-//    [Tooltip("收获数量")]
-//    public int Num;//收获数量
-//    // 拷贝构造函数
-//    public PlantData(PlantData other)
-//    {
-//        if (other == null)
-//        {
-//            Germinate_Image = null;
-//            Grown_Image = null;
-//            Mature_Image = null;
-
-//            Germinate_Time = 0;
-//            Grown_Time = 0;
-//            Mature_Time = 0;
-//            Plant_Time = 0;
-//            Water_Time = 0;
-//            fertilize_Time = 0;
-//            BugControl_Time = 0;
-//            Harvest_Time = 0;
-//        }
-//        else
-//        {
-//            Germinate_Image = other.Germinate_Image;
-//            Grown_Image = other.Grown_Image;
-//            Mature_Image = other.Mature_Image;
-
-//            Germinate_Time = other.Germinate_Time;
-//            Grown_Time = other.Grown_Time;
-//            Mature_Time = other.Mature_Time;
-//            Plant_Time = other.Plant_Time;
-//            Water_Time = other.Water_Time;
-//            fertilize_Time = other.fertilize_Time;
-//            BugControl_Time = other.BugControl_Time;
-//            Harvest_Time = other.Harvest_Time;
-
-//            Num = other.Num;
-//        }
-//    }
-//}
-
-
-
-
-
-
-
-

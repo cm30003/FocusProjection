@@ -8,7 +8,6 @@ using UnityEngine.UI;
 public class Phone_PlantManager : NewUIBase
 {
     [Header("————列表————")]
-
     public List<PlantItem_Data> PlantItem_List;
 
     public List<GameObject> PlantItem_Prefab_List;//装植物按钮的列表
@@ -114,7 +113,6 @@ public class Phone_PlantManager : NewUIBase
         //更新田地状态
         for (int i = 0; i < fileds.Length; i++)
         {
-            
             //获取田地
             GameObject field = fileds[i];
             //获取田地状态
@@ -122,6 +120,8 @@ public class Phone_PlantManager : NewUIBase
             if (plant_State.State == Plant_State.Empty)//如果田地为空
             {
                 plant_State.State = Plant_State.plant;
+
+                plant_State.Call_NPC();
 
                 Plant(field, button);
                 //更新数据

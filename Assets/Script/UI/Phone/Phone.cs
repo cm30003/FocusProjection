@@ -9,13 +9,29 @@ using DG.Tweening;
 
 public class Phone : NewUIBase
 {
-    private void Start()
+    protected override void OnEscapePressed()
     {
-        UIManager.AddCustomEventListener(GetControl<Image>("TOP"), EventTriggerType.PointerClick, (data) => 
-        {
+        this.transform.parent.DOLocalMoveY(-1050f, 1f);
+    }
 
-            this.transform.parent.DOLocalMoveY(-1050f, 1f);
-        });
+    //private void Start()
+    //{
+    //    UIManager.AddCustomEventListener(GetControl<Image>("TOP"), EventTriggerType.PointerClick, (data) => 
+    //    {
+    //        this.transform.parent.DOLocalMoveY(-1050f, 1f);
+    //    });
+    //}
+
+    public void Close_Phone()
+    {
+        this.transform.parent.DOLocalMoveY(-1050f, 1f);
+        Debug.Log("0000");
+        //隐藏除了Phone_Base以外的其他界面
+        for (int i = 1; i < transform.parent.childCount; i++)
+        {
+            Debug.Log("1111");
+            UIManager.GetInstance().HideUI(transform.parent.GetChild(i).name);
+        }
     }
     protected override void OnClick(string btnName,Button button)
     {

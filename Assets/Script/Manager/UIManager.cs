@@ -35,21 +35,23 @@ public class UIManager : BaseManager<UIManager>
     //    //创建存储好的Canvas预制体，UI将在该Cnavas下生成
     //    GameObject gameObject=ResourceManager.GetInstance().Load<GameObject>("Prefab/UI");
         canvas = GameObject.FindGameObjectWithTag("Phone_Base").transform as RectTransform;
-    //    //跨场景时不销毁
-    //    GameObject.DontDestroyOnLoad(gameObject);
+        #region 层级功能 暂时弃用
+        //    //跨场景时不销毁
+        //    GameObject.DontDestroyOnLoad(gameObject);
 
-    //    //找到各层级
-    //    Bot = canvas.Find("Bot");
-    //    Mid = canvas.Find("Mid");
-    //    Top = canvas.Find("Top");
-    //    System = canvas.Find("System");
+        //    //找到各层级
+        //    Bot = canvas.Find("Bot");
+        //    Mid = canvas.Find("Mid");
+        //    Top = canvas.Find("Top");
+        //    System = canvas.Find("System");
 
 
 
-    //    //加载事件系统
-    //    gameObject = ResourceManager.GetInstance().Load<GameObject>("UI/EventSystem");
-    //    //跨场景时不销毁
-    //    GameObject.DontDestroyOnLoad(gameObject);
+        //    //加载事件系统
+        //    gameObject = ResourceManager.GetInstance().Load<GameObject>("UI/EventSystem");
+        //    //跨场景时不销毁
+        //    GameObject.DontDestroyOnLoad(gameObject);
+        #endregion
     }
     /// <summary>
     /// 通过对应枚举，获取对应层级的父对象
@@ -158,6 +160,8 @@ public class UIManager : BaseManager<UIManager>
             obj.transform.localPosition=Vector3.zero;
             obj.transform.localScale=Vector3.one;
 
+            obj.name=uiName;
+
             //(obj.transform as RectTransform).offsetMax = Vector2.zero;
             //(obj.transform as RectTransform).offsetMin = Vector2.zero;
 
@@ -181,6 +185,7 @@ public class UIManager : BaseManager<UIManager>
     /// <param name="uiName">UI名称</param>
     public void HideUI(string uiName)
     {
+        Debug.Log(uiName+" Hide");
         //如果已加载UI字典中存在该UI，则证明该UI已经加载
         if(LoadedNewUIDic.ContainsKey(uiName))
         {

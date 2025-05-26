@@ -515,6 +515,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Info_Group: {fileID: 7187192794944530569}
   Waitings_Group: {fileID: 6897554113869873880}
+  Choose_Group: {fileID: 8640753331088720181}
   Npc_Waiting_Prefab: {fileID: 3665994120384983398, guid: 4cdd63a04f1739443ae1afafbfffaed0, type: 3}
 --- !u!1 &2928728743013381682
 GameObject:

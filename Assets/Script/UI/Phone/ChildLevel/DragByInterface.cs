@@ -23,9 +23,12 @@ public class DragByInterface : MonoBehaviour,IDragHandler,IBeginDragHandler,IEnd
     public void OnBeginDrag(PointerEventData eventData)
     {
         this.transform.SetParent(this.transform.parent.parent.parent);
-        CanvasGroup.blocksRaycasts = false;
+        CanvasGroup.blocksRaycasts = false;//拖拽时，无法被点击
     }
-
+    /// <summary>
+    /// 拖拽期间，实时更新位置
+    /// </summary>
+    /// <param name="eventData"></param>
     public void OnDrag(PointerEventData eventData)
     {
         //Debug.Log(eventData.pointerCurrentRaycast.gameObject.name);
@@ -42,23 +45,30 @@ public class DragByInterface : MonoBehaviour,IDragHandler,IBeginDragHandler,IEnd
     public void OnEndDrag(PointerEventData eventData)
     {
         //如果被拖入了小动物选择框。
-        if(eventData.pointerCurrentRaycast.gameObject.name== "NPCChoosen")
+        GameObject RaycastgameObject  = eventData.pointerCurrentRaycast.gameObject;
+        if(RaycastgameObject.name== "NPCChoosen"&&RaycastgameObject.transform.childCount==0)
         {
-            transform.SetParent(eventData.pointerCurrentRaycast.gameObject.transform);
-
+            transform.SetParent(eventData.pointerCurrentRaycast.gameObject.transform);//被拖拽的等待中的NPC将成为选择框的子物体。
+            //调整等待NPC的位置和缩放
             GetComponent<RectTransform>().localPosition = new Vector3(-5, -25, 0);
-            GetComponent<RectTransform>().localScale = new Vector3(0.88f, 0.88f, 0.88f);
-            GetComponent<RectTransform>().sizeDelta = new Vector2(145, 205);
+            GetComponent<RectTransform>().localScale = new Vector3(0.4f, 0.4f, 0.4f);
+            //GetComponent<RectTransform>().sizeDelta = new Vector2(145, 205);
 
-            CanvasGroup.blocksRaycasts = true;
+            CanvasGroup.blocksRaycasts = true;//允许被点击
 
             //玩家选中事件
             EventCenter.GetInstance().EventTrigger<string>("Is_Choosen",GetComponent<NPCData_Data>().npcInformation.Name);
         }
+        //else if(RaycastgameObject.name == "NPC_Waiting")
+        //{
+
+        //}
         else
         {
-            CanvasGroup.blocksRaycasts = true;
-            this.transform.SetParent(Originalparent);
+            CanvasGroup.blocksRaycasts = true;//允许被点击
+
+            this.transform.SetParent(Originalparent);//还原位置（返回等待框）
+            //调整等待NPC的位置和缩放
             this.transform.localPosition = new Vector3(-5, -13, 0);
             GetComponent<RectTransform>().localScale = new Vector3(0.1f, 0.1f, 0.1f);
             GetComponent<RectTransform>().sizeDelta = new Vector2(900, 1289);

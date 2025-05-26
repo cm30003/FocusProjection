@@ -32,8 +32,10 @@ public class plant_State : MonoBehaviour
             case Plant_State.plant://播種
                 //变更所有图片
                 Sprit_Change(ResourceManager.GetInstance().Load<Sprite>(data.Germinate_SpriteResPath) );
+                //呼唤NPC
+                //Call_NPC();
                 //计算时间
-                Standard_Second-=Time.deltaTime;
+                Standard_Second -=Time.deltaTime;
                 if(Standard_Second<=0)
                 {
                     data.Plant_Time-=npc_Data.Work_Speed;
@@ -225,7 +227,21 @@ public class plant_State : MonoBehaviour
                 break;
         }
     }
-
+    /// <summary>
+    /// 呼唤小动物
+    /// </summary>
+    public void Call_NPC()
+    {
+        if(ObjectKeeper_Singleton.Instance.Work_NPCs.Count<3&&ObjectKeeper_Singleton.Instance.Waiting_NPCs.Count>0)
+        {
+            //ObjectKeeper_Singleton.Instance.Add_WorkNpcs(ObjectKeeper_Singleton.Instance.Waiting_NPCs[0]);
+            ObjectKeeper_Singleton.Instance.Waiting_NPCs[0].GetComponent<CharaController>().NPC_Status  = NPC_status.GoToWork;
+        }
+        else
+        {
+            return;
+        }
+    }
     /// <summary>
     /// 图片切换，用以在植物的不同状态下切换图片
     /// </summary>
