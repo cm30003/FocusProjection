@@ -8,9 +8,9 @@ using UnityEngine.UI;
 
 public class Phone_NPCManager : NewUIBase
 {
-    [Header("¡ª¡ª¡ª¡ªĞÅÏ¢×é¡ª¡ª¡ª¡ª")]
+    [Header("â€”â€”â€”â€”ä¿¡æ¯ç»„â€”â€”â€”â€”")]
     public GameObject Info_Group;
-    [Header("¡ª¡ª¡ª¡ªµÈ´ı×é¡ª¡ª¡ª¡ª")]
+    [Header("â€”â€”â€”â€”ç­‰å¾…ç»„â€”â€”â€”â€”")]
     public GameObject Waitings_Group;
     public GameObject Choose_Group;
 
@@ -29,6 +29,9 @@ public class Phone_NPCManager : NewUIBase
                 break;
         }
     }
+    /// <summary>
+    /// NPCManageråˆ›å»ºé€‰æ‹©ç»„
+    /// </summary>
     public void Create_Choose()
     {
         List<GameObject> Worknpc = ObjectKeeper_Singleton.Instance.Work_NPCs;
@@ -36,7 +39,7 @@ public class Phone_NPCManager : NewUIBase
         for(int i = 0; i < Worknpc.Count; i++)
         {
             GameObject Choosen = Choose_Group.transform.GetChild(i).gameObject;
-            //´´½¨Image×é¼ş²¢ÖÃÓÚWaitingÏÂ·½
+            //åˆ›å»ºImageç»„ä»¶å¹¶ç½®äºWaitingä¸‹æ–¹
             GameObject child = Instantiate(Npc_Waiting_Prefab, Choosen.transform);
 
             Image image = child.GetComponent<Image>();
@@ -44,10 +47,10 @@ public class Phone_NPCManager : NewUIBase
             child.transform.localPosition = new Vector3(-5, -25, 0);
             child.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
 
-            //ÉèÖÃwaitingÄÚÈİ
+            //è®¾ç½®waitingå†…å®¹
             Button button = Choosen.AddComponent<Button>();
             button.onClick.AddListener(() => UpdateInfo(button));
-            //ÎªÃ¿¸öwaitingÌí¼ÓNPCData_Data×é¼ş/Ìí¼ÓÆäNPCÊı¾İ
+            //ä¸ºæ¯ä¸ªwaitingæ·»åŠ NPCData_Dataç»„ä»¶/æ·»åŠ å…¶NPCæ•°æ®
             child.AddComponent<NPCData_Data>();
             child.GetComponent<NPCData_Data>().data = Worknpc[i].GetComponent<CharaController>().Template_data;
             child.GetComponent<NPCData_Data>().npcInformation = Worknpc[i].GetComponent<CharaController>().npc_Information;
@@ -56,7 +59,7 @@ public class Phone_NPCManager : NewUIBase
         }
     }
     /// <summary>
-    /// ´´½¨µÈ´ı×éµÄÄÚÈİ
+    /// åˆ›å»ºç­‰å¾…ç»„çš„å†…å®¹
     /// </summary>
     public void Creat_Waitings()
     {
@@ -65,7 +68,7 @@ public class Phone_NPCManager : NewUIBase
         for (int i = 0; i < ObjectKeeper_Singleton.Instance.Waiting_NPCs.Count; i++)
         {
             GameObject waiting = Waitings_Group.transform.GetChild(i).gameObject;
-            //´´½¨Image×é¼ş²¢ÖÃÓÚWaitingÏÂ·½
+            //åˆ›å»ºImageç»„ä»¶å¹¶ç½®äºWaitingä¸‹æ–¹
             GameObject child = Instantiate(Npc_Waiting_Prefab,waiting.transform);
             
             Image image = child.GetComponent<Image>();
@@ -73,10 +76,10 @@ public class Phone_NPCManager : NewUIBase
             child.transform.localPosition = new Vector3(-5,-13,0);
             child.transform.localScale = new Vector3(0.25f,0.25f,0.25f);
 
-            //ÉèÖÃwaitingÄÚÈİ
+            //è®¾ç½®waitingå†…å®¹
             Button button= waiting.AddComponent<Button>();
             button.onClick.AddListener(() => UpdateInfo(button));
-            //ÎªÃ¿¸öwaitingÌí¼ÓNPCData_Data×é¼ş/Ìí¼ÓÆäNPCÊı¾İ
+            //ä¸ºæ¯ä¸ªwaitingæ·»åŠ NPCData_Dataç»„ä»¶/æ·»åŠ å…¶NPCæ•°æ®
             child.AddComponent<NPCData_Data>();
             child.GetComponent<NPCData_Data>().data= npc[i].GetComponent<CharaController>().Template_data;
             child.GetComponent<NPCData_Data>().npcInformation= npc[i].GetComponent<CharaController>().npc_Information;
@@ -86,7 +89,15 @@ public class Phone_NPCManager : NewUIBase
     }
     public void UpdateInfo(Button button)
     {
-        Info_Group.transform.GetChild(0).GetComponent<Image>().sprite=ResourceManager.GetInstance().Load<Sprite>(button.GetComponentInChildren<NPCData_Data>().data.Sprite_Res) ;
+        //å”¤é†’CanvasGroup
+        Info_Group.GetComponent<CanvasGroup>().alpha=1;
+        Info_Group.GetComponent <CanvasGroup>().interactable=true;
+        Info_Group.GetComponent<CanvasGroup>().blocksRaycasts=true;
+        //å›¾åƒéƒ¨åˆ†
+        Image RoleImage=Info_Group.transform.GetChild(0).GetComponent<Image>();
+        RoleImage.sprite=ResourceManager.GetInstance().Load<Sprite>(button.GetComponentInChildren<NPCData_Data>().data.Sprite_Res) ;
+        RoleImage.SetNativeSize();
+        //æ–‡å­—éƒ¨åˆ†
         Info_Group.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text= button.GetComponentInChildren<NPCData_Data>().npcInformation.Name;
         Info_Group.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text= button.GetComponentInChildren<NPCData_Data>().npcInformation.Description;
 

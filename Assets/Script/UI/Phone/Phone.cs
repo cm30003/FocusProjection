@@ -25,11 +25,10 @@ public class Phone : NewUIBase
     public void Close_Phone()
     {
         this.transform.parent.DOLocalMoveY(-1050f, 1f);
-        Debug.Log("0000");
-        //Òş²Ø³ıÁËPhone_BaseÒÔÍâµÄÆäËû½çÃæ
+
+        //éšè—é™¤äº†Phone_Baseä»¥å¤–çš„å…¶ä»–ç•Œé¢
         for (int i = 1; i < transform.parent.childCount; i++)
         {
-            Debug.Log("1111");
             UIManager.GetInstance().HideUI(transform.parent.GetChild(i).name);
         }
     }
@@ -57,13 +56,13 @@ public class Phone : NewUIBase
                 break;
 
             case "PlayerCard_Button":
-                UIManager.GetInstance().ShowOldUI<IDCardUI>("¡ª¡ªPlayer IDCard¡ª¡ª");
+                UIManager.GetInstance().ShowOldUI<IDCardUI>("â€”â€”Player IDCardâ€”â€”");
                 break;
             case "Settings_Button":
-                UIManager.GetInstance().ShowOldUI<SystemMenueUI>("¡ª¡ªSystem Menue UI CanvasGroup¡ª¡ª");
+                UIManager.GetInstance().ShowOldUI<SystemMenueUI>("â€”â€”System Menue UI CanvasGroupâ€”â€”");
                 break;
             case "Mail_Button":
-                UIManager.GetInstance().ShowOldUI<MailUI>("¡ª¡ªMail¡ª¡ª");
+                UIManager.GetInstance().ShowOldUI<MailUI>("â€”â€”Mailâ€”â€”");
                 break;
         }
     }

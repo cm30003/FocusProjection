@@ -6,9 +6,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class ChatRoomUI : MonoBehaviour//UI 控件管理、用户输入处理、消息发送与显示	使用 ClientSocket 进行网络通信
+public class ChatRoomUI : NewUIBase//UI 控件管理、用户输入处理、消息发送与显示	使用 ClientSocket 进行网络通信
 {
-    private const string IP = "127.0.0.1";//服务器地址
+    private const string IP = "192.168.80.119";//服务器地址
     private const int PORT = 8080;//端口号
 
     // 用户名输入
@@ -57,6 +57,7 @@ public class ChatRoomUI : MonoBehaviour//UI 控件管理、用户输入处理、
         sendBtn.onClick.AddListener(() =>
         {
             Send("chat", msgInput.text);//给发送按钮添加点击事件监听器，调用 Send("chat", msg) 发送聊天消息。
+            msgInput.text = "";
         });
     }
 

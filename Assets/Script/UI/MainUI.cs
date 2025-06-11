@@ -9,35 +9,35 @@ using DG.Tweening;
 
 public class MainUI : UIBase
 {
-    [Header("¡ª¡ª¡ª¡ª¸÷ÏµÍ³¡ª¡ª¡ª¡ª")]
-    public CanvasGroup ShopUI;//ÉÌµê½çÃæ
+    [Header("â€”â€”â€”â€”å„ç³»ç»Ÿâ€”â€”â€”â€”")]
+    public CanvasGroup ShopUI;//å•†åº—ç•Œé¢
 
-    public CanvasGroup NCP_Manager_UI;//¶¯Îï¹ÜÀí
-    //public CanvasGroup Plant_Manage_UI;//Ö²Îï¹ÜÀí
+    public CanvasGroup NCP_Manager_UI;//åŠ¨ç‰©ç®¡ç†
+    //public CanvasGroup Plant_Manage_UI;//æ¤ç‰©ç®¡ç†
 
-    public CanvasGroup WareHouse_UI;//²Ö¿â
-    public CanvasGroup DiningHall_UI;//Ê³ÌÃ
-    public CanvasGroup Timer_UI;//¼ÆÊ±Æ÷¶ş¼¶½çÃæ
+    public CanvasGroup WareHouse_UI;//ä»“åº“
+    public CanvasGroup DiningHall_UI;//é£Ÿå ‚
+    public CanvasGroup Timer_UI;//è®¡æ—¶å™¨äºŒçº§ç•Œé¢
 
     public GameObject Phone_UI;
-    //public CanvasGroup Player_ID_Card_UI;//Íæ¼ÒÃûÆ¬
-    //public CanvasGroup System_Menue_UI;//ÏµÍ³²Ëµ¥
-    //public CanvasGroup Mail_UI;//ÓÊ¼ş
-    //public CanvasGroup Calendar_UI;//ÈÕÀú
-    [Header("¡ª¡ª¡ª¡ªµ×²¿¹¤¾ßÀ¸¡ª¡ª¡ª¡ª")]
-    public Button Quit_Button;//ÍË³ö
-    public Button fullscreen_Button;//È«ÆÁ
-    public Button Hide_UI_Button;//Òş²ØÖ÷UI
-    public Button Phone_Button;//ÊÖ»ú
-    [Header("¡ª¡ª¡ª¡ªÖ÷½çÃæ°´Å¥¡ª¡ª¡ª¡ª")]
-    //public Button Shop_Button;//ÉÌµê
-    public Button NPCManager_Button;//¶¯Îï¹ÜÀí
-    public Button DiningHall_Button;//Ê³ÌÃ
-    public Button WareHouse_Button;//²Ö¿â
-    public Button PlantManager_Button;//Ö²Îï¹ÜÀí
-    public Button Timer_Button;//¼ÆÊ±Æ÷
-    public Button Player_IDCard_Button;//Íæ¼ÒÃûÆ¬
-    [Header("¡ª¡ª¡ª¡ªÓÒÉÏ¼Æ»®°å¡ª¡ª¡ª¡ª")]
+    //public CanvasGroup Player_ID_Card_UI;//ç©å®¶åç‰‡
+    //public CanvasGroup System_Menue_UI;//ç³»ç»Ÿèœå•
+    //public CanvasGroup Mail_UI;//é‚®ä»¶
+    //public CanvasGroup Calendar_UI;//æ—¥å†
+    [Header("â€”â€”â€”â€”åº•éƒ¨å·¥å…·æ â€”â€”â€”â€”")]
+    public Button Quit_Button;//é€€å‡º
+    public Button fullscreen_Button;//å…¨å±
+    public Button Hide_UI_Button;//éšè—ä¸»UI
+    public Button Phone_Button;//æ‰‹æœº
+    [Header("â€”â€”â€”â€”ä¸»ç•Œé¢æŒ‰é’®â€”â€”â€”â€”")]
+    //public Button Shop_Button;//å•†åº—
+    public Button NPCManager_Button;//åŠ¨ç‰©ç®¡ç†
+    public Button DiningHall_Button;//é£Ÿå ‚
+    public Button WareHouse_Button;//ä»“åº“
+    public Button PlantManager_Button;//æ¤ç‰©ç®¡ç†
+    public Button Timer_Button;//è®¡æ—¶å™¨
+    public Button Player_IDCard_Button;//ç©å®¶åç‰‡
+    [Header("â€”â€”â€”â€”å³ä¸Šè®¡åˆ’æ¿â€”â€”â€”â€”")]
     public GameObject PlanText_Group;
 
     public GameObject Choose_Bar;
@@ -45,11 +45,11 @@ public class MainUI : UIBase
     public GameObject PlaceHolder;
 
     public Mission_ADay mission_ADay;
-    [Header("¡ª¡ª¡ª¡ª×óÉÏÍæ¼ÒĞÅÏ¢¡ª¡ª¡ª¡ª")]
+    [Header("â€”â€”â€”â€”å·¦ä¸Šç©å®¶ä¿¡æ¯â€”â€”â€”â€”")]
     public TextMeshProUGUI Player_Name;
     public TextMeshProUGUI Player_Money;
     public TextMeshProUGUI Player_level;
-    [Header("¡ª¡ª¡ª¡ªÆäËû¡ª¡ª¡ª¡ª")]
+    [Header("â€”â€”â€”â€”å…¶ä»–â€”â€”â€”â€”")]
     public GameObject OpenMainUI_Trigger;
     private void Start()
     {
@@ -65,31 +65,31 @@ public class MainUI : UIBase
     }
     private void InitClick()
     {
-        Phone_Button.onClick.AddListener(Open_Phone_UI);//ÊÖ»ú½çÃæ
-        //Shop_Button.onClick.AddListener(Open_Shop_UI);//ÉÌµê
-        NPCManager_Button.onClick.AddListener(Open_NCP_Manager_UI);//¶¯Îï¹ÜÀí
-        DiningHall_Button.onClick.AddListener(Open_DiningHall_UI);//Ê³ÌÃ
-        WareHouse_Button.onClick.AddListener(Open_WareHouse_UI);//²Ö¿â
-        //PlantManager_Button.onClick.AddListener(Open_Plant_Manage_UI);//Ö²Îï¹ÜÀí
-        Timer_Button.onClick.AddListener(Open_Timer_UI);//¼ÆÊ±Æ÷
+        Phone_Button.onClick.AddListener(Open_Phone_UI);//æ‰‹æœºç•Œé¢
+        //Shop_Button.onClick.AddListener(Open_Shop_UI);//å•†åº—
+        NPCManager_Button.onClick.AddListener(Open_NCP_Manager_UI);//åŠ¨ç‰©ç®¡ç†
+        DiningHall_Button.onClick.AddListener(Open_DiningHall_UI);//é£Ÿå ‚
+        WareHouse_Button.onClick.AddListener(Open_WareHouse_UI);//ä»“åº“
+        //PlantManager_Button.onClick.AddListener(Open_Plant_Manage_UI);//æ¤ç‰©ç®¡ç†
+        Timer_Button.onClick.AddListener(Open_Timer_UI);//è®¡æ—¶å™¨
 
-        Player_IDCard_Button.onClick.AddListener(Open_Player_IDCard);//´ò¿ªÍæ¼ÒÃûÆ¬
-        Quit_Button.onClick.AddListener(QuitGame);//ÍË³ö
+        Player_IDCard_Button.onClick.AddListener(Open_Player_IDCard);//æ‰“å¼€ç©å®¶åç‰‡
+        Quit_Button.onClick.AddListener(QuitGame);//é€€å‡º
 
-        Hide_UI_Button.onClick.AddListener(Hide_Main_UI);//Òş²ØÖ÷UI
+        Hide_UI_Button.onClick.AddListener(Hide_Main_UI);//éšè—ä¸»UI
 
-        //System_Menue_Button.onClick.AddListener(Open_System_Menue_UI);//´ò¿ªÏµÍ³²Ëµ¥
-        //Mail_Button.onClick.AddListener(Open_Mail_UI);//ÓÊ¼ş
-        //Calendar_Button.onClick.AddListener(Open_Calendar_UI);//ÈÕÀú
+        //System_Menue_Button.onClick.AddListener(Open_System_Menue_UI);//æ‰“å¼€ç³»ç»Ÿèœå•
+        //Mail_Button.onClick.AddListener(Open_Mail_UI);//é‚®ä»¶
+        //Calendar_Button.onClick.AddListener(Open_Calendar_UI);//æ—¥å†
 
-        EventCenter.GetInstance().AddEventListener("Info_Update", Info_Update);//ĞÅÏ¢¸üĞÂÊÂ¼ş
+        EventCenter.GetInstance().AddEventListener("Info_Update", Info_Update);//ä¿¡æ¯æ›´æ–°äº‹ä»¶
         Info_Update();
 
         //Plan_Panel_Button();
     }
 
     /// <summary>
-    /// ¸üĞÂÖ÷UIÖĞµÄÍæ¼ÒĞÅÏ¢
+    /// æ›´æ–°ä¸»UIä¸­çš„ç©å®¶ä¿¡æ¯
     /// </summary>
     public void Info_Update()
     {
@@ -97,15 +97,15 @@ public class MainUI : UIBase
         Player_Money.text = ObjectKeeper_Singleton.Instance.gamerData.Money.ToString();
         Player_level.text ="Lv."+ObjectKeeper_Singleton.Instance.gamerData.Level.ToString();
     }
-    #region ¼Æ»®°åÏà¹Ø
+    #region è®¡åˆ’æ¿ç›¸å…³
     /// <summary>
-    /// Îª¼Æ»®°åÌí¼Ó°´Å¥ÊÂ¼ş-ÊäÈëÎÄ±¾¿òÑ¡ÔñÊÂ¼ş
+    /// ä¸ºè®¡åˆ’æ¿æ·»åŠ æŒ‰é’®äº‹ä»¶-è¾“å…¥æ–‡æœ¬æ¡†é€‰æ‹©äº‹ä»¶
     /// </summary>
     private void Plan_Panel_Button()
     {
-        //»ñÈ¡Íê³É°´Å¥
+        //è·å–å®ŒæˆæŒ‰é’®
         Button[] Finish_buttons = PlanText_Group.GetComponentsInChildren<Button>();
-        //»ñÈ¡ÊäÈëÎÄ±¾¿ò
+        //è·å–è¾“å…¥æ–‡æœ¬æ¡†
         TMP_InputField[] inputField = PlanText_Group.GetComponentsInChildren<TMP_InputField>();
 
         for (int i = 0; i < Finish_buttons.Length; i++)
@@ -117,41 +117,41 @@ public class MainUI : UIBase
         }
     }
     /// <summary>
-    /// Íê³ÉÏîÄ¿ÊÂ¼ş,µ±Íê³É¸ÃÏîÄ¿£¬Ôò½«Æä±£´æµ½±¾µØ
+    /// å®Œæˆé¡¹ç›®äº‹ä»¶,å½“å®Œæˆè¯¥é¡¹ç›®ï¼Œåˆ™å°†å…¶ä¿å­˜åˆ°æœ¬åœ°
     /// </summary>
-    /// <param name="Option">¶ÔÓ¦µÄÏîÄ¿</param>
+    /// <param name="Option">å¯¹åº”çš„é¡¹ç›®</param>
     private void Finish_Button(ref TMP_InputField Option)
     {
-        mission_ADay.Day = DateTime.Now.ToString("yyyy/M/d");//´æ´¢µ±Ç°ÈÕÆÚ
-        if (Option != null && Option.text != "")//option±äÁ¿²»Îª¿Õ£¬ÇÒ´æÔÚÎÄ±¾
+        mission_ADay.Day = DateTime.Now.ToString("yyyy/M/d");//å­˜å‚¨å½“å‰æ—¥æœŸ
+        if (Option != null && Option.text != "")//optionå˜é‡ä¸ä¸ºç©ºï¼Œä¸”å­˜åœ¨æ–‡æœ¬
         {
-            //µ±×ÖµäÖĞ´æÔÚ´Ë¼ü/ÈÕÆÚÊ±£¬ËµÃ÷´ËÇ°Ôø¾­´æ´¢¹ıÍ¬Ò»ÌìµÄÄÚÈİ£¬¸üĞÂ×Öµä
+            //å½“å­—å…¸ä¸­å­˜åœ¨æ­¤é”®/æ—¥æœŸæ—¶ï¼Œè¯´æ˜æ­¤å‰æ›¾ç»å­˜å‚¨è¿‡åŒä¸€å¤©çš„å†…å®¹ï¼Œæ›´æ–°å­—å…¸
             if (mission_ADay.ADay_Options_Dic.ContainsKey(mission_ADay.Day))
             {
                 mission_ADay.Options = mission_ADay.ADay_Options_Dic[mission_ADay.Day] = mission_ADay.Options;
                 mission_ADay.Options.Add(Option.text);
             }
-            else//²»´æÔÚ´Ë¼ü/ÈÕÆÚÊ±£¬Ìí¼Ó´Ë¼ü/ÈÕÆÚ¼°ÆäÏà¶ÔÓ¦µÄÍê³ÉÏîÄ¿ÁĞ±í
+            else//ä¸å­˜åœ¨æ­¤é”®/æ—¥æœŸæ—¶ï¼Œæ·»åŠ æ­¤é”®/æ—¥æœŸåŠå…¶ç›¸å¯¹åº”çš„å®Œæˆé¡¹ç›®åˆ—è¡¨
             {
                 mission_ADay.Options.Clear();
                 mission_ADay.Options.Add(Option.text);
                 mission_ADay.ADay_Options_Dic.Add(mission_ADay.Day, mission_ADay.Options);
             }
         }
-        //´æ´¢½ñÈÕÊı¾İµ½±¾µØ
+        //å­˜å‚¨ä»Šæ—¥æ•°æ®åˆ°æœ¬åœ°
         JsonManager.Instance.SaveData(mission_ADay, "ADay");
         Option.text = "";
     }
     /// <summary>
-    /// ´ò¿ªµ±Ç°¼Æ»®¿ò
+    /// æ‰“å¼€å½“å‰è®¡åˆ’æ¡†
     /// </summary>
     /// <param name="text"></param>
     private void Open_Choosen_Bar(TMP_InputField text)
     {
-        //È·ÈÏ¼Æ»®°åµ±Ç°ÊÇ·ñ´ò¿ª£¬²¢ÅĞ¶ÏÊäÈë¿òÊÇ·ñÎª¿Õ
+        //ç¡®è®¤è®¡åˆ’æ¿å½“å‰æ˜¯å¦æ‰“å¼€ï¼Œå¹¶åˆ¤æ–­è¾“å…¥æ¡†æ˜¯å¦ä¸ºç©º
         if(Choose_Bar.transform.localScale==Vector3.zero&&text.text!="")
         {
-            //´´½¨Õ¼Î»·û
+            //åˆ›å»ºå ä½ç¬¦
             GameObject placeHolder = Instantiate(PlaceHolder);
 
             placeHolder.transform.SetParent(PlanText_Group.transform);
@@ -167,7 +167,7 @@ public class MainUI : UIBase
         } 
     }
     /// <summary>
-    /// ¹Ø±Õµ±Ç°¼Æ»®¿ò
+    /// å…³é—­å½“å‰è®¡åˆ’æ¡†
     /// </summary>
     public void Close_Choosen_Bar()
     {
@@ -176,15 +176,15 @@ public class MainUI : UIBase
         GameObject placeHolder = PlanText_Group.transform.GetChild(0).gameObject;
         Destroy(placeHolder);
     }
-    #endregion ¼Æ»®°åÏà¹Ø
-    #region ×óÉÏ½ÇÍæ¼ÒĞÅÏ¢Ïà¹Ø
-    public void Player_Left_Up()//×óÉÏ½ÇÍæ¼ÒĞÅÏ¢¸üĞÂ
+    #endregion è®¡åˆ’æ¿ç›¸å…³
+    #region å·¦ä¸Šè§’ç©å®¶ä¿¡æ¯ç›¸å…³
+    public void Player_Left_Up()//å·¦ä¸Šè§’ç©å®¶ä¿¡æ¯æ›´æ–°
     {
         
     }
     #endregion
     /// <summary>
-    /// ´ò¿ªÖ÷UI
+    /// æ‰“å¼€ä¸»UI
     /// </summary>
     public void Open_Main_UI()
     {
@@ -193,7 +193,7 @@ public class MainUI : UIBase
         //OpenMainUI_Trigger.GetComponent<GraphicRaycaster>().enabled = false;
     }
     /// <summary>
-    /// Òş²ØÖ÷UI
+    /// éšè—ä¸»UI
     /// </summary>
     private void Hide_Main_UI()
     {
@@ -202,18 +202,19 @@ public class MainUI : UIBase
         //OpenMainUI_Trigger.GetComponent<GraphicRaycaster>().enabled = true;
     }
     /// <summary>
-    /// »½³öÊÖ»ú½çÃæ
+    /// å”¤å‡ºæ‰‹æœºç•Œé¢
     /// </summary>
     private void Open_Phone_UI()
     {
         Phone_UI.transform.DOLocalMoveY(-45, 1f);
+
     }
     /// <summary>
-    /// ´ò¿ªÍæ¼ÒÃûÆ¬
+    /// æ‰“å¼€ç©å®¶åç‰‡
     /// </summary>
     private void Open_Player_IDCard()
     {
-        UIManager.GetInstance().ShowOldUI<IDCardUI>("¡ª¡ªPlayer IDCard¡ª¡ª");
+        UIManager.GetInstance().ShowOldUI<IDCardUI>("â€”â€”Player IDCardâ€”â€”");
     }
     private void Open_Timer_UI()
     {
@@ -246,7 +247,7 @@ public class MainUI : UIBase
     //}
     public void Open_Mail_UI()
     {
-        UIManager.GetInstance().ShowOldUI<MailUI>("¡ª¡ªMail¡ª¡ª");
+        UIManager.GetInstance().ShowOldUI<MailUI>("â€”â€”Mailâ€”â€”");
     }
     public void Open_WareHouse_UI()
     {

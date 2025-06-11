@@ -11,99 +11,99 @@ public class ExcelReader : Editor
     private enum Food_ExcelTitleEnum
     {
         ID,//ID
-        Name,//Ãû×Ö
-        Description,//ÃèÊö
-        Cost,//¼Û¸ñ
+        Name,//åå­—
+        Description,//æè¿°
+        Cost,//ä»·æ ¼
         Buff,// buff
-        ResPath,//×ÊÔ´Â·¾¶
+        ResPath,//èµ„æºè·¯å¾„
     }
     private enum NpcData_ExcelTitleEnum
     {
         ID,//ID
-        Favorability,// ºÃ¸Ğ¶È
-        FavorvateThing_ID,//Ï²»¶µÄÊÂÎñ
-        CherishThing_ID,//Õä°®µÄÊÂÎï
-        MoveSpeed,//ÒÆ¶¯ËÙ¶È
-        WorkSpeed,//¹¤×÷ËÙ¶È
-        Work_Time,//¹¤×÷Ê±¼ä/ÍµÀÁ½áËãµ¹ÊıÊ±¼ä
-        Eat_Time,//³Ô·¹Ê±¼ä
-        Hungry_Time,//¼¢¶öµ¹ÊıÊ±¼ä
-        Res,//NPCÍ¼Æ¬×ÊÔ´Â·¾¶
+        Favorability,// å¥½æ„Ÿåº¦
+        FavorvateThing_ID,//å–œæ¬¢çš„äº‹åŠ¡
+        CherishThing_ID,//ççˆ±çš„äº‹ç‰©
+        MoveSpeed,//ç§»åŠ¨é€Ÿåº¦
+        WorkSpeed,//å·¥ä½œé€Ÿåº¦
+        Work_Time,//å·¥ä½œæ—¶é—´/å·æ‡’ç»“ç®—å€’æ•°æ—¶é—´
+        Eat_Time,//åƒé¥­æ—¶é—´
+        Hungry_Time,//é¥¥é¥¿å€’æ•°æ—¶é—´
+        Res,//NPCå›¾ç‰‡èµ„æºè·¯å¾„
     }
     private enum NPCInformation_ExcelTitleEnum
     {
         ID,//ID
-        Name,//Ãû×Ö
-        Hobby,//°®ºÃ
-        Personality,//¸öĞÔ
-        Description,//½ÇÉ«ÃèÊö
-        Birthday,//ÉúÈÕ
+        Name,//åå­—
+        Hobby,//çˆ±å¥½
+        Personality,//ä¸ªæ€§
+        Description,//è§’è‰²æè¿°
+        Birthday,//ç”Ÿæ—¥
     }
     private enum Gift_ExcelTitleEnum
     {
         ID,//ID
-        Name,//Ãû×Ö
-        Description,//ÃèÊö
-        Cost,//¼Û¸ñ
-        Default_Affinity,//Ä¬ÈÏºÃ¸Ğ¶È
-        Like_Affinity,//Ï²°®ºÃ¸Ğ¶È
+        Name,//åå­—
+        Description,//æè¿°
+        Cost,//ä»·æ ¼
+        Default_Affinity,//é»˜è®¤å¥½æ„Ÿåº¦
+        Like_Affinity,//å–œçˆ±å¥½æ„Ÿåº¦
         Favorate_Affinity,//
-        Sprite_ResPath,//×ÊÔ´Â·¾¶
+        Sprite_ResPath,//èµ„æºè·¯å¾„
     }
     private enum Cloth_ExcelTitleEnum
     {
         ID,//ID
-        Name,//Ãû×Ö
-        Description,//ÃèÊö
-        Cost,//¼Û¸ñ
+        Name,//åå­—
+        Description,//æè¿°
+        Cost,//ä»·æ ¼
 
-        Target_Animal_ID,//Ä¿±ê¶¯ÎïID
+        Target_Animal_ID,//ç›®æ ‡åŠ¨ç‰©ID
 
-        Sprite_ResPath,//×ÊÔ´Â·¾¶
+        Sprite_ResPath,//èµ„æºè·¯å¾„
     }
     private enum Plant_ExcelTitleEnum
     {
         ID,
         Name,
         Description,
-        Sell_Price,//³öÊÛ¼Û¸ñ
+        Sell_Price,//å‡ºå”®ä»·æ ¼
         Cost,
-        Plant_Time,//ÖÖÖ²Ê±¼ä
-        Germinate_Time,//·¢Ñ¿Ê±¼ä
-        fertilize_Time,//Ê©·ÊÊ±¼ä
-        Grown_Time1,//³É³¤Ê±¼ä
-        Water_Time1,//½½Ë®Ê±¼ä
-        Grown_Time2,//³É³¤Ê±¼ä
-        Water_Time2,//½½Ë®Ê±¼ä
-        Mature_Time,//³ÉÊìÊ±¼ä
-        BugControl_Time,//³æ×Ó¿ØÖÆÊ±¼ä
-        Harvest_Time,//ÊÕ»ñÊ±¼ä
-        Harvest_Num,//sÊÕ»ñÊıÁ¿
-        Germainate_SpriteResPath,//·¢Ñ¿Í¼Æ¬×ÊÔ´Â·¾¶
-        Grown_SpriteResPath,//Éú³¤Í¼Æ¬×ÊÔ´Â·¾¶
-        Mature_SpriteResPath,//×ÊÔ´Â·¾¶
+        Plant_Time,//ç§æ¤æ—¶é—´
+        Germinate_Time,//å‘èŠ½æ—¶é—´
+        fertilize_Time,//æ–½è‚¥æ—¶é—´
+        Grown_Time1,//æˆé•¿æ—¶é—´
+        Water_Time1,//æµ‡æ°´æ—¶é—´
+        Grown_Time2,//æˆé•¿æ—¶é—´
+        Water_Time2,//æµ‡æ°´æ—¶é—´
+        Mature_Time,//æˆç†Ÿæ—¶é—´
+        BugControl_Time,//è™«å­æ§åˆ¶æ—¶é—´
+        Harvest_Time,//æ”¶è·æ—¶é—´
+        Harvest_Num,//sæ”¶è·æ•°é‡
+        Germainate_SpriteResPath,//å‘èŠ½å›¾ç‰‡èµ„æºè·¯å¾„
+        Grown_SpriteResPath,//ç”Ÿé•¿å›¾ç‰‡èµ„æºè·¯å¾„
+        Mature_SpriteResPath,//èµ„æºè·¯å¾„
     }
     /// <summary>
-    /// ´ÓExcel´´½¨JsonÊı¾İÎÄ¼ş
+    /// ä»Excelåˆ›å»ºJsonæ•°æ®æ–‡ä»¶
     /// </summary>
     [MenuItem("Tools/CreatAsset_From_Excel")]
     static void CreateAssets_Form_Excel()
     {
-        //excelµÄÎÄ¼şÂ·¾¶
+        //excelçš„æ–‡ä»¶è·¯å¾„
         string path = Path.Combine(Application.dataPath, "Editor/Data_Table.xlsx");
-        //»ñÈ¡ÎÄ¼şĞÅÏ¢
+        //è·å–æ–‡ä»¶ä¿¡æ¯
         FileInfo fileInfo = new FileInfo(path);
 
         using (ExcelPackage excel = new ExcelPackage(fileInfo))
         {
             //Debug.Log(excel.Workbook.Worksheets.Count);
 
-            ExcelWorksheet workSheet_NPCData = excel.Workbook.Worksheets[1];//Ğ¡¶¯Îï½ÇÉ«Êı¾İ
-            ExcelWorksheet workSheet_NPCInformation = excel.Workbook.Worksheets[2];//Ğ¡¶¯Îï½ÇÉ«ÃèÊöĞÅÏ¢
-            ExcelWorksheet workSheet_Gift = excel.Workbook.Worksheets[3];//ÀñÎïÊı¾İ
-            ExcelWorksheet workSheet_Food = excel.Workbook.Worksheets[4];//Ê³ÎïÊı¾İ
-            ExcelWorksheet workSheet_Cloth = excel.Workbook.Worksheets[5];//ÒÂÎïÊı¾İ
-            ExcelWorksheet workSheet_Plant = excel.Workbook.Worksheets[6];//Ö²ÎïÊı¾İ
+            ExcelWorksheet workSheet_NPCData = excel.Workbook.Worksheets[1];//å°åŠ¨ç‰©è§’è‰²æ•°æ®
+            ExcelWorksheet workSheet_NPCInformation = excel.Workbook.Worksheets[2];//å°åŠ¨ç‰©è§’è‰²æè¿°ä¿¡æ¯
+            ExcelWorksheet workSheet_Gift = excel.Workbook.Worksheets[3];//ç¤¼ç‰©æ•°æ®
+            ExcelWorksheet workSheet_Food = excel.Workbook.Worksheets[4];//é£Ÿç‰©æ•°æ®
+            ExcelWorksheet workSheet_Cloth = excel.Workbook.Worksheets[5];//è¡£ç‰©æ•°æ®
+            ExcelWorksheet workSheet_Plant = excel.Workbook.Worksheets[6];//æ¤ç‰©æ•°æ®
 
             NPC_DataJson_Create(workSheet_NPCData);
             NPC_InformationJson_Create(workSheet_NPCInformation);
@@ -114,18 +114,18 @@ public class ExcelReader : Editor
         }
     }
     /// <summary>
-    /// ´´½¨Ğ¡¶¯Îï½ÇÉ«ÃèÊöĞÅÏ¢NPCInformation.jsonwÎÄ¼ş
+    /// åˆ›å»ºå°åŠ¨ç‰©è§’è‰²æè¿°ä¿¡æ¯NPCInformation.jsonwæ–‡ä»¶
     /// </summary>
     /// <param name="worksheet"></param>
     private static void NPC_InformationJson_Create(ExcelWorksheet worksheet)
     {
-        int StartRow = 4, StartCol = 1;//ÆğÊ¼ĞĞÁĞ
+        int StartRow = 4, StartCol = 1;//èµ·å§‹è¡Œåˆ—
 
-        Debug.Log("NPCInformation:ĞĞ:" + worksheet.Dimension.Rows + "ÁĞ£º" + worksheet.Dimension.Columns);
+        Debug.Log("NPCInformation:è¡Œ:" + worksheet.Dimension.Rows + "åˆ—ï¼š" + worksheet.Dimension.Columns);
 
         List<NPCInformation> list = new List<NPCInformation>();
 
-        //½«¶ÁÈ¡µ½µÄExcelÊı¾İÌî³äµ½ÏàÓ¦µÄ¿ÉĞòÁĞ»¯×Ö¶ÎÖĞ
+        //å°†è¯»å–åˆ°çš„Excelæ•°æ®å¡«å……åˆ°ç›¸åº”çš„å¯åºåˆ—åŒ–å­—æ®µä¸­
         for (int i = StartRow; i <= worksheet.Dimension.Rows; i++)
         {
             NPCInformation npcInformation = new NPCInformation();
@@ -138,30 +138,30 @@ public class ExcelReader : Editor
 
             list.Add(npcInformation);
         }
-        //½«¿ÉĞòÁĞ»¯Êı¾İ×ªÎªJsonÊı¾İ²¢±£´æµ½Ä¿±êÂ·¾¶
+        //å°†å¯åºåˆ—åŒ–æ•°æ®è½¬ä¸ºJsonæ•°æ®å¹¶ä¿å­˜åˆ°ç›®æ ‡è·¯å¾„
         string savePath = Path.Combine(Application.dataPath, "Resources/JsonDataAsset/NPCInformation.json");
-        //¼ì²âÂ·¾¶ÊÇ·ñ´æÔÚ
+        //æ£€æµ‹è·¯å¾„æ˜¯å¦å­˜åœ¨
         if (!Directory.Exists(Path.GetDirectoryName(savePath)))
         {
             Directory.CreateDirectory(Path.GetDirectoryName(savePath));
         }
-        //½«¶ÔÏóÁĞ±íĞòÁĞ»¯Îª JSON ¸ñÊ½£¬²¢Ğ´Èëµ½Ö¸¶¨Â·¾¶µÄÎÄ¼şÖĞ¡£
+        //å°†å¯¹è±¡åˆ—è¡¨åºåˆ—åŒ–ä¸º JSON æ ¼å¼ï¼Œå¹¶å†™å…¥åˆ°æŒ‡å®šè·¯å¾„çš„æ–‡ä»¶ä¸­ã€‚
         File.WriteAllText(savePath, JsonConvert.SerializeObject(list, Formatting.Indented));
 
-        Debug.Log("Éú³ÉJsonDataÓÚ£º" + savePath);
+        Debug.Log("ç”ŸæˆJsonDataäºï¼š" + savePath);
     }
     /// <summary>
-    /// ´´½¨Ê³ÎïÊı¾İFoodItem_Data.jsonÎÄ¼ş
+    /// åˆ›å»ºé£Ÿç‰©æ•°æ®FoodItem_Data.jsonæ–‡ä»¶
     /// </summary>
     /// <param name="worksheet"></param>
     private static void FoodDataJson_Create(ExcelWorksheet worksheet)
     {
-        int StartRow = 4,StartCol=1;//ÆğÊ¼ĞĞÁĞ
+        int StartRow = 4,StartCol=1;//èµ·å§‹è¡Œåˆ—
 
-        Debug.Log("FoodData:ĞĞ:"+worksheet.Dimension.Rows+"ÁĞ£º"+ worksheet.Dimension.Columns);
+        Debug.Log("FoodData:è¡Œ:"+worksheet.Dimension.Rows+"åˆ—ï¼š"+ worksheet.Dimension.Columns);
 
         List<FoodItem_Data> list = new List<FoodItem_Data>();
-        //½«¶ÁÈ¡µ½µÄExcelÊı¾İÌî³äµ½ÏàÓ¦µÄ¿ÉĞòÁĞ»¯×Ö¶ÎÖĞ
+        //å°†è¯»å–åˆ°çš„Excelæ•°æ®å¡«å……åˆ°ç›¸åº”çš„å¯åºåˆ—åŒ–å­—æ®µä¸­
         for(int i=StartRow;i<worksheet.Dimension.Rows-3;i++)
         {
             FoodItem_Data foodItem_Data = new FoodItem_Data();
@@ -174,9 +174,9 @@ public class ExcelReader : Editor
 
             list.Add(foodItem_Data);
         }
-        //½«¿ÉĞòÁĞ»¯Êı¾İ×ªÎªJsonÊı¾İ²¢±£´æµ½Ä¿±êÂ·¾¶
+        //å°†å¯åºåˆ—åŒ–æ•°æ®è½¬ä¸ºJsonæ•°æ®å¹¶ä¿å­˜åˆ°ç›®æ ‡è·¯å¾„
         string savePath = Path.Combine(Application.dataPath, "Resources/JsonDataAsset/FoodItem_Data.json");
-        //¼ì²âÂ·¾¶ÊÇ·ñ´æÔÚ
+        //æ£€æµ‹è·¯å¾„æ˜¯å¦å­˜åœ¨
         if (!Directory.Exists(Path.GetDirectoryName(savePath)))
         {
             Directory.CreateDirectory(Path.GetDirectoryName(savePath));
@@ -184,20 +184,20 @@ public class ExcelReader : Editor
         //
         File.WriteAllText(savePath, JsonConvert.SerializeObject(list,Formatting.Indented));
 
-        Debug.Log("Éú³ÉJsonDataÓÚ£º"+savePath);
+        Debug.Log("ç”ŸæˆJsonDataäºï¼š"+savePath);
     }
     /// <summary>
-    /// ´´½¨NPCÊı¾İNPCData.jsonÎÄ¼ş
+    /// åˆ›å»ºNPCæ•°æ®NPCData.jsonæ–‡ä»¶
     /// </summary>
     /// <param name="worksheet"></param>
     private static void NPC_DataJson_Create(ExcelWorksheet worksheet)
     {
-        int StartRow = 4, StartCol = 1;//ÆğÊ¼ĞĞÁĞ
+        int StartRow = 4, StartCol = 1;//èµ·å§‹è¡Œåˆ—
 
-        Debug.Log("NPCData:ĞĞ:" + worksheet.Dimension.Rows + "ÁĞ£º" + worksheet.Dimension.Columns);
+        Debug.Log("NPCData:è¡Œ:" + worksheet.Dimension.Rows + "åˆ—ï¼š" + worksheet.Dimension.Columns);
 
         List<NPCData> list = new List<NPCData>();
-        //½«¶ÁÈ¡µ½µÄExcelÊı¾İÌî³äµ½ÏàÓ¦µÄ¿ÉĞòÁĞ»¯×Ö¶ÎÖĞ
+        //å°†è¯»å–åˆ°çš„Excelæ•°æ®å¡«å……åˆ°ç›¸åº”çš„å¯åºåˆ—åŒ–å­—æ®µä¸­
         for (int i = StartRow; i <= worksheet.Dimension.Rows; i++)
         {
             NPCData npc_data = new NPCData();
@@ -215,9 +215,9 @@ public class ExcelReader : Editor
 
             list.Add(npc_data);
         }
-        //½«¿ÉĞòÁĞ»¯Êı¾İ×ªÎªJsonÊı¾İ²¢±£´æµ½Ä¿±êÂ·¾¶
+        //å°†å¯åºåˆ—åŒ–æ•°æ®è½¬ä¸ºJsonæ•°æ®å¹¶ä¿å­˜åˆ°ç›®æ ‡è·¯å¾„
         string savePath = Path.Combine(Application.dataPath, "Resources/JsonDataAsset/NPC_Data.json");
-        //¼ì²âÂ·¾¶ÊÇ·ñ´æÔÚ
+        //æ£€æµ‹è·¯å¾„æ˜¯å¦å­˜åœ¨
         if (!Directory.Exists(Path.GetDirectoryName(savePath)))
         {
             Directory.CreateDirectory(Path.GetDirectoryName(savePath));
@@ -225,20 +225,20 @@ public class ExcelReader : Editor
         //
         File.WriteAllText(savePath, JsonConvert.SerializeObject(list, Formatting.Indented));
 
-        Debug.Log("Éú³ÉJsonDataÓÚ£º" + savePath);
+        Debug.Log("ç”ŸæˆJsonDataäºï¼š" + savePath);
     }
     /// <summary>
-    /// ´´½¨ÉÌµêÀñÎïÊı¾İGift_Data.jsonÎÄ¼ş
+    /// åˆ›å»ºå•†åº—ç¤¼ç‰©æ•°æ®Gift_Data.jsonæ–‡ä»¶
     /// </summary>
     /// <param name="worksheet"></param>
     private static void Gift_DataJson_Create(ExcelWorksheet worksheet)
     {
-        int StartRow = 4, StartCol = 1;//ÆğÊ¼ĞĞÁĞ
+        int StartRow = 4, StartCol = 1;//èµ·å§‹è¡Œåˆ—
 
-        Debug.Log("GiftData:ĞĞ:" + worksheet.Dimension.Rows + "ÁĞ£º" + worksheet.Dimension.Columns);
+        Debug.Log("GiftData:è¡Œ:" + worksheet.Dimension.Rows + "åˆ—ï¼š" + worksheet.Dimension.Columns);
 
         List<GiftData> list = new List<GiftData>();
-        //½«¶ÁÈ¡µ½µÄExcelÊı¾İÌî³äµ½ÏàÓ¦µÄ¿ÉĞòÁĞ»¯×Ö¶ÎÖĞ
+        //å°†è¯»å–åˆ°çš„Excelæ•°æ®å¡«å……åˆ°ç›¸åº”çš„å¯åºåˆ—åŒ–å­—æ®µä¸­
         for (int i = StartRow; i < worksheet.Dimension.Rows-3; i++)
         {
             GiftData giftData = new GiftData();
@@ -254,30 +254,30 @@ public class ExcelReader : Editor
 
             list.Add(giftData);
         }
-        //½«¿ÉĞòÁĞ»¯Êı¾İ×ªÎªJsonÊı¾İ²¢±£´æµ½Ä¿±êÂ·¾¶
+        //å°†å¯åºåˆ—åŒ–æ•°æ®è½¬ä¸ºJsonæ•°æ®å¹¶ä¿å­˜åˆ°ç›®æ ‡è·¯å¾„
         string savePath = Path.Combine(Application.dataPath, "Resources/JsonDataAsset/Gift_Data.json");
-        //¼ì²âÂ·¾¶ÊÇ·ñ´æÔÚ
+        //æ£€æµ‹è·¯å¾„æ˜¯å¦å­˜åœ¨
         if (!Directory.Exists(Path.GetDirectoryName(savePath)))
         {
             Directory.CreateDirectory(Path.GetDirectoryName(savePath));
         }
         File.WriteAllText(savePath, JsonConvert.SerializeObject(list, Formatting.Indented));
 
-        Debug.Log("Éú³ÉJsonDataÓÚ£º" + savePath);
+        Debug.Log("ç”ŸæˆJsonDataäºï¼š" + savePath);
     }
     /// <summary>
-    /// ´´½¨ÉÌ³Ç·ş×°Êı¾İCloth_Data.jsonÎÄ¼ş
+    /// åˆ›å»ºå•†åŸæœè£…æ•°æ®Cloth_Data.jsonæ–‡ä»¶
     /// </summary>
     /// <param name="worksheet"></param>
     private static void Cloth_DataJson_Create(ExcelWorksheet worksheet)
     {
-        int StartRow = 4, StartCol = 1;//ÆğÊ¼ĞĞÁĞ
+        int StartRow = 4, StartCol = 1;//èµ·å§‹è¡Œåˆ—
 
-        Debug.Log("ClothData:ĞĞ:" + worksheet.Dimension.Rows + "ÁĞ£º" + worksheet.Dimension.Columns);
+        Debug.Log("ClothData:è¡Œ:" + worksheet.Dimension.Rows + "åˆ—ï¼š" + worksheet.Dimension.Columns);
 
         List<ClothItem_Data> list = new List<ClothItem_Data>();
 
-        //½«¶ÁÈ¡µ½µÄExcelÊı¾İÌî³äµ½ÏàÓ¦µÄ¿ÉĞòÁĞ»¯×Ö¶ÎÖĞ
+        //å°†è¯»å–åˆ°çš„Excelæ•°æ®å¡«å……åˆ°ç›¸åº”çš„å¯åºåˆ—åŒ–å­—æ®µä¸­
         for (int i = StartRow; i < worksheet.Dimension.Rows; i++)
         {
             //Debug.Log(worksheet.Cells[i, StartCol + (int)Cloth_ExcelTitleEnum.Cost].Text);
@@ -295,33 +295,33 @@ public class ExcelReader : Editor
 
             list.Add(ClothData);
         }
-        //½«¿ÉĞòÁĞ»¯Êı¾İ×ªÎªJsonÊı¾İ²¢±£´æµ½Ä¿±êÂ·¾¶
+        //å°†å¯åºåˆ—åŒ–æ•°æ®è½¬ä¸ºJsonæ•°æ®å¹¶ä¿å­˜åˆ°ç›®æ ‡è·¯å¾„
         string savePath = Path.Combine(Application.dataPath, "Resources/JsonDataAsset/Cloth_Data.json");
-        //¼ì²âÂ·¾¶ÊÇ·ñ´æÔÚ
+        //æ£€æµ‹è·¯å¾„æ˜¯å¦å­˜åœ¨
         if (!Directory.Exists(Path.GetDirectoryName(savePath)))
         {
             Directory.CreateDirectory(Path.GetDirectoryName(savePath));
         }
         File.WriteAllText(savePath, JsonConvert.SerializeObject(list, Formatting.Indented));
 
-        Debug.Log("Éú³ÉJsonDataÓÚ£º" + savePath);
+        Debug.Log("ç”ŸæˆJsonDataäºï¼š" + savePath);
     }
     /// <summary>
-    /// ´´½¨Ö²ÎïÊı¾İPlant_Data.jsonÎÄ¼ş
+    /// åˆ›å»ºæ¤ç‰©æ•°æ®Plant_Data.jsonæ–‡ä»¶
     /// </summary>
     /// <param name="worksheet"></param>
     private static void Plant_DataJson_Create(ExcelWorksheet worksheet)
     {
-        int StartRow = 4, StartCol = 1;//ÆğÊ¼ĞĞÁĞ
+        int StartRow = 4, StartCol = 1;//èµ·å§‹è¡Œåˆ—
 
         List<PlantItem_Data> list = new List<PlantItem_Data>();
 
-        //½«¶ÁÈ¡µ½µÄExcelÊı¾İÌî³äµ½ÏàÓ¦µÄ¿ÉĞòÁĞ»¯×Ö¶ÎÖĞ
+        //å°†è¯»å–åˆ°çš„Excelæ•°æ®å¡«å……åˆ°ç›¸åº”çš„å¯åºåˆ—åŒ–å­—æ®µä¸­
         for (int i = StartRow; i < worksheet.Dimension.Rows-9; i++)
         {
             PlantItem_Data plantData = new PlantItem_Data();
             
-            Debug.Log(worksheet.Cells[i, StartCol + (int)Plant_ExcelTitleEnum.Name].Text);
+            //Debug.Log(worksheet.Cells[i, StartCol + (int)Plant_ExcelTitleEnum.Name].Text);
             plantData.ID = int.Parse(worksheet.Cells[i, StartCol].Text);
             plantData.Name = worksheet.Cells[i, StartCol + (int)Plant_ExcelTitleEnum.Name].Text;
             plantData.Description = worksheet.Cells[i, StartCol + (int)Plant_ExcelTitleEnum.Description].Text;
@@ -346,15 +346,15 @@ public class ExcelReader : Editor
 
             //Debug.Log(i);
         }
-        //½«¿ÉĞòÁĞ»¯Êı¾İ×ªÎªJsonÊı¾İ²¢±£´æµ½Ä¿±êÂ·¾¶
+        //å°†å¯åºåˆ—åŒ–æ•°æ®è½¬ä¸ºJsonæ•°æ®å¹¶ä¿å­˜åˆ°ç›®æ ‡è·¯å¾„
         string savePath = Path.Combine(Application.dataPath, "Resources/JsonDataAsset/Plant_Data.json");
-        //¼ì²âÂ·¾¶ÊÇ·ñ´æÔÚ
+        //æ£€æµ‹è·¯å¾„æ˜¯å¦å­˜åœ¨
         if (!Directory.Exists(Path.GetDirectoryName(savePath)))
         {
             Directory.CreateDirectory(Path.GetDirectoryName(savePath));
         }
         File.WriteAllText(savePath, JsonConvert.SerializeObject(list, Formatting.Indented));
 
-        Debug.Log("Éú³ÉJsonDataÓÚ£º" + savePath);
+        Debug.Log("ç”ŸæˆJsonDataäºï¼š" + savePath);
     }
 }

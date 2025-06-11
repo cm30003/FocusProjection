@@ -4,23 +4,24 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// ¹ÒÔØÔÚÉÌ³ÇÒÂÎï°´Å¥ÉÏµÄÊı¾İ½Å±¾
+/// æŒ‚è½½åœ¨å•†åŸè¡£ç‰©æŒ‰é’®ä¸Šçš„æ•°æ®è„šæœ¬
 /// </summary>
 public class Item_Gift_Cloth : MonoBehaviour
 {
-    [Tooltip("Ğ¡¶¯ÎïÍ·Ïñ")]
+    [Tooltip("å°åŠ¨ç‰©å¤´åƒ")]
     public Image HeadImage;
-    [Tooltip("ÒÑ¹ºÂòÕÚÕÖ")]
+    [Tooltip("å·²è´­ä¹°é®ç½©")]
     public RawImage Mask;
 
     public bool IsBought;
 
     public ClothItem_Data Data;
-
+    /// <summary>
+    /// å•†å“è¿›å…¥å·²è´­ä¹°çŠ¶æ€ï¼Œæ˜¾ç¤ºå·²è´­ä¹°é®ç½©ï¼Œé®æŒ¡ç‚¹å‡»
+    /// </summary>
     public void Bought()
     {
         IsBought = true;
         Mask.color  = new Color(1, 1, 1, 0.65f);
-
     }
 }

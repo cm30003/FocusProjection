@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 /// <summary>
-/// UI²ã¼¶
+/// UIå±‚çº§
 /// </summary>
 public enum UILevel
 {
@@ -14,17 +14,17 @@ public enum UILevel
     System
 }
 /// <summary>
-/// UI¹ÜÀíÆ÷
-/// ¹ÜÀíËùÓĞÏÔÊ¾µÄÃæ°å
-/// Ìá¹©¸øÍâ²¿ ÏÔÊ¾ºÍÒş²Ø µÈµÈ½Ó¿Ú
+/// UIç®¡ç†å™¨
+/// ç®¡ç†æ‰€æœ‰æ˜¾ç¤ºçš„é¢æ¿
+/// æä¾›ç»™å¤–éƒ¨ æ˜¾ç¤ºå’Œéšè— ç­‰ç­‰æ¥å£
 /// </summary>
 public class UIManager : BaseManager<UIManager>
 {
     public Dictionary<string,NewUIBase> LoadedNewUIDic=new Dictionary<string, NewUIBase>();
     public Dictionary<string,UIBase> LoadedOldUIDic=new Dictionary<string, UIBase>();
-    //¼ÇÂ¼UICanvas¸¸¶ÔÏó£¬·½±ãÍâ²¿Ê¹ÓÃ
+    //è®°å½•UICanvasçˆ¶å¯¹è±¡ï¼Œæ–¹ä¾¿å¤–éƒ¨ä½¿ç”¨
     public RectTransform canvas;
-    /*CanavsµÄ¸÷¸ö²ã¼¶£¨Ñ¡ÓÃ£©*/
+    /*Canavsçš„å„ä¸ªå±‚çº§ï¼ˆé€‰ç”¨ï¼‰*/
     private Transform Bot;
     private Transform Mid;
     private Transform Top;
@@ -32,14 +32,14 @@ public class UIManager : BaseManager<UIManager>
 
     public UIManager()
     {
-    //    //´´½¨´æ´¢ºÃµÄCanvasÔ¤ÖÆÌå£¬UI½«ÔÚ¸ÃCnavasÏÂÉú³É
+    //    //åˆ›å»ºå­˜å‚¨å¥½çš„Canvasé¢„åˆ¶ä½“ï¼ŒUIå°†åœ¨è¯¥Cnavasä¸‹ç”Ÿæˆ
     //    GameObject gameObject=ResourceManager.GetInstance().Load<GameObject>("Prefab/UI");
         canvas = GameObject.FindGameObjectWithTag("Phone_Base").transform as RectTransform;
-        #region ²ã¼¶¹¦ÄÜ ÔİÊ±ÆúÓÃ
-        //    //¿ç³¡¾°Ê±²»Ïú»Ù
+        #region å±‚çº§åŠŸèƒ½ æš‚æ—¶å¼ƒç”¨
+        //    //è·¨åœºæ™¯æ—¶ä¸é”€æ¯
         //    GameObject.DontDestroyOnLoad(gameObject);
 
-        //    //ÕÒµ½¸÷²ã¼¶
+        //    //æ‰¾åˆ°å„å±‚çº§
         //    Bot = canvas.Find("Bot");
         //    Mid = canvas.Find("Mid");
         //    Top = canvas.Find("Top");
@@ -47,14 +47,14 @@ public class UIManager : BaseManager<UIManager>
 
 
 
-        //    //¼ÓÔØÊÂ¼şÏµÍ³
+        //    //åŠ è½½äº‹ä»¶ç³»ç»Ÿ
         //    gameObject = ResourceManager.GetInstance().Load<GameObject>("UI/EventSystem");
-        //    //¿ç³¡¾°Ê±²»Ïú»Ù
+        //    //è·¨åœºæ™¯æ—¶ä¸é”€æ¯
         //    GameObject.DontDestroyOnLoad(gameObject);
         #endregion
     }
     /// <summary>
-    /// Í¨¹ı¶ÔÓ¦Ã¶¾Ù£¬»ñÈ¡¶ÔÓ¦²ã¼¶µÄ¸¸¶ÔÏó
+    /// é€šè¿‡å¯¹åº”æšä¸¾ï¼Œè·å–å¯¹åº”å±‚çº§çš„çˆ¶å¯¹è±¡
     /// </summary>
     /// <param name="layer"></param>
     /// <returns></returns>
@@ -74,56 +74,53 @@ public class UIManager : BaseManager<UIManager>
         return null;
     }
     /// <summary>
-    /// ShowUIµÄÖØÔØ£¬ÓÃÓÚÏÔÊ¾¼Ì³Ğ×ÔÀÏUIBaseµÄUI
+    /// ShowUIçš„é‡è½½ï¼Œç”¨äºæ˜¾ç¤ºç»§æ‰¿è‡ªè€UIBaseçš„UI
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    /// <param name="uiName">UIÃû×Ö</param>
+    /// <param name="uiName">UIåå­—</param>
     /// <param name="callBack"></param>
     public void ShowOldUI<T>(string uiName, UnityAction<T> callBack = null) where T : UIBase 
     {
         if (LoadedOldUIDic.ContainsKey(uiName))
         {
-            Debug.Log("UIÒÑ¾­´æÔÚ");
             //LoadedOldUIDic[uiName].ShowMe();
             if (callBack != null)
             {
                 callBack(LoadedOldUIDic[uiName] as T);
             }
-            //±ÜÃâÃæ°åÖØ¸´¼ÓÔØ Èç¹û´æÔÚ¸ÃÃæ°å Ö±½ÓÏÔÊ¾ µ÷ÓÃ»Øµ÷º¯Êıºó Ö±½ÓReturn ²»ÔÙ´¦ÀíºóÃæµÄÒì²½¼ÓÔØÂß¼­
+            //é¿å…é¢æ¿é‡å¤åŠ è½½ å¦‚æœå­˜åœ¨è¯¥é¢æ¿ ç›´æ¥æ˜¾ç¤º è°ƒç”¨å›è°ƒå‡½æ•°å ç›´æ¥Return ä¸å†å¤„ç†åé¢çš„å¼‚æ­¥åŠ è½½é€»è¾‘
             return;
-
         }
 
         ResourceManager.GetInstance().LoadAsync<GameObject>("UI/" + uiName, (obj) =>
         {
-
-            //¼ÓÔØÍê±Ïºó£¬ĞŞÕıUIÎ»ÖÃ
+            //åŠ è½½å®Œæ¯•åï¼Œä¿®æ­£UIä½ç½®
             //obj.transform.SetParent(canvas);
 
             //obj.transform.localPosition = Vector3.zero;
             //obj.transform.localScale = Vector3.one;
-
-            //µÃµ½UIÉíÉÏµÄÃæ°å½Å±¾
+            obj.name = uiName;
+            //å¾—åˆ°UIèº«ä¸Šçš„é¢æ¿è„šæœ¬
             T panel = obj.GetComponent<T>();
-            //UI´´½¨Íê³ÉºóµÄÂß¼­
+            //UIåˆ›å»ºå®Œæˆåçš„é€»è¾‘
             if (callBack != null)
             {
                 callBack(panel);
             }
-            //°ÑUI´æÆğÀ´
+            //æŠŠUIå­˜èµ·æ¥
             LoadedOldUIDic.Add(uiName, panel);
-            //°ÑËû×÷ÎªCnavasµÄ×Ó¶ÔÏó
-            //²¢ÇÒÒªÉèÖÃËüµÄÏà¶ÔÎ»ÖÃ
+            //æŠŠä»–ä½œä¸ºCnavasçš„å­å¯¹è±¡
+            //å¹¶ä¸”è¦è®¾ç½®å®ƒçš„ç›¸å¯¹ä½ç½®
         });
         //Debug.Log("UIShow");
     }
     /// <summary>
-    /// ÏÔÊ¾Ãæ°å£¬ÓÃÓÚÏÔÊ¾¼Ì³ĞNewBaseUIµÄUI
+    /// æ˜¾ç¤ºé¢æ¿ï¼Œç”¨äºæ˜¾ç¤ºç»§æ‰¿NewBaseUIçš„UI
     /// </summary>
-    /// <typeparam name="T">UI½Å±¾ÀàĞÍ</typeparam>
-    /// <param name="uiName">UIÃû</param>
-    /// <param name="layer">ÔÚCanvasÖĞµÄÏÔÊ¾²ã¼¶</param>
-    /// <param name="callBack">UI¼ÓÔØ/ÏÔÊ¾Íê³ÉºóµÄÂß¼­</param>
+    /// <typeparam name="T">UIè„šæœ¬ç±»å‹</typeparam>
+    /// <param name="uiName">UIå</param>
+    /// <param name="layer">åœ¨Canvasä¸­çš„æ˜¾ç¤ºå±‚çº§</param>
+    /// <param name="callBack">UIåŠ è½½/æ˜¾ç¤ºå®Œæˆåçš„é€»è¾‘</param>
     public void ShowNewUI<T>(string uiName,UnityAction<T> callBack=null)where T:NewUIBase
     {
         if(LoadedNewUIDic.ContainsKey(uiName))
@@ -133,13 +130,13 @@ public class UIManager : BaseManager<UIManager>
             {
                 callBack(LoadedNewUIDic[uiName] as T);
             }
-            //±ÜÃâÃæ°åÖØ¸´¼ÓÔØ Èç¹û´æÔÚ¸ÃÃæ°å Ö±½ÓÏÔÊ¾ µ÷ÓÃ»Øµ÷º¯Êıºó Ö±½ÓReturn ²»ÔÙ´¦ÀíºóÃæµÄÒì²½¼ÓÔØÂß¼­
+            //é¿å…é¢æ¿é‡å¤åŠ è½½ å¦‚æœå­˜åœ¨è¯¥é¢æ¿ ç›´æ¥æ˜¾ç¤º è°ƒç”¨å›è°ƒå‡½æ•°å ç›´æ¥Return ä¸å†å¤„ç†åé¢çš„å¼‚æ­¥åŠ è½½é€»è¾‘
             return;
         }
 
         ResourceManager.GetInstance().LoadAsync<GameObject>("UI/"+uiName, (obj)=>
         {
-            #region ÆúÓÃ
+            #region å¼ƒç”¨
             //Transform father=Bot;
             //switch(layer)
             //{
@@ -153,7 +150,7 @@ public class UIManager : BaseManager<UIManager>
             //        father=System;
             //        break;
             //}
-            //ÉèÖÃ¸¸¶ÔÏó ÉèÖÃÏà¶ÔÎ»ÖÃºÍ´óĞ¡
+            //è®¾ç½®çˆ¶å¯¹è±¡ è®¾ç½®ç›¸å¯¹ä½ç½®å’Œå¤§å°
             #endregion
             obj.transform.SetParent(canvas);
 
@@ -165,44 +162,46 @@ public class UIManager : BaseManager<UIManager>
             //(obj.transform as RectTransform).offsetMax = Vector2.zero;
             //(obj.transform as RectTransform).offsetMin = Vector2.zero;
 
-            //µÃµ½UIÉíÉÏµÄÃæ°å½Å±¾
+            //å¾—åˆ°UIèº«ä¸Šçš„é¢æ¿è„šæœ¬
             T panel=obj.GetComponent<T>();
-            //UI´´½¨Íê³ÉºóµÄÂß¼­
+            //UIåˆ›å»ºå®Œæˆåçš„é€»è¾‘
             if(callBack!=null)
             {
                 callBack(panel);
             }
             panel.ShowMe();
-            //°ÑUI´æÆğÀ´
+            //æŠŠUIå­˜èµ·æ¥
             LoadedNewUIDic.Add(uiName,panel);
-            //°ÑËû×÷ÎªCnavasµÄ×Ó¶ÔÏó
-            //²¢ÇÒÒªÉèÖÃËüµÄÏà¶ÔÎ»ÖÃ
+            //æŠŠä»–ä½œä¸ºCnavasçš„å­å¯¹è±¡
+            //å¹¶ä¸”è¦è®¾ç½®å®ƒçš„ç›¸å¯¹ä½ç½®
         });
     }
     /// <summary>
-    /// Òş²ØUI
+    /// éšè—UI
     /// </summary>
-    /// <param name="uiName">UIÃû³Æ</param>
+    /// <param name="uiName">UIåç§°</param>
     public void HideUI(string uiName)
     {
-        Debug.Log(uiName+" Hide");
-        //Èç¹ûÒÑ¼ÓÔØUI×ÖµäÖĞ´æÔÚ¸ÃUI£¬ÔòÖ¤Ã÷¸ÃUIÒÑ¾­¼ÓÔØ
-        if(LoadedNewUIDic.ContainsKey(uiName))
+
+        //å¦‚æœå·²åŠ è½½UIå­—å…¸ä¸­å­˜åœ¨è¯¥UIï¼Œåˆ™è¯æ˜è¯¥UIå·²ç»åŠ è½½
+        if (LoadedNewUIDic.ContainsKey(uiName))
         {
+            Debug.Log("New " + uiName + " Hide");
             LoadedNewUIDic[uiName].HideMe();
-            //Ïú»ÙUI
+            //é”€æ¯UI
             GameObject.Destroy(LoadedNewUIDic[uiName].gameObject);
             LoadedNewUIDic.Remove(uiName);
         }
         else if(LoadedOldUIDic.ContainsKey(uiName))
         {
-            //Ïú»ÙUI
+            Debug.Log("Old " + uiName + " Hide");
+            //é”€æ¯UI
             GameObject.Destroy(LoadedOldUIDic[uiName].gameObject);
             LoadedOldUIDic.Remove(uiName);
         }
     }
     /// <summary>
-    /// µÃµ½Ä³Ò»¸öÒÑ¾­ÏÔÊ¾µÄÃæ°å ·½±ãÍâ²¿Ê¹ÓÃ
+    /// å¾—åˆ°æŸä¸€ä¸ªå·²ç»æ˜¾ç¤ºçš„é¢æ¿ æ–¹ä¾¿å¤–éƒ¨ä½¿ç”¨
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="uiName"></param>
@@ -216,26 +215,26 @@ public class UIManager : BaseManager<UIManager>
         return null;
     }
     /// <summary>
-    /// ¸ø¿Ø¼şÌí¼Ó×Ô¶¨ÒåÊÂ¼ş´¥·¢Æ÷
+    /// ç»™æ§ä»¶æ·»åŠ è‡ªå®šä¹‰äº‹ä»¶è§¦å‘å™¨
     /// </summary>
-    /// <param name="control">¿Ø¼ş¶ÔÏó</param>
-    /// <param name="type">ÊÂ¼şÀàĞÍ</param>
-    /// <param name="callBack">ÊÂ¼şµÄÏìÓ¦º¯Êı</param>
+    /// <param name="control">æ§ä»¶å¯¹è±¡</param>
+    /// <param name="type">äº‹ä»¶ç±»å‹</param>
+    /// <param name="callBack">äº‹ä»¶çš„å“åº”å‡½æ•°</param>
     public static void AddCustomEventListener(UIBehaviour control,EventTriggerType type, UnityAction<BaseEventData> callBack)
     {
-        //¼ÙÈç¹ÒÔØ¶ÔÏóÉÏ´æÔÚEventTrigger×é¼ş£¬Ôò»ñÈ¡
+        //å‡å¦‚æŒ‚è½½å¯¹è±¡ä¸Šå­˜åœ¨EventTriggerç»„ä»¶ï¼Œåˆ™è·å–
         EventTrigger trigger=control.GetComponent<EventTrigger>();
-        //ÈôÃ»ÓĞ£¬ÔòÎªÆäÌí¼ÓEventTrigger
+        //è‹¥æ²¡æœ‰ï¼Œåˆ™ä¸ºå…¶æ·»åŠ EventTrigger
         if(trigger==null)
         {
             trigger=control.gameObject.AddComponent<EventTrigger>();
         }
-        //×Ô¶¨ÒåÊÂ¼şÀàĞÍ
+        //è‡ªå®šä¹‰äº‹ä»¶ç±»å‹
         EventTrigger.Entry entry=new EventTrigger.Entry();
         entry.eventID=type;
-        //×Ô¶¨Òå»Øµ÷º¯Êı
+        //è‡ªå®šä¹‰å›è°ƒå‡½æ•°
         entry.callback.AddListener(callBack);
-        //Ìí¼Óµ½EventTriggerÖĞ
+        //æ·»åŠ åˆ°EventTriggerä¸­
         trigger.triggers.Add(entry);
     }
 }

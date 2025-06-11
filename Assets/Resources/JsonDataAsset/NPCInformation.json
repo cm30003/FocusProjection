@@ -14,5 +14,13 @@
     "Personality": "沉稳",
     "Description": "这里是描述",
     "BirthDay": "2000.1.1"
+  },
+  {
+    "ID": 1003,
+    "Name": "Player",
+    "Hobby": "刷手机",
+    "Personality": "内敛",
+    "Description": "这里是描述",
+    "BirthDay": "2001.1.1"
   }
 ]

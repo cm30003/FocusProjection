@@ -3,13 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Layer_Trigger : MonoBehaviour
+public class Layer_Trigger : MonoBehaviour//ç”¨æ¥åˆ‡æ¢å°åŠ¨ç‰©å±‚çº§çš„
 {
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         MeshRenderer meshRenderer = collision.GetComponentInChildren<MeshRenderer>();
-        //Èç¹û´ËÊ±Ğ¡¶¯ÎïÎ»ÓÚÌìÌ¨ÏÂ·½£¬Ôò´¥·¢¸Ã´¥·¢Æ÷
+        //å¦‚æœæ­¤æ—¶å°åŠ¨ç‰©ä½äºå¤©å°ä¸‹æ–¹ï¼Œåˆ™è§¦å‘è¯¥è§¦å‘å™¨
         if (this.gameObject.name == "Bottom_Trigger" && meshRenderer.sortingOrder == 0)
         {
             meshRenderer.sortingOrder = 5;

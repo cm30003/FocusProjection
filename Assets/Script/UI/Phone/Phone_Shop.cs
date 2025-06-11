@@ -8,24 +8,24 @@ using UnityEngine.UI;
 
 public class Phone_Shop : NewUIBase
 {
-    [Header("¡ª¡ª¡ª¡ª±í¡ª¡ª¡ª¡ª")]
+    [Header("â€”â€”â€”â€”è¡¨â€”â€”â€”â€”")]
     public List<GiftData> Gift_list;
     public List<ClothItem_Data>Cloth_list;
 
     public List<Button> Gift_Buttons_Prefab;
     public List<Button> Cloth_Buttons_Prefab;
-    [Header("¡ª¡ª¡ª¡ªÓÃÓÚ¸ü»»µÄÍ¼Æ¬ËØ²Ä¡ª¡ª¡ª¡ª")]
+    [Header("â€”â€”â€”â€”ç”¨äºæ›´æ¢çš„å›¾ç‰‡ç´ æâ€”â€”â€”â€”")]
     public Sprite Start_Button_Image;
     public Sprite After_Button_Image;
-    [Header("¡ª¡ª¡ª¡ª×é¡ª¡ª¡ª¡ª")]
+    [Header("â€”â€”â€”â€”ç»„â€”â€”â€”â€”")]
     public GameObject Top_Button_Group;
     public GameObject Gift_UI;
     private void Start()
     {
-        JsonData_Get();//JsonÊı¾İ»ñÈ¡
-        GiftItem_Creat();
+        JsonData_Get();//Jsonæ•°æ®è·å–
+        GiftItem_Create();
 
-        //Õâ¸öÊÇÓÃÓÚËÍÀñÎïÊÂ¼şºóÊµÊ±¸üĞÂºÃ¸Ğ¶ÈÏÔÊ¾µÄ£¬ËäÈ»È·ÊµÊÇÓĞµã²»ÃÀ¹Ûµ«¾ÍÏÈÕâÑù°É
+        //è¿™ä¸ªæ˜¯ç”¨äºé€ç¤¼ç‰©äº‹ä»¶åå®æ—¶æ›´æ–°å¥½æ„Ÿåº¦æ˜¾ç¤ºçš„ï¼Œè™½ç„¶ç¡®å®æ˜¯æœ‰ç‚¹ä¸ç¾è§‚ä½†å°±å…ˆè¿™æ ·å§
         EventCenter.GetInstance().AddEventListener("Info_Update", Grade_Two_Info_Update);
     }
     protected override void OnClick(string btnName, Button button)
@@ -49,72 +49,76 @@ public class Phone_Shop : NewUIBase
     }
     public void JsonData_Get()
     {
-        //»ñÈ¡Êı¾İÁĞ±íÖĞµÄGiftJsonÊı¾İ
+        //è·å–æ•°æ®åˆ—è¡¨ä¸­çš„GiftJsonæ•°æ®
         string GiftData = ResourceManager.GetInstance().Load<TextAsset>("JsonDataAsset/Gift_Data").text;
         string ClothData = ResourceManager.GetInstance().Load<TextAsset>("JsonDataAsset/Cloth_Data").text;
-        //·´ĞòÁĞ»¯½âÎöÎª¶ÔÓ¦µÄÊı¾İ½á¹¹
+        //ååºåˆ—åŒ–è§£æä¸ºå¯¹åº”çš„æ•°æ®ç»“æ„
         GiftData[] Gift_Datas = JsonMapper.ToObject<GiftData[]>(GiftData);
         ClothItem_Data[] Cloth_Datas = JsonMapper.ToObject<ClothItem_Data[]>(ClothData);
-        //Êı×é×ª»¯ÎªÁĞ±í
+        //æ•°ç»„è½¬åŒ–ä¸ºåˆ—è¡¨
         Gift_list = new List<GiftData>(Gift_Datas);
         Cloth_list = new List<ClothItem_Data>(Cloth_Datas);
     }
     /// <summary>
-    /// ´ò¿ªÀñÎï½çÃæ
+    /// æ‰“å¼€ç¤¼ç‰©ç•Œé¢
     /// </summary>
     private void Open_Gift_UI(Button button)
     {
         Clear_All_Button();
         Current_Button = button;
         Button_Image_Change(Top_Button_Group, After_Button_Image, Start_Button_Image);
-        GiftItem_Creat();
+        GiftItem_Create();
     }
     /// <summary>
-    /// ´ò¿ª½¨ÖşUI
+    /// æ‰“å¼€å»ºç­‘UI
     /// </summary>
     private void Open_Building_UI(Button button)
     {
         Clear_All_Button();
         Current_Button = button;
         Button_Image_Change(Top_Button_Group, After_Button_Image, Start_Button_Image);
+        BuildingItem_Create();
     }
-
     /// <summary>
-    /// ´ò¿ª×°°ç½çÃæ
+    /// æ‰“å¼€è£…æ‰®ç•Œé¢
     /// </summary>
     private void Open_Cloth_UI(Button button)
     {
         Clear_All_Button();
         Current_Button = button;
         Button_Image_Change(Top_Button_Group, After_Button_Image, Start_Button_Image);
-        ClothItem_Creat();
+        ClothItem_Create();
     }
-    #region ÉÌ³Ç ÀñÎï½çÃæ
+    private void BuildingItem_Create()
+    {
+        return;
+    }
+    #region å•†åŸ ç¤¼ç‰©ç•Œé¢
     /// <summary>
-    /// ¸ù¾İ¶Á±í¶¯Ì¬Éú³ÉÉÌÆ·°´Å¥
+    /// æ ¹æ®è¯»è¡¨åŠ¨æ€ç”Ÿæˆå•†å“æŒ‰é’®
     /// </summary>
-    public void GiftItem_Creat()
+    public void GiftItem_Create()
     {
         for (int i = 0; i < Gift_list.Count; i++)
         {
-            //´´½¨°´Å¥
-            Button Gift_Button = Instantiate(Gift_Buttons_Prefab[i % Gift_Buttons_Prefab.Count], Gift_UI.transform);//Éú³É°´Å¥
-            Gift_Button.GetComponent<Gift>().Data = Gift_list[i];//¸ø°´Å¥¸³Öµ
+            //åˆ›å»ºæŒ‰é’®
+            Button Gift_Button = Instantiate(Gift_Buttons_Prefab[i % Gift_Buttons_Prefab.Count], Gift_UI.transform);//ç”ŸæˆæŒ‰é’®
+            Gift_Button.GetComponent<Gift>().Data = Gift_list[i];//ç»™æŒ‰é’®èµ‹å€¼
             Gift data = Gift_Button.GetComponent<Gift>();
-            //¸ü¸Ä°´Å¥Ï¸½Ú
-            Gift_Button.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = data.Data.Description;//GiftµÄÃèÊö
-            Gift_Button.transform.GetChild(1).GetComponent<Image>().sprite = ResourceManager.GetInstance().Load<Sprite>(data.Data.Sprite_ResPath);//GiftµÄSprite
-            Gift_Button.transform.GetChild(2).GetComponentInChildren<TextMeshProUGUI>().text = data.Data.Name;//GiftµÄÃû³Æ
-            //Îª¶ş¼¶½çÃæ×¢²áÊÂ¼ş
+            //æ›´æ”¹æŒ‰é’®ç»†èŠ‚
+            Gift_Button.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = data.Data.Description;//Giftçš„æè¿°
+            Gift_Button.transform.GetChild(1).GetComponent<Image>().sprite = ResourceManager.GetInstance().Load<Sprite>(data.Data.Sprite_ResPath);//Giftçš„Sprite
+            Gift_Button.transform.GetChild(2).GetComponentInChildren<TextMeshProUGUI>().text = data.Data.Name;//Giftçš„åç§°
+            //ä¸ºäºŒçº§ç•Œé¢æ³¨å†Œäº‹ä»¶
             GameObject Gift_Grade_Two_UI= Gift_Button.transform.GetChild(3).gameObject;
             Gift GiftData = Gift_Button.GetComponent<Gift>();
             Grade_Two_EventSignIn(Gift_Grade_Two_UI, GiftData);
-            //Îª°´Å¥×¢²áµã»÷ÊÂ¼ş
+            //ä¸ºæŒ‰é’®æ³¨å†Œç‚¹å‡»äº‹ä»¶
             Gift_Button.onClick.AddListener(() => Open_GradeTwo_UI(Gift_Button));
         }
     }
     /// <summary>
-    /// ´ò¿ªÀñÎï½çÃæµÄ¶ş¼¶½çÃæ
+    /// æ‰“å¼€ç¤¼ç‰©ç•Œé¢çš„äºŒçº§ç•Œé¢
     /// </summary>
     private void Open_GradeTwo_UI(Button button)
     {
@@ -123,7 +127,7 @@ public class Phone_Shop : NewUIBase
         for(int i= 0; i < Gift_UI.transform.childCount; i++)
         {
             Button button1=Gift_UI.transform.GetChild(i).GetComponent<Button>();
-            //´æ´¢ÀñÎï½çÃæ¶ş¼¶»­Ãæµ×Í¼£¬¸Ãµ×Í¼ÊÇ¸Ã¶ş¼¶½çÃæµÄ»ù±¾¸¸ÎïÌå
+            //å­˜å‚¨ç¤¼ç‰©ç•Œé¢äºŒçº§ç”»é¢åº•å›¾ï¼Œè¯¥åº•å›¾æ˜¯è¯¥äºŒçº§ç•Œé¢çš„åŸºæœ¬çˆ¶ç‰©ä½“
             GameObject BaseImage = button1.transform.GetChild(3).gameObject;
             if(Current_Button==button1)
             {
@@ -141,79 +145,79 @@ public class Phone_Shop : NewUIBase
         }
     }
     /// <summary>
-    /// ×¢²áÀñÎï½çÃæ¶ş¼¶½çÃæµÄÊÂ¼ş
+    /// æ³¨å†Œç¤¼ç‰©ç•Œé¢äºŒçº§ç•Œé¢çš„äº‹ä»¶
     /// </summary>
     public void Grade_Two_EventSignIn(GameObject BaseImage, Gift data)
     {
-        Button[] buttons = BaseImage.GetComponentsInChildren<Button>();//Ôİ´æ¶ş¼¶½çÃæµÄËùÓĞButton×é¼ş
-        GameObject[] npcs = ObjectKeeper_Singleton.Instance.NPCs;//Ôİ´æNpcÊı×é
+        Button[] buttons = BaseImage.GetComponentsInChildren<Button>();//æš‚å­˜äºŒçº§ç•Œé¢çš„æ‰€æœ‰Buttonç»„ä»¶
+        GameObject[] npcs = ObjectKeeper_Singleton.Instance.NPCs;//æš‚å­˜Npcæ•°ç»„
         for (int i = 0; i < buttons.Length; i++)
         {
             Button button = buttons[i];
-            TextMeshProUGUI favorability = button.transform.parent.transform.parent.transform.GetChild(1).GetComponentInChildren<TextMeshProUGUI>();//»ñÈ¡¶ş¼¶½çÃæÖĞµÄºÃ¸Ğ¶ÈÏÔÊ¾ÎÄ±¾
-            Gift giftdata = button.GetComponent<Gift>();//»ñÈ¡°´Å¥ÉÏµÄÉÌÆ·Êı¾İ
+            TextMeshProUGUI favorability = button.transform.parent.transform.parent.transform.GetChild(1).GetComponentInChildren<TextMeshProUGUI>();//è·å–äºŒçº§ç•Œé¢ä¸­çš„å¥½æ„Ÿåº¦æ˜¾ç¤ºæ–‡æœ¬
+            Gift giftdata = button.GetComponent<Gift>();//è·å–æŒ‰é’®ä¸Šçš„å•†å“æ•°æ®
 
-            giftdata.Data = data.Data;//»ñÈ¡Êı¾İ
-            button.gameObject.name = npcs[i % npcs.Length].name;//½«°´Å¥µÄÃû×ÖÈ«²¿×ªÎªÏÖÓĞµÄNPCµÄÃû×Ö
-            button.image.sprite = ResourceManager.GetInstance().Load<Sprite>(npcs[i % npcs.Length].GetComponent<CharaController>().Template_data.Sprite_Res);//°´Å¥ImageÈ«²¿×ªÎªNPCµÄSprite
+            giftdata.Data = data.Data;//è·å–æ•°æ®
+            button.gameObject.name = npcs[i % npcs.Length].name;//å°†æŒ‰é’®çš„åå­—å…¨éƒ¨è½¬ä¸ºç°æœ‰çš„NPCçš„åå­—
+            button.image.sprite = ResourceManager.GetInstance().Load<Sprite>(npcs[i % npcs.Length].GetComponent<CharaController>().Template_data.Sprite_Res);//æŒ‰é’®Imageå…¨éƒ¨è½¬ä¸ºNPCçš„Sprite
             
-            //Îª¶ş¼¶½çÃæ°´Å¥×¢²áËÍÀñÊÂ¼ş
+            //ä¸ºäºŒçº§ç•Œé¢æŒ‰é’®æ³¨å†Œé€ç¤¼äº‹ä»¶
             button.onClick.AddListener(() =>
             {
-                if (ObjectKeeper_Singleton.Instance.gamerData.Money< giftdata.Data.Cost)//Íæ¼ÒÇ®²»¹»
+                if (ObjectKeeper_Singleton.Instance.gamerData.Money< giftdata.Data.Cost)//ç©å®¶é’±ä¸å¤Ÿ
                 {
                     return;
                 }
                 else
                 {
                     EventCenter.GetInstance().EventTrigger("Gifted", button);
-                    favorability.text = npcs[i % npcs.Length].GetComponent<CharaController>().data.Favorability.ToString();//¸üĞÂËÍÀñµÄNPCµÄºÃ¸Ğ¶È
+                    favorability.text = npcs[i % npcs.Length].GetComponent<CharaController>().data.Favorability.ToString();//æ›´æ–°é€ç¤¼çš„NPCçš„å¥½æ„Ÿåº¦
                 }
             } );
         }
     }
     /// <summary>
-    /// ¶ş¼¶½çÃæĞÅÏ¢¸üĞÂ·½·¨£¬±»ÒıÓÃÓÚĞÅÏ¢¸üĞÂÊÂ¼ş
+    /// äºŒçº§ç•Œé¢ä¿¡æ¯æ›´æ–°æ–¹æ³•ï¼Œè¢«å¼•ç”¨äºä¿¡æ¯æ›´æ–°äº‹ä»¶
     /// </summary>
     public void Grade_Two_Info_Update()
     {
         for (int i = 0; i < Gift_UI.transform.childCount; i++)
         {
             Button button1 = Gift_UI.transform.GetChild(i).GetComponent<Button>();
-            //´æ´¢ÀñÎï½çÃæ¶ş¼¶»­Ãæµ×Í¼£¬¸Ãµ×Í¼ÊÇ¸Ã¶ş¼¶½çÃæµÄ»ù±¾¸¸ÎïÌå
+            //å­˜å‚¨ç¤¼ç‰©ç•Œé¢äºŒçº§ç”»é¢åº•å›¾ï¼Œè¯¥åº•å›¾æ˜¯è¯¥äºŒçº§ç•Œé¢çš„åŸºæœ¬çˆ¶ç‰©ä½“
             GameObject BaseImage = button1.transform.GetChild(3).gameObject;
-            Button[] buttons = BaseImage.GetComponentsInChildren<Button>();//Ôİ´æ¶ş¼¶½çÃæµÄËùÓĞButton×é¼ş
-            GameObject[] npcs = ObjectKeeper_Singleton.Instance.NPCs;//Ôİ´æNpcÊı×é
+            Button[] buttons = BaseImage.GetComponentsInChildren<Button>();//æš‚å­˜äºŒçº§ç•Œé¢çš„æ‰€æœ‰Buttonç»„ä»¶
+            GameObject[] npcs = ObjectKeeper_Singleton.Instance.NPCs;//æš‚å­˜Npcæ•°ç»„
             for (int a = 0; a < buttons.Length; a++)
             {
                 Button button = buttons[a];
-                TextMeshProUGUI favorability = button.transform.parent.transform.parent.transform.GetChild(1).GetComponentInChildren<TextMeshProUGUI>();//»ñÈ¡¶ş¼¶½çÃæÖĞµÄºÃ¸Ğ¶È
+                TextMeshProUGUI favorability = button.transform.parent.transform.parent.transform.GetChild(1).GetComponentInChildren<TextMeshProUGUI>();//è·å–äºŒçº§ç•Œé¢ä¸­çš„å¥½æ„Ÿåº¦
 
-                favorability.text = npcs[a % npcs.Length].GetComponent<CharaController>().data.Favorability.ToString();//¸üĞÂËÍÀñµÄNPCµÄºÃ¸Ğ¶È
+                favorability.text = npcs[a % npcs.Length].GetComponent<CharaController>().data.Favorability.ToString();//æ›´æ–°é€ç¤¼çš„NPCçš„å¥½æ„Ÿåº¦
             }
         }
     }
     #endregion
 
-    #region ÉÌ³Ç ÒÂÎïÒ³Ãæ
+    #region å•†åŸ è¡£ç‰©é¡µé¢
     /// <summary>
-    /// ¸ù¾İ¶Á±í¶¯Ì¬Éú³ÉÉÌÆ·°´Å¥
+    /// æ ¹æ®è¯»è¡¨åŠ¨æ€ç”Ÿæˆå•†å“æŒ‰é’®
     /// </summary>
-    public void ClothItem_Creat()
+    public void ClothItem_Create()
     {
         for (int i = 0; i < Cloth_list.Count; i++)
         {
-            //´´½¨°´Å¥
-            Button Cloth_Button = Instantiate(Cloth_Buttons_Prefab[i % Cloth_Buttons_Prefab.Count], Gift_UI.transform);//Éú³É°´Å¥
-            Cloth_Button.GetComponent<Item_Gift_Cloth>().Data = Cloth_list[i];//¸ø°´Å¥¸³Öµ/¸ÃÖµÀ´×ÔÓÚJsonÊı¾İÎÄ¼ş
+            //åˆ›å»ºæŒ‰é’®
+            Button Cloth_Button = Instantiate(Cloth_Buttons_Prefab[i % Cloth_Buttons_Prefab.Count], Gift_UI.transform);//ç”ŸæˆæŒ‰é’®
+            Cloth_Button.GetComponent<Item_Gift_Cloth>().Data = Cloth_list[i];//ç»™æŒ‰é’®èµ‹å€¼/è¯¥å€¼æ¥è‡ªäºJsonæ•°æ®æ–‡ä»¶
             ClothItem_Data data = Cloth_Button.GetComponent<Item_Gift_Cloth>().Data;
-            //¸ü¸Ä°´Å¥Ï¸½Ú
-            Cloth_Button.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = data.Description;//GiftµÄÃèÊö
-            Cloth_Button.transform.GetChild(1).GetComponent<Image>().sprite = ResourceManager.GetInstance().Load<Sprite>(data.ResPath);//GiftµÄSprite
-            Cloth_Button.transform.GetChild(2).GetComponentInChildren<TextMeshProUGUI>().text = data.Name;//ÒÂÎïµÄÃû³Æ
-            //Îª¶ş¼¶½çÃæ×¢²áÊÂ¼ş
+            //æ›´æ”¹æŒ‰é’®ç»†èŠ‚
+            Cloth_Button.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = data.Description;//Giftçš„æè¿°
+            Cloth_Button.transform.GetChild(1).GetComponent<Image>().sprite = ResourceManager.GetInstance().Load<Sprite>(data.ResPath);//Giftçš„Sprite
+            Cloth_Button.transform.GetChild(2).GetComponentInChildren<TextMeshProUGUI>().text = data.Name;//è¡£ç‰©çš„åç§°
+            //ä¸ºäºŒçº§ç•Œé¢æ³¨å†Œäº‹ä»¶
             GameObject Gift_Grade_Two_UI = Cloth_Button.transform.GetChild(3).gameObject;
-            //Ğ¡¶¯ÎïÍ·Ïñ
+            //å°åŠ¨ç‰©å¤´åƒ
             for (int a=0;a<ObjectKeeper_Singleton.Instance.NPCs.Length;a++)
             {
                 if(ObjectKeeper_Singleton.Instance.NPCs[a].GetComponent<CharaController>().Template_data.ID==data.Target_Animal_ID)
@@ -226,44 +230,42 @@ public class Phone_Shop : NewUIBase
             Item_Gift_Cloth ClothData = Cloth_Button.GetComponent<Item_Gift_Cloth>();
 
             Cloth_GradeTwo_EventSignIn(Gift_Grade_Two_UI, ClothData);
-            //Îª°´Å¥×¢²áµã»÷ÊÂ¼ş
+            //ä¸ºæŒ‰é’®æ³¨å†Œç‚¹å‡»äº‹ä»¶
             Cloth_Button.onClick.AddListener(() => Open_Cloth_GradeTwo_UI(Cloth_Button));
         }
     }
     /// <summary>
-    /// ×¢²áÀñÎï½çÃæ¶ş¼¶½çÃæµÄÊÂ¼ş
+    /// æ³¨å†Œç¤¼ç‰©ç•Œé¢äºŒçº§ç•Œé¢çš„äº‹ä»¶
     /// </summary>
-    /// <param name="BaseImage">¶ş¼¶½çÃæµ×Í¼</param>
-    /// <param name="data">¶ş¼¶½çÃæËùÊôµÄ°´Å¥µÄÊı¾İ½Å±¾</param>
+    /// <param name="BaseImage">äºŒçº§ç•Œé¢åº•å›¾</param>
+    /// <param name="data">äºŒçº§ç•Œé¢æ‰€å±çš„æŒ‰é’®çš„æ•°æ®è„šæœ¬</param>
     public void Cloth_GradeTwo_EventSignIn(GameObject BaseImage, Item_Gift_Cloth data)
     {
-        Button[] buttons = BaseImage.GetComponentsInChildren<Button>();//Ôİ´æ¶ş¼¶½çÃæµÄËùÓĞButton×é¼ş
-        GameObject[] npcs = ObjectKeeper_Singleton.Instance.NPCs;//Ôİ´æNpcÊı×é
+        Button[] buttons = BaseImage.GetComponentsInChildren<Button>();//æš‚å­˜äºŒçº§ç•Œé¢çš„æ‰€æœ‰Buttonç»„ä»¶
+        GameObject[] npcs = ObjectKeeper_Singleton.Instance.NPCs;//æš‚å­˜Npcæ•°ç»„
         for (int i = 0; i < buttons.Length; i++)
         {
-            //°´Å¥
+            //æŒ‰é’®
             Button button = buttons[i];
-            //»ñÈ¡¶ş¼¶½çÃæÖĞµÄºÃ¸Ğ¶ÈÏÔÊ¾ÎÄ±¾
+            //è·å–äºŒçº§ç•Œé¢ä¸­çš„å¥½æ„Ÿåº¦æ˜¾ç¤ºæ–‡æœ¬
             TextMeshProUGUI favorability = button.transform.parent.transform.parent.transform.GetChild(1).GetComponentInChildren<TextMeshProUGUI>();
 
-            Item_Gift_Cloth Clothdata = button.GetComponent<Item_Gift_Cloth>();//»ñÈ¡°´Å¥ÉÏµÄÉÌÆ·Êı¾İ
-            Clothdata.Data = data.Data;//×¢ÈëÊı¾İ
+            Item_Gift_Cloth Clothdata = button.GetComponent<Item_Gift_Cloth>();//è·å–æŒ‰é’®ä¸Šçš„å•†å“æ•°æ®
+            Clothdata.Data = data.Data;//æ³¨å…¥æ•°æ®
 
             for(int a = 0; a < ObjectKeeper_Singleton.Instance.NPCs.Length; a++)
             {
                 if(Clothdata.Data.ID == ObjectKeeper_Singleton.Instance.NPCs[a].GetComponent<CharaController>().Template_data.ID)
                 {
                     button.gameObject.name = ObjectKeeper_Singleton.Instance.NPCs[a].GetComponent<CharaController>().npc_Information.Name;
-                    //°´Å¥ImageÈ«²¿×ªÎªNPCµÄSprite
+                    //æŒ‰é’®Imageå…¨éƒ¨è½¬ä¸ºNPCçš„Sprite
                     button.image.sprite = ResourceManager.GetInstance().Load<Sprite>(ObjectKeeper_Singleton.Instance.NPCs[a].GetComponent<CharaController>().Template_data.Sprite_Res);
                 }
             }
-            
-
-            //Îª¶ş¼¶½çÃæ°´Å¥×¢²áËÍÀñÊÂ¼ş
+            //ä¸ºäºŒçº§ç•Œé¢æŒ‰é’®æ³¨å†Œé€ç¤¼äº‹ä»¶
             button.onClick.AddListener(() =>
             {
-                if (ObjectKeeper_Singleton.Instance.gamerData.Money < Clothdata.Data.Cost)//Íæ¼ÒÇ®²»¹»
+                if (ObjectKeeper_Singleton.Instance.gamerData.Money < Clothdata.Data.Cost)//ç©å®¶é’±ä¸å¤Ÿ
                 {
                     return;
                 }
@@ -271,7 +273,6 @@ public class Phone_Shop : NewUIBase
                 {
                     //
                     data.Bought();
-
                     
                     EventCenter.GetInstance().EventTrigger("Gifted", button);
                 }
@@ -279,7 +280,7 @@ public class Phone_Shop : NewUIBase
         }
     }
     /// <summary>
-    /// ´ò¿ªÀñÎï½çÃæµÄ¶ş¼¶½çÃæ
+    /// æ‰“å¼€ç¤¼ç‰©ç•Œé¢çš„äºŒçº§ç•Œé¢
     /// </summary>
     private void Open_Cloth_GradeTwo_UI(Button button)
     {
@@ -289,7 +290,7 @@ public class Phone_Shop : NewUIBase
         {
             //
             Button button1 = Gift_UI.transform.GetChild(i).GetComponent<Button>();
-            //´æ´¢ÀñÎï½çÃæ¶ş¼¶»­Ãæµ×Í¼£¬¸Ãµ×Í¼ÊÇ¸Ã¶ş¼¶½çÃæµÄ»ù±¾¸¸ÎïÌå
+            //å­˜å‚¨ç¤¼ç‰©ç•Œé¢äºŒçº§ç”»é¢åº•å›¾ï¼Œè¯¥åº•å›¾æ˜¯è¯¥äºŒçº§ç•Œé¢çš„åŸºæœ¬çˆ¶ç‰©ä½“
             GameObject BaseImage = button1.transform.GetChild(3).gameObject;
             if (Current_Button == button1)
             {
@@ -307,29 +308,29 @@ public class Phone_Shop : NewUIBase
         }
     }
     /// <summary>
-    /// ÒÂÎï¶ş¼¶½çÃæĞÅÏ¢¸üĞÂ·½·¨£¬±»ÒıÓÃÓÚĞÅÏ¢¸üĞÂÊÂ¼ş
+    /// è¡£ç‰©äºŒçº§ç•Œé¢ä¿¡æ¯æ›´æ–°æ–¹æ³•ï¼Œè¢«å¼•ç”¨äºä¿¡æ¯æ›´æ–°äº‹ä»¶
     /// </summary>
     //public void GradeTwo_Cloth_Info_Update()
     //{
     //    for (int i = 0; i < Gift_UI.transform.childCount; i++)
     //    {
     //        Button button1 = Gift_UI.transform.GetChild(i).GetComponent<Button>();
-    //        //´æ´¢ÀñÎï½çÃæ¶ş¼¶»­Ãæµ×Í¼£¬¸Ãµ×Í¼ÊÇ¸Ã¶ş¼¶½çÃæµÄ»ù±¾¸¸ÎïÌå
+    //        //å­˜å‚¨ç¤¼ç‰©ç•Œé¢äºŒçº§ç”»é¢åº•å›¾ï¼Œè¯¥åº•å›¾æ˜¯è¯¥äºŒçº§ç•Œé¢çš„åŸºæœ¬çˆ¶ç‰©ä½“
     //        GameObject BaseImage = button1.transform.GetChild(3).gameObject;
-    //        Button[] buttons = BaseImage.GetComponentsInChildren<Button>();//Ôİ´æ¶ş¼¶½çÃæµÄËùÓĞButton×é¼ş
-    //        GameObject[] npcs = ObjectKeeper_Singleton.Instance.NPCs;//Ôİ´æNpcÊı×é
+    //        Button[] buttons = BaseImage.GetComponentsInChildren<Button>();//æš‚å­˜äºŒçº§ç•Œé¢çš„æ‰€æœ‰Buttonç»„ä»¶
+    //        GameObject[] npcs = ObjectKeeper_Singleton.Instance.NPCs;//æš‚å­˜Npcæ•°ç»„
     //        for (int a = 0; a < buttons.Length; a++)
     //        {
     //            Button button = buttons[a];
-    //            TextMeshProUGUI favorability = button.transform.parent.transform.parent.transform.GetChild(1).GetComponentInChildren<TextMeshProUGUI>();//»ñÈ¡¶ş¼¶½çÃæÖĞµÄºÃ¸Ğ¶È
+    //            TextMeshProUGUI favorability = button.transform.parent.transform.parent.transform.GetChild(1).GetComponentInChildren<TextMeshProUGUI>();//è·å–äºŒçº§ç•Œé¢ä¸­çš„å¥½æ„Ÿåº¦
 
-    //            favorability.text = npcs[a % npcs.Length].GetComponent<CharaController>().data.Favorability.ToString();//¸üĞÂËÍÀñµÄNPCµÄºÃ¸Ğ¶È
+    //            favorability.text = npcs[a % npcs.Length].GetComponent<CharaController>().data.Favorability.ToString();//æ›´æ–°é€ç¤¼çš„NPCçš„å¥½æ„Ÿåº¦
     //        }
     //    }
     //}
     #endregion
     /// <summary>
-    /// Çå¿ÕÀñÎï¶ş¼¶½çÃæËùÓĞµÄ°´Å¥ÊÂ¼ş
+    /// æ¸…ç©ºç¤¼ç‰©äºŒçº§ç•Œé¢æ‰€æœ‰çš„æŒ‰é’®äº‹ä»¶
     /// </summary>
     public void Clear_All_Button()
     {

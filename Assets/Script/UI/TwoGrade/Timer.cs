@@ -7,27 +7,27 @@ using System;
 
 public class Timer : UIBase
 {
-    private float timer=1f;//±ê×¼µÄÒ»Ãë
-    private int second=0;//´¢´æÃëÊı
-    private int Start_Second=0;//´¢´æ³õÊ¼×¨×¢ÃëÊı
+    private float timer=1f;//æ ‡å‡†çš„ä¸€ç§’
+    private int second=0;//å‚¨å­˜ç§’æ•°
+    private int Start_Second=0;//å‚¨å­˜åˆå§‹ä¸“æ³¨ç§’æ•°
 
     private int is_pause=0;
 
     public TextMeshProUGUI Time_Text;
     public TextMeshProUGUI Month_Day;
     public TextMeshProUGUI Focus_Time;
-    [Header("¡ª¡ª¡ª¡ªGradeTwo_SetFoucusTimeUI¡ª¡ª¡ª¡ª")]
+    [Header("â€”â€”â€”â€”GradeTwo_SetFoucusTimeUIâ€”â€”â€”â€”")]
     public GameObject SetFoucusTimeUI;
 
     public Button Open_SetFoucusTimeUI_Button;
     public Button Cancle_SetFoucusTimeUI_Button;
     public Button Ensure_Foucus_Time;
-    [Header("¡ª¡ª¡ª¡ªButtons¡ª¡ª¡ª¡ª")]
+    [Header("â€”â€”â€”â€”Buttonsâ€”â€”â€”â€”")]
     public Button Pause_Button;
     public Button Reset_Button;
     private void Start()
     {
-        //ÈÕÆÚ³õÊ¼»¯£¬²¢Ã¿Ãë¸üĞÂÈÕÆÚºÍÔÂ·İ
+        //æ—¥æœŸåˆå§‹åŒ–ï¼Œå¹¶æ¯ç§’æ›´æ–°æ—¥æœŸå’Œæœˆä»½
         InvokeRepeating("Month_Day_Update", 0f,1f);
         InitClick();
     }
@@ -39,6 +39,13 @@ public class Timer : UIBase
         Pause_Button.onClick.AddListener(Pause_Timer);
         Reset_Button.onClick.AddListener(Reset_Timer);
     }
+
+    //private void Open_SetFoucusTimeUI()
+    //{
+    //    OpenUI(SetFoucusTimeUI.GetComponent<CanvasGroup>());
+    //    Debug.Log("1111");
+    //}
+
     private void Update()
     {
         Time_Text.text = DateTime.Now.ToLongTimeString().ToString();
@@ -49,7 +56,7 @@ public class Timer : UIBase
         }
     }
     /// <summary>
-    /// ¸üĞÂÔÂ·İºÍÈÕÆÚ
+    /// æ›´æ–°æœˆä»½å’Œæ—¥æœŸ
     /// </summary>
     private void Month_Day_Update()
     {
@@ -58,14 +65,14 @@ public class Timer : UIBase
         Month_Day.text = Month + " " + Day;
     }
     /// <summary>
-    /// ÖØÖÃ×¨×¢Ê±¼ä
+    /// é‡ç½®ä¸“æ³¨æ—¶é—´
     /// </summary>
     private void Reset_Timer()
     {
         second = Start_Second;
     }
     /// <summary>
-    /// ÔİÍ£×¨×¢Ê±¼ä
+    /// æš‚åœä¸“æ³¨æ—¶é—´
     /// </summary>
     private void Pause_Timer()
     {
@@ -85,46 +92,36 @@ public class Timer : UIBase
             }
         }
     }
-    /// <summary>
-    /// ´ò¿ª×¨×¢Ê±¼äÉèÖÃUI
-    /// </summary>
-    //private void Open_SetFoucusTimeUI()
-    //{
-    //    OpenUI(SetFoucusTimeUI.GetComponent<CanvasGroup>());
-    //}
-    /// <summary>
-    /// È¡Ïû×¨×¢Ê±¼äÉèÖÃ
-    /// </summary>
     private void Cancle_SetFoucusTimeUI()
     {
         CloseUI(SetFoucusTimeUI.GetComponent<CanvasGroup>());
     }
     /// <summary>
-    /// È·ÈÏ²¢ÉèÖÃ×¨×¢Ê±¼ä/¸ÃÊÂ¼ş°ó¶¨ÔÚ×¨×¢Ê±¼äÉèÖÃ½çÃæµÄÈ·ÈÏ°´Å¥ÉÏ
+    /// ç¡®è®¤å¹¶è®¾ç½®ä¸“æ³¨æ—¶é—´/è¯¥äº‹ä»¶ç»‘å®šåœ¨ä¸“æ³¨æ—¶é—´è®¾ç½®ç•Œé¢çš„ç¡®è®¤æŒ‰é’®ä¸Š
     /// </summary>
     private void Ensure_Foucus_Time_Method()
     {
-        //×¨×¢Ê±¼äÈ·ÈÏºó£¬¹Ø±Õ¶ş¼¶²Ëµ¥
+        //ä¸“æ³¨æ—¶é—´ç¡®è®¤åï¼Œå…³é—­äºŒçº§èœå•
         CloseUI(SetFoucusTimeUI.GetComponent<CanvasGroup>());
-        //»ñÈ¡Íæ¼ÒÊäÈëµÄ×¨×¢Ê±¼äÎÄ±¾
+        //è·å–ç©å®¶è¾“å…¥çš„ä¸“æ³¨æ—¶é—´æ–‡æœ¬
         string time_text = SetFoucusTimeUI.GetComponentInChildren<TMP_InputField>().text;
-        //ÎÄ±¾×ª»¯ÎªÕûÊı²¢½øĞĞ¼ÆËã
+        //æ–‡æœ¬è½¬åŒ–ä¸ºæ•´æ•°å¹¶è¿›è¡Œè®¡ç®—
         int time = int.Parse(time_text);
 
         int hour = time / 60;
         int minute= time % 60;
-        //ÉèÖÃ×ÜÃëÊı
+        //è®¾ç½®æ€»ç§’æ•°
         second = time * 60;
         Start_Second = time * 60;
         Focus_Time.text = string.Format("{0:D2}:{1:D2}:{2:D2}", hour, minute, 0);
 
         ObjectKeeper_Singleton.Instance.Is_Set = true;
-        //µ±×¨×¢Ê±¼äÉèÖÃºó£¬´¥·¢NPC¹¤×÷ÊÂ¼ş
+        //å½“ä¸“æ³¨æ—¶é—´è®¾ç½®åï¼Œè§¦å‘NPCå·¥ä½œäº‹ä»¶
         //EventCenter.GetInstance().EventTrigger("FocusTime_Set");
     }
 
     /// <summary>
-    /// ÉèÖÃ×¨×¢Ê±¼ä
+    /// è®¾ç½®ä¸“æ³¨æ—¶é—´
     /// </summary>
     public void Focus_Time_Method()
     {
@@ -147,17 +144,17 @@ public class Timer : UIBase
         }
     }
     /// <summary>
-    /// ÔÚÓÎÏ·½áÊøºó¼ÆËã³ö½ñÈÕÕæÊµµÄ×¨×¢Ê±¼ä,²¢½øĞĞ´æ´¢
+    /// åœ¨æ¸¸æˆç»“æŸåè®¡ç®—å‡ºä»Šæ—¥çœŸå®çš„ä¸“æ³¨æ—¶é—´,å¹¶è¿›è¡Œå­˜å‚¨
     /// </summary>
     public void calculate_FocusTime()
     {
         int Last_focustime=0;
 
         Mission_ADay mission_ADay = JsonManager.Instance.LoadData<Mission_ADay>("ADay");
-        string Day = DateTime.Now.ToString("yyyy/M/d");//´æ´¢µ±Ç°ÈÕÆÚ
+        string Day = DateTime.Now.ToString("yyyy/M/d");//å­˜å‚¨å½“å‰æ—¥æœŸ
         if (mission_ADay!= null)
         {
-            //µ±´æ´¢ÈÕÆÚ´æÔÚÓÚ´æ´¢ÎÄ¼şÖĞÊ±£¬¸üĞÂ¸ÃÈÕÆÚµÄ×¨×¢Ê±¼ä
+            //å½“å­˜å‚¨æ—¥æœŸå­˜åœ¨äºå­˜å‚¨æ–‡ä»¶ä¸­æ—¶ï¼Œæ›´æ–°è¯¥æ—¥æœŸçš„ä¸“æ³¨æ—¶é—´
             if(mission_ADay.ADay_FocusTime_Dic.ContainsKey(Day))
             {
                 Last_focustime = mission_ADay.ADay_FocusTime_Dic[Day];

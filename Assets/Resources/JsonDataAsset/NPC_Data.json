@@ -22,5 +22,17 @@
     "Eat_Time": 10.0,
     "Hungry_Time": 100.0,
     "Sprite_Res": "UI/Sprite/Role/羊童木"
+  },
+  {
+    "ID": 1003,
+    "Favorability": 0,
+    "FavorvateThing_ID": 2003,
+    "CherishThing_ID": 2005,
+    "MoveSpeed": 2.0,
+    "Work_Speed": 1.0,
+    "Work_Time": 40.0,
+    "Eat_Time": 10.0,
+    "Hungry_Time": 100.0,
+    "Sprite_Res": "UI/Sprite/Role/Player"
   }
 ]

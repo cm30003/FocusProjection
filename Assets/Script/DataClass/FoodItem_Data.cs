@@ -4,21 +4,21 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 /// <summary>
-/// Ê³ÎïµÄÊı¾İÀà
+/// é£Ÿç‰©çš„æ•°æ®ç±»
 /// </summary>
 [Serializable]
 public class FoodItem_Data
 {
     public int ID;
 
-    public string Name;//Ãû×Ö
-    public string Description;//ÃèÊö
-    public int Cost;//¹ºÂò/ÊÛÂô¼Û¸ñ
-    public float Buff;//ÔöÒæ
-    public string ResPath;//×ÊÔ´Â·¾¶
+    public string Name;//åå­—
+    public string Description;//æè¿°
+    public int Cost;//è´­ä¹°/å”®å–ä»·æ ¼
+    public float Buff;//å¢ç›Š
+    public string ResPath;//èµ„æºè·¯å¾„
 }
 /// <summary>
-/// Ö²ÎïµÄÊı¾İ¶îÀà
+/// æ¤ç‰©çš„æ•°æ®é¢ç±»
 /// </summary>
 [Serializable]
 public class PlantItem_Data
@@ -28,32 +28,33 @@ public class PlantItem_Data
     public string Description;
     public int Sell_Price;
     public int Cost;
-    [Tooltip("·¢Ñ¿Ê±¼ä")]
+    [Tooltip("æ’­ç§æ—¶é—´")]
+    public float Plant_Time;//æ’­ç§æ—¶é—´
+    [Tooltip("å‘èŠ½æ—¶é—´")]
     public float Germinate_Time;
-    [Tooltip("Éú³¤Ê±¼ä")]
+    [Tooltip("ç”Ÿé•¿æ—¶é—´")]
     public float Grown_Time1;
     public float Grown_Time2;
-    [Tooltip("³ÉÊìÊ±¼ä")]
+    [Tooltip("æˆç†Ÿæ—¶é—´")]
     public float Mature_Time;
-    [Tooltip("²¥ÖÖÊ±¼ä")]
-    public float Plant_Time;//²¥ÖÖÊ±¼ä
-    [Tooltip("½½Ë®Ê±¼ä")]
-    public float Water_Time1;//½½Ë®Ê±¼ä
+
+    [Tooltip("æµ‡æ°´æ—¶é—´")]
+    public float Water_Time1;//æµ‡æ°´æ—¶é—´
     public float Water_Time2;
-    [Tooltip("Ê©·ÊÊ±¼ä")]
-    public float fertilize_Time;//Ê©·ÊÊ±¼ä
-    [Tooltip("³ı³æÊ±¼ä")]
-    public float BugControl_Time;//³ı³æÊ±¼ä
-    [Tooltip("ÊÕ»ñÊ±¼ä")]
-    public float Harvest_Time;//ÊÕ»ñÊ±¼ä
+    [Tooltip("æ–½è‚¥æ—¶é—´")]
+    public float fertilize_Time;//æ–½è‚¥æ—¶é—´
+    [Tooltip("é™¤è™«æ—¶é—´")]
+    public float BugControl_Time;//é™¤è™«æ—¶é—´
+    [Tooltip("æ”¶è·æ—¶é—´")]
+    public float Harvest_Time;//æ”¶è·æ—¶é—´
 
-    [Tooltip("ÊÕ»ñÊıÁ¿")]
-    public int Harvest_Num;//ÊÕ»ñÊıÁ¿
-    public int Gamer_Num;//Íæ¼ÒÓµÓĞ¸ÃÖ²ÎïµÄÊıÁ¿
+    [Tooltip("æ”¶è·æ•°é‡")]
+    public int Harvest_Num;//æ”¶è·æ•°é‡
+    public int Gamer_Num;//ç©å®¶æ‹¥æœ‰è¯¥æ¤ç‰©çš„æ•°é‡
 
-    public string Germinate_SpriteResPath;//·¢Ñ¿Í¼Æ¬Â·¾¶
-    public string Grown_SpriteResPath;//³É³¤Í¼Æ¬Â·¾¶
-    public string Mature_SpriteResPath;//³ÉÊìÍ¼Æ¬Â·¾¶
+    public string Germinate_SpriteResPath;//å‘èŠ½å›¾ç‰‡è·¯å¾„
+    public string Grown_SpriteResPath;//æˆé•¿å›¾ç‰‡è·¯å¾„
+    public string Mature_SpriteResPath;//æˆç†Ÿå›¾ç‰‡è·¯å¾„
     public PlantItem_Data(PlantItem_Data other)
     {
         if (other == null)
@@ -138,7 +139,7 @@ public class PlantItem_Data
             $"<color=white>Grown_SpriteResPath:</color> <color=green>{Grown_SpriteResPath}</color>\n" +
             $"<color=white>Mature_SpriteResPath:</color> <color=green>{Mature_SpriteResPath}</color>";
     }
-    public PlantItem_Data()//¹«¹²ÎŞ²Î¹¹Ôìº¯Êı
+    public PlantItem_Data()//å…¬å…±æ— å‚æ„é€ å‡½æ•°
     {
         Germinate_Time = 0;
         Grown_Time1 = 0;
@@ -157,7 +158,7 @@ public class PlantItem_Data
     }
 }
 /// <summary>
-/// ÉÌ³ÇÒÂÎïÊı¾İÀà
+/// å•†åŸè¡£ç‰©æ•°æ®ç±»
 /// </summary>
 [Serializable]
 public class ClothItem_Data
@@ -173,20 +174,20 @@ public class ClothItem_Data
     public string ResPath;
 }
 [Serializable]
-public class NPCInformation//NPCĞÅÏ¢Àà£¨UIÏÔÊ¾£©
+public class NPCInformation//NPCä¿¡æ¯ç±»ï¼ˆUIæ˜¾ç¤ºï¼‰
 {
-    [Header("¡ª¡ª¡ª¡ª»ù±¾ĞÅÏ¢¡ª¡ª¡ª¡ª")]
+    [Header("â€”â€”â€”â€”åŸºæœ¬ä¿¡æ¯â€”â€”â€”â€”")]
     public int ID;
-    public string Name;//Ãû×Ö
-    public string Hobby;//°®ºÃ
-    public string Personality;//ĞÔ¸ñ
-    public string Description;//ÃèÊöÎÄ±¾
-    public string BirthDay;//ÉúÈÕ
+    public string Name;//åå­—
+    public string Hobby;//çˆ±å¥½
+    public string Personality;//æ€§æ ¼
+    public string Description;//æè¿°æ–‡æœ¬
+    public string BirthDay;//ç”Ÿæ—¥
     public NPCInformation(NPCInformation other)
     {
         if (other == null)
         {
-            // Èç¹û´«ÈëµÄ²ÎÊıÎª null£¬Ôò³õÊ¼»¯ÎªÄ¬ÈÏÖµ
+            // å¦‚æœä¼ å…¥çš„å‚æ•°ä¸º nullï¼Œåˆ™åˆå§‹åŒ–ä¸ºé»˜è®¤å€¼
             ID = 0;
             Name = string.Empty;
             Hobby = string.Empty;
@@ -204,7 +205,7 @@ public class NPCInformation//NPCĞÅÏ¢Àà£¨UIÏÔÊ¾£©
             BirthDay = other.BirthDay;
         }
     }
-    // ¹«¹²ÎŞ²Î¹¹Ôìº¯Êı
+    // å…¬å…±æ— å‚æ„é€ å‡½æ•°
     public NPCInformation()
     {
         ID = 0;
@@ -216,25 +217,25 @@ public class NPCInformation//NPCĞÅÏ¢Àà£¨UIÏÔÊ¾£©
     }
 }
 [Serializable]
-public class NPCData//NPCÊı¾İÀà
+public class NPCData//NPCæ•°æ®ç±»
 {
-    public int ID;//ID£¨1001~1999£©
-    [Header("¡ª¡ª¡ª¡ªÏ²ºÃ¡ª¡ª¡ª¡ª")]
-    public int Favorability;//ºÃ¸Ğ¶È
-    public int FavorvateThing_ID;//Ï²ºÃÎïµÄID
-    public int CherishThing_ID;//ÕäÊÓµÄ¶«Î÷µÄID
-    [Header("¡ª¡ª¡ª¡ªĞ§ÂÊ¡ª¡ª¡ª¡ª")]
-    public float MoveSpeed;//ÒÆ¶¯ËÙ¶È
-    public float Work_Speed;//¹¤×÷ËÙ¶È
-    [Header("¡ª¡ª¡ª¡ªÊ±¼ä¡ª¡ª¡ª¡ª")]
-    public float Work_Time;//¹¤×÷Ê±¼ä
+    public int ID;//IDï¼ˆ1001~1999ï¼‰
+    [Header("â€”â€”â€”â€”å–œå¥½â€”â€”â€”â€”")]
+    public int Favorability;//å¥½æ„Ÿåº¦
+    public int FavorvateThing_ID;//å–œå¥½ç‰©çš„ID
+    public int CherishThing_ID;//çè§†çš„ä¸œè¥¿çš„ID
+    [Header("â€”â€”â€”â€”æ•ˆç‡â€”â€”â€”â€”")]
+    public float MoveSpeed;//ç§»åŠ¨é€Ÿåº¦
+    public float Work_Speed;//å·¥ä½œé€Ÿåº¦
+    [Header("â€”â€”â€”â€”æ—¶é—´â€”â€”â€”â€”")]
+    public float Work_Time;//å·¥ä½œæ—¶é—´
 
-    public float Eat_Time;//³Ô·¹Ê±¼ä
+    public float Eat_Time;//åƒé¥­æ—¶é—´
 
-    public float Hungry_Time;//¼¢¶öÊ±¼ä
-    [Header("¡ª¡ª¡ª¡ª×ÊÔ´¡ª¡ª¡ª¡ª")]
+    public float Hungry_Time;//é¥¥é¥¿æ—¶é—´
+    [Header("â€”â€”â€”â€”èµ„æºâ€”â€”â€”â€”")]
     public string Sprite_Res;
-    // ¿½±´¹¹Ôìº¯Êı
+    // æ‹·è´æ„é€ å‡½æ•°
     public NPCData(NPCData other)
     {
         if (other == null)
@@ -274,7 +275,7 @@ public class NPCData//NPCÊı¾İÀà
             Sprite_Res = other.Sprite_Res;
         }
     }
-    // ¹«¹²ÎŞ²Î¹¹Ôìº¯Êı
+    // å…¬å…±æ— å‚æ„é€ å‡½æ•°
     public NPCData()
     {
         ID = 0;
@@ -313,21 +314,21 @@ public class NPCData//NPCÊı¾İÀà
     }
 }
 /// <summary>
-/// ÉÌ³ÇÀñÎïÊı¾İÀà
+/// å•†åŸç¤¼ç‰©æ•°æ®ç±»
 /// </summary>
 [Serializable]
 public class GiftData
 {
     public int ID;
-    public string Name;//Ãû×Ö
-    public string Description;//ÃèÊö
-    public int Cost;//¹ºÂò/ÊÛÂô¼Û¸ñ
-    [Tooltip("ºÃ¸Ğ¶È¼Ó³É")]
-    public int Default_Affinity;//Ä¬ÈÏºÃ¸Ğ¶È
-    public int Like_Affinity;//Ï²°®ºÃ¸Ğ¶È
-    public int Favorate_Affinity;//×î¸ßºÃ¸Ğ¶È
+    public string Name;//åå­—
+    public string Description;//æè¿°
+    public int Cost;//è´­ä¹°/å”®å–ä»·æ ¼
+    [Tooltip("å¥½æ„Ÿåº¦åŠ æˆ")]
+    public int Default_Affinity;//é»˜è®¤å¥½æ„Ÿåº¦
+    public int Like_Affinity;//å–œçˆ±å¥½æ„Ÿåº¦
+    public int Favorate_Affinity;//æœ€é«˜å¥½æ„Ÿåº¦
 
-    [Tooltip("×ÊÔ´Â·¾¶")]
+    [Tooltip("èµ„æºè·¯å¾„")]
     public string Sprite_ResPath;
 }
 

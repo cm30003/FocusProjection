@@ -102,14 +102,14 @@ RectTransform:
   m_GameObject: {fileID: 879834828223697458}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1220562474786752266}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 127, y: 34}
+  m_AnchoredPosition: {x: 127, y: 75}
   m_SizeDelta: {x: 312.045, y: 446.91833}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4786915750490839870
@@ -140,7 +140,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 06d35c33deba3144592c264a5fee9c55, type: 3}
+  m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -913,6 +913,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1220562474786752266}
+  - component: {fileID: 242177899928383589}
   m_Layer: 0
   m_Name: NPCInformation
   m_TagString: Untagged
@@ -942,6 +943,18 @@ RectTransform:
   m_AnchoredPosition: {x: 1.5001, y: -346.53638}
   m_SizeDelta: {x: 582, y: 434.9272}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &242177899928383589
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7187192794944530569}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &8640753331088720181
 GameObject:
   m_ObjectHideFlags: 0

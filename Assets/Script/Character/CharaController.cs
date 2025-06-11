@@ -10,23 +10,23 @@ using UnityEngine.AI;
 
 public class CharaController : MonoBehaviour
 {
-    [Header("¡ª¡ª¡ª¡ªĞèÒª½»»¥µÄ¶¯Ì¬¶ÔÏó¡ª¡ª¡ª¡ª")]
-    public float RestWalk_InRest_RangeY;//ÂşÓÎ·¶Î§
-    public float RestWalk_InRest_RangeX;//ÂşÓÎ·¶Î§
+    [Header("â€”â€”â€”â€”éœ€è¦äº¤äº’çš„åŠ¨æ€å¯¹è±¡â€”â€”â€”â€”")]
+    public float RestWalk_InRest_RangeY;//æ¼«æ¸¸èŒƒå›´
+    public float RestWalk_InRest_RangeX;//æ¼«æ¸¸èŒƒå›´
 
-    public float RestIde_Time;//Íê³ÉÒ»¸öÂşÓÎºóµÄ´ı»úÊ±¼ä
-    public float CurrentRestIde_Time;//Íê³ÉÒ»¸öÂşÓÎºóµÄ´ı»úÊ±¼ä
+    public float RestIde_Time;//å®Œæˆä¸€ä¸ªæ¼«æ¸¸åçš„å¾…æœºæ—¶é—´
+    public float CurrentRestIde_Time;//å®Œæˆä¸€ä¸ªæ¼«æ¸¸åçš„å¾…æœºæ—¶é—´
 
-    public float Distance;//ÈËÎïÓëÄ¿±êÖ®¼äµÄ¾àÀë
+    public float Distance;//äººç‰©ä¸ç›®æ ‡ä¹‹é—´çš„è·ç¦»
 
-    public AIDestinationSetter Target;//Ä¿±êµØµã
+    public AIDestinationSetter Target;//ç›®æ ‡åœ°ç‚¹
 
-    public NPC_status NPC_Status;//Ğ¡¶¯Îï×´Ì¬
-    [Tooltip("¹¤×÷µÄÌïµØ")]
+    public NPC_status NPC_Status;//å°åŠ¨ç‰©çŠ¶æ€
+    [Tooltip("å·¥ä½œçš„ç”°åœ°")]
     public plant_State Work_Field;
-    [Tooltip("°áÔËµÄ»õÎï")]
-    public PlantItem_Data freight;//»õÎï
-    [Header("¡ª¡ª¡ª¡ª¶¯Îï/Êı¾İ¡ª¡ª¡ª¡ª")]
+    [Tooltip("æ¬è¿çš„è´§ç‰©")]
+    public PlantItem_Data freight;//è´§ç‰©
+    [Header("â€”â€”â€”â€”åŠ¨ç‰©/æ•°æ®â€”â€”â€”â€”")]
     public string NPC_DATA_PATH = "JsonDataAsset/NPC_Data";
     public string NPC_INFO_PATH = "JsonDataAsset/NPCInformation";
 
@@ -34,19 +34,19 @@ public class CharaController : MonoBehaviour
     
     public NPCData Template_data;
     public NPCData data;
-    [Header("¡ª¡ª¡ª¡ª×é¼ş¡ª¡ª¡ª¡ª")]
-    private Animator animator;//¶¯»­×´Ì¬»ú
-    private AIPath aiPath;//A Star Ñ°Â·
-    [Header("¡ª¡ª¡ª¡ª¼ÆÊ±¡ª¡ª¡ª¡ª")]
+    [Header("â€”â€”â€”â€”ç»„ä»¶â€”â€”â€”â€”")]
+    private Animator animator;//åŠ¨ç”»çŠ¶æ€æœº
+    private AIPath aiPath;//A Star å¯»è·¯
+    [Header("â€”â€”â€”â€”è®¡æ—¶â€”â€”â€”â€”")]
     private float Standard_Second = 1;
 
     private void Start()
     {
-        NPCData_Information_SignIn();//×¢²áNPCÃèÊöĞÅÏ¢
+        NPCData_Information_SignIn();//æ³¨å†ŒNPCæè¿°ä¿¡æ¯
 
-        animator = GetComponentInChildren<Animator>();//»ñÈ¡¶¯»­×´Ì¬»ú
+        animator = GetComponentInChildren<Animator>();//è·å–åŠ¨ç”»çŠ¶æ€æœº
 
-        Event_SignIn();//ÊÂ¼ş×¢²á
+        Event_SignIn();//äº‹ä»¶æ³¨å†Œ
 
         Target = GetComponent<AIDestinationSetter>();
 
@@ -55,17 +55,17 @@ public class CharaController : MonoBehaviour
         aiPath = GetComponent<AIPath>();
     }
    /// <summary>
-   /// ×¢²áNPCÊı¾İÓëÃèÊöĞÅÏ¢
+   /// æ³¨å†ŒNPCæ•°æ®ä¸æè¿°ä¿¡æ¯
    /// </summary>
     public void NPCData_Information_SignIn()
     {
-        //»ñÈ¡Êı¾İÁĞ±íÖĞµÄNPCJsonÊı¾İ
+        //è·å–æ•°æ®åˆ—è¡¨ä¸­çš„NPCJsonæ•°æ®
         string NPCData = ResourceManager.GetInstance().Load<TextAsset>(NPC_DATA_PATH).text;
         string NPCInfo = ResourceManager.GetInstance().Load<TextAsset>(NPC_INFO_PATH).text;
-        //·´ĞòÁĞ»¯½âÎöÎª¶ÔÓ¦µÄÊı¾İ½á¹¹
+        //ååºåˆ—åŒ–è§£æä¸ºå¯¹åº”çš„æ•°æ®ç»“æ„
         NPCData[] NPC_Data = JsonMapper.ToObject<NPCData[]>(NPCData);
         NPCInformation[] NPC_Info = JsonMapper.ToObject<NPCInformation[]>(NPCInfo);
-        //±éÀúÊı¾İ½á¹¹£¬Ñ°ÕÒ¶ÔÓ¦Ãû×ÖµÄĞ¡¶¯Îï,»ñÈ¡Ğ¡¶¯ÎïĞÅÏ¢
+        //éå†æ•°æ®ç»“æ„ï¼Œå¯»æ‰¾å¯¹åº”åå­—çš„å°åŠ¨ç‰©,è·å–å°åŠ¨ç‰©ä¿¡æ¯
         for (int i = 0; i < NPC_Info.Length; i++)
         {
             string name = NPC_Info[i].Name;
@@ -75,7 +75,7 @@ public class CharaController : MonoBehaviour
                 break;
             }
         }
-        //Ğ¡¶¯ÎïĞÅÏ¢»ñÈ¡ºó£¬Í¨¹ıÆäĞÅÏ¢»ñÈ¡ÆäÊı¾İ
+        //å°åŠ¨ç‰©ä¿¡æ¯è·å–åï¼Œé€šè¿‡å…¶ä¿¡æ¯è·å–å…¶æ•°æ®
         for (int i = 0; i < NPC_Data.Length; i++)
         {
             int ID = NPC_Data[i].ID;
@@ -87,26 +87,26 @@ public class CharaController : MonoBehaviour
             }
         }
     }
-    #region ÊÂ¼ş
+    #region äº‹ä»¶
     /// <summary>
-    /// ÊÂ¼ş×¢²á
+    /// äº‹ä»¶æ³¨å†Œ
     /// </summary>
     private void Event_SignIn()
     {
-        /*¡ª¡ª¡ª¡ªÊÂ¼ş¡ª¡ª¡ª¡ª*/
-        //×¨×¢Ê±¼äÉèÖÃÊÂ¼ş£¬µ±×¨×¢Ê±¼ä±»ÉèÖÃ£¬Ğ¡¶¯Îï»áÈ¥¹¤×÷
+        /*â€”â€”â€”â€”äº‹ä»¶â€”â€”â€”â€”*/
+        //ä¸“æ³¨æ—¶é—´è®¾ç½®äº‹ä»¶ï¼Œå½“ä¸“æ³¨æ—¶é—´è¢«è®¾ç½®ï¼Œå°åŠ¨ç‰©ä¼šå»å·¥ä½œ
         //EventCenter.GetInstance().AddEventListener("FocusTime_Set", IsChoosen);
-        //Íæ¼ÒÑ¡ÖĞÊÂ¼ş
+        //ç©å®¶é€‰ä¸­äº‹ä»¶
         EventCenter.GetInstance().AddEventListener<string>("Is_Choosen",IsChoosen);
-        //´ıÃüÊÂ¼ş
+        //å¾…å‘½äº‹ä»¶
         EventCenter.GetInstance().AddEventListener<string>("Is_Waiting", IsWaiting);
-        //ÀñÎïÊÂ¼ş£¬Ôö¼ÓºÃ¸Ğ¶È£¬¼õÉÙÍæ¼Ò½ğÇ®
+        //ç¤¼ç‰©äº‹ä»¶ï¼Œå¢åŠ å¥½æ„Ÿåº¦ï¼Œå‡å°‘ç©å®¶é‡‘é’±
         EventCenter.GetInstance().AddEventListener<Button>("Gifted", Gifted);
-        //¹¤×÷ÊÂ¼ş
+        //å·¥ä½œäº‹ä»¶
         EventCenter.GetInstance().AddEventListener<Button>("NPC_Work", Order_Work);
-        //ĞİÏ¢ÊÂ¼ş
+        //ä¼‘æ¯äº‹ä»¶
         EventCenter.GetInstance().AddEventListener<Button>("NPC_Rest", Order_Rest);
-        //¼Ó²ÍÊÂ¼ş
+        //åŠ é¤äº‹ä»¶
         EventCenter.GetInstance().AddEventListener<Button>("NPC_Eat", Order_Eat);
     }
     public void IsChoosen(string name)
@@ -124,15 +124,15 @@ public class CharaController : MonoBehaviour
         }
     }
     /// <summary>
-    /// ±»ËÍÁËÀñÎïÊÂ¼ş
+    /// è¢«é€äº†ç¤¼ç‰©äº‹ä»¶
     /// </summary>
-    /// <param name="Info">ÀñÎïĞÅÏ¢</param>
+    /// <param name="Info">ç¤¼ç‰©ä¿¡æ¯</param>
     public void Gifted(Button Info)
     {
         if(Info.name== npc_Information.Name)
         {
             GiftData gift_data = Info.GetComponent<Gift>().Data;
-            //±È¶ÔĞ¡¶¯ÎïID¡£Èç¹ûĞ¡¶¯ÎïÏ²»¶Õâ¸öÀñÎï£¬ÔòÔö¼ÓºÃ¸Ğ¶ÈÔö¼Ó
+            //æ¯”å¯¹å°åŠ¨ç‰©IDã€‚å¦‚æœå°åŠ¨ç‰©å–œæ¬¢è¿™ä¸ªç¤¼ç‰©ï¼Œåˆ™å¢åŠ å¥½æ„Ÿåº¦å¢åŠ 
             if(data.CherishThing_ID == gift_data.ID)
             {
                 data.Favorability += gift_data.Favorate_Affinity;
@@ -141,13 +141,13 @@ public class CharaController : MonoBehaviour
             {
                 data.Favorability += gift_data.Like_Affinity;
             }
-            else//Èç¹ûÆÕÍ¨£¬Ôò°´Ä¬ÈÏÊıÖµÔö¼Ó
+            else//å¦‚æœæ™®é€šï¼Œåˆ™æŒ‰é»˜è®¤æ•°å€¼å¢åŠ 
             {
                 data.Favorability += gift_data.Default_Affinity;
             }
         }
     }
-    #region Ğ¡¶¯ÎïÖ¸Áî
+    #region å°åŠ¨ç‰©æŒ‡ä»¤
     public void Order_Work(Button info)
     {
         string button_Name= info.transform.parent.gameObject.transform.parent.gameObject.transform.parent.gameObject.name;
@@ -156,7 +156,7 @@ public class CharaController : MonoBehaviour
             NPC_Status= NPC_status.GoToWork;
             data.Favorability--;
             EventCenter.GetInstance().EventTrigger("Info_Update");
-            print("Ç¿ÖÆ¹¤×÷Ö¸Áî");
+            print("å¼ºåˆ¶å·¥ä½œæŒ‡ä»¤");
         }
     }
     public void Order_Rest(Button info)
@@ -165,7 +165,7 @@ public class CharaController : MonoBehaviour
         if (button_Name == npc_Information.Name)
         {
             NPC_Status = NPC_status.Go_To_Rest;
-            print("Ç¿ÖÆĞİÏ¢Ö¸Áî");
+            print("å¼ºåˆ¶ä¼‘æ¯æŒ‡ä»¤");
         }
     }
     public void Order_Eat(Button info)
@@ -174,15 +174,15 @@ public class CharaController : MonoBehaviour
         if (button_Name == npc_Information.Name)
         {
             NPC_Status = NPC_status.GoToEat;
-            print("Ç¿ÖÆÇ¡·¹Ö¸Áî");
+            print("å¼ºåˆ¶æ°é¥­æŒ‡ä»¤");
         }
     }
     #endregion
     #endregion
     private void FixedUpdate()
     {
-        #region ×¨×¢Ê±¼ä½áÊøĞ¡¶¯Îï»Ø·¿µÄÂß¼­ ÒÑÆúÓÃ
-        //×¨×¢Ê±¼ä½áÊøÁË¾Í²»¹ÜÈıÆß¶şÊ®Ò»ÏÂ°à,³ı·ÇÒÑ¾­ÔÚĞİÏ¢ÊÒĞİÏ¢ÁË
+        #region ä¸“æ³¨æ—¶é—´ç»“æŸå°åŠ¨ç‰©å›æˆ¿çš„é€»è¾‘ å·²å¼ƒç”¨
+        //ä¸“æ³¨æ—¶é—´ç»“æŸäº†å°±ä¸ç®¡ä¸‰ä¸ƒäºŒåä¸€ä¸‹ç­,é™¤éå·²ç»åœ¨ä¼‘æ¯å®¤ä¼‘æ¯äº†
         if (!ObjectKeeper_Singleton.Instance.Is_Set && NPC_Status != NPC_status.Rest&&!Check_PlantedField())
         {
             NPC_Status = NPC_status.Go_To_Rest;
@@ -192,96 +192,98 @@ public class CharaController : MonoBehaviour
         aiPath.maxSpeed = data.MoveSpeed;
     }
     /// <summary>
-    /// ×´Ì¬ÇĞ»»
+    /// çŠ¶æ€åˆ‡æ¢
     /// </summary>
     public void Switch_Status()
     {
         switch (NPC_Status)
         {
-            case NPC_status.GoToWork://µ±Ğ¡¶¯Îï´¦ÓÚÈ¥¹¤×÷×´Ì¬£¬ÔòÑ°ÕÒ¾àÀë×î½üµÄÖÖÌï»úÆ÷
+            case NPC_status.GoToWork://å½“å°åŠ¨ç‰©å¤„äºå»å·¥ä½œçŠ¶æ€ï¼Œåˆ™å¯»æ‰¾è·ç¦»æœ€è¿‘çš„ç§ç”°æœºå™¨
 
-                ObjectKeeper_Singleton.Instance.Add_WorkNpcs(gameObject);//Ìí¼Óµ½¹¤×÷NPCÁĞ±í
+                ObjectKeeper_Singleton.Instance.Add_WorkNpcs(gameObject);//æ·»åŠ åˆ°å·¥ä½œNPCåˆ—è¡¨
 
-                animator.Play("z_move");//ĞĞ×ß¶¯»­
+                animator.Play("z_move");//è¡Œèµ°åŠ¨ç”»
 
-                Target.target = null;//Ê×ÏÈÄ¿±êÖÃ¿Õ
+                Target.target = null;//é¦–å…ˆç›®æ ‡ç½®ç©º
 
                 HungryTime_calculation();
 
-                Freight_Wait();//²éÕÒÊÇ·ñ´æÔÚ»õÎïĞèÒª°áÔË£¬ÈôÓĞÔòÓÅÏÈ°áÔË»õÎï
+                Freight_Wait();//æŸ¥æ‰¾æ˜¯å¦å­˜åœ¨è´§ç‰©éœ€è¦æ¬è¿ï¼Œè‹¥æœ‰åˆ™ä¼˜å…ˆæ¬è¿è´§ç‰©
 
-                if (Target.target==null)//Èç¹ûÃ»ÓĞÕÒµ½¹¤×÷µØµã£¬ÔòËÑÑ°×î½üµÄ
+                if (Target.target==null)//å¦‚æœæ²¡æœ‰æ‰¾åˆ°å·¥ä½œåœ°ç‚¹ï¼Œåˆ™æœå¯»æœ€è¿‘çš„
                 {
                     ShortestPath(ObjectKeeper_Singleton.Instance.Farm_Machine);
                 }
-                //ÈôÕÒµ½ÁË¹¤×÷µØµã²¢Ç°Íù£¬µ«¹¤×÷µØµãÒÑ¾­±»ÆäËûĞ¡¶¯ÎïÌáÇ°Õ¼ÓÃ£¬ÔòÖØĞÂÑ°ÕÒ¹¤×÷µØµã
+                //è‹¥æ‰¾åˆ°äº†å·¥ä½œåœ°ç‚¹å¹¶å‰å¾€ï¼Œä½†å·¥ä½œåœ°ç‚¹å·²ç»è¢«å…¶ä»–å°åŠ¨ç‰©æå‰å ç”¨ï¼Œåˆ™é‡æ–°å¯»æ‰¾å·¥ä½œåœ°ç‚¹
                 else if (!Target.target.GetComponent<Map_Target>().Is_Empty)
                 {
                     Target.target = null;
                 }
-                Move_Right_OR_Left();//ÅĞ¶Ï×óÓÒ²¢½øĞĞ·­×ª
+                Move_Right_OR_Left();//åˆ¤æ–­å·¦å³å¹¶è¿›è¡Œç¿»è½¬
                 break;
 
-            case NPC_status.Work://¹¤×÷
+            case NPC_status.Work://å·¥ä½œ
 
-                animator.Play("b_work1");//²¥·Å ¹¤×÷¶¯»­
+                this.transform.rotation = Quaternion.Euler(0, 180, 0);
+
+                animator.Play("b_work1");//æ’­æ”¾ å·¥ä½œåŠ¨ç”»
 
                 HungryTime_calculation();
 
-                //Èç¹ûNPCÕÒµ½ÁË×Ô¼ºµÄ¹¤×÷ÌïµØ
+                //å¦‚æœNPCæ‰¾åˆ°äº†è‡ªå·±çš„å·¥ä½œç”°åœ°
                 if (Work_Field != null)
                 {
-                    //Èç¹ûÌïµØ×´Ì¬½øÈë×ÔÓÉÉú³¤µÄ×´Ì¬£¬ÔòÖØĞÂ¼ÆËãNPC×´Ì¬
+                    //å¦‚æœç”°åœ°çŠ¶æ€è¿›å…¥è‡ªç”±ç”Ÿé•¿çš„çŠ¶æ€ï¼Œåˆ™é‡æ–°è®¡ç®—NPCçŠ¶æ€
                     if(Work_Field.State == Plant_State.Germinate||Work_Field.State == Plant_State.Grown1||Work_Field.State == Plant_State.Grown2||Work_Field.State == Plant_State.Mature||Work_Field.State == Plant_State.Empty)
                     {
                         Leave_Field();
                         NPC_Status = NPC_status.GoToWork;
                     }
                     GameManager.GetInstance().FixedUpdate_Timer(ref data.Work_Time, 1f,ref Standard_Second);
-                    //¹¤×÷Ê±¼ä¹éÁã½øÈëÍµÀÁ½áËã
+                    //å·¥ä½œæ—¶é—´å½’é›¶è¿›å…¥å·æ‡’ç»“ç®—
                     if (data.Work_Time <= 0)
                     {
                         if (Lazy_Check(data.Favorability) == 0)
                         {
-                            print(name + ":ÍµÀÁÁË£¡");
+                            print(name + ":å·æ‡’äº†ï¼");
                             NPC_Status = NPC_status.GoTo_TouchFish;
 
-                            data.Work_Time = Template_data.Work_Time;//ÖØÖÃÊ±¼ä
+                            data.Work_Time = Template_data.Work_Time;//é‡ç½®æ—¶é—´
                         }
                     }
                 }
-                //ÈôÃ»ÓĞĞèÒª¹¤×÷µÄÌïµØ£¬Ôò½øÈëÍµÀÁ×´Ì¬
+                //è‹¥æ²¡æœ‰éœ€è¦å·¥ä½œçš„ç”°åœ°ï¼Œåˆ™è¿›å…¥å·æ‡’çŠ¶æ€
                 else
                 {
-                    //²éÕÒ´æÔÚ¹¤×÷µÄÌïµØ
+                    //æŸ¥æ‰¾å­˜åœ¨å·¥ä½œçš„ç”°åœ°
                     Work_Field = Choosen_Field();
                 }
                 break;
 
-            case NPC_status.Go_To_Rest://Ğ¡¶¯Îï»ØĞİÏ¢ÊÒ
+            case NPC_status.Go_To_Rest://å°åŠ¨ç‰©å›ä¼‘æ¯å®¤
 
                 ObjectKeeper_Singleton.Instance.Remove_WorkNpc(gameObject);
 
                 Move_Right_OR_Left();
                 
-                animator.Play("z_move");//ĞĞ×ß¶¯»­
+                animator.Play("z_move");//è¡Œèµ°åŠ¨ç”»
 
-                Leave_Field();//Àë¿ªÌïµØ£¬ÌïµØµÄ¸ºÔğÈËÖÃ¿Õ
-                Target.target = ObjectKeeper_Singleton.Instance.Rest_Area.transform;//Ä¿±êÎªĞİÏ¢ÊÒ
-                //µ±Ğ¡¶¯ÎïµÖ´ïĞİÏ¢ÊÒÊ±£¬½øÈëĞİÏ¢×´Ì¬
+                Leave_Field();//ç¦»å¼€ç”°åœ°ï¼Œç”°åœ°çš„è´Ÿè´£äººç½®ç©º
+                Target.target = ObjectKeeper_Singleton.Instance.Rest_Area.transform;//ç›®æ ‡ä¸ºä¼‘æ¯å®¤
+                //å½“å°åŠ¨ç‰©æŠµè¾¾ä¼‘æ¯å®¤æ—¶ï¼Œè¿›å…¥ä¼‘æ¯çŠ¶æ€
                 if(aiPath.reachedEndOfPath)
                 {
                     NPC_Status = NPC_status.Rest;
                 }
                 break;
 
-            case NPC_status.Rest://Ğ¡¶¯ÎïĞİÏ¢
+            case NPC_status.Rest://å°åŠ¨ç‰©ä¼‘æ¯
 
                 ObjectKeeper_Singleton.Instance.Remove_WorkNpc(gameObject);
 
                 if (aiPath.reachedEndOfPath)
                 {
-                    //ÔÚÉ¢²½Ä¿±êÉÏµÄµÈ´ıÊ±¼ä
+                    //åœ¨æ•£æ­¥ç›®æ ‡ä¸Šçš„ç­‰å¾…æ—¶é—´
                     CurrentRestIde_Time -= Time.deltaTime;
 
                     animator.Play("z_idle");
@@ -290,11 +292,11 @@ public class CharaController : MonoBehaviour
                     {
                         Target.target  = null;
 
-                        float randomX = Random.Range(-RestWalk_InRest_RangeX, RestWalk_InRest_RangeX);//Ëæ»úX
-                        float randomY = Random.Range(-RestWalk_InRest_RangeY, RestWalk_InRest_RangeY);//Ëæ»úY
+                        float randomX = Random.Range(-RestWalk_InRest_RangeX, RestWalk_InRest_RangeX);//éšæœºX
+                        float randomY = Random.Range(-RestWalk_InRest_RangeY, RestWalk_InRest_RangeY);//éšæœºY
 
-                        float RestArea_X = ObjectKeeper_Singleton.Instance.Rest_Area.transform.position.x;//ĞİÏ¢ÇøÓòx
-                        float RestArea_Y = ObjectKeeper_Singleton.Instance.Rest_Area.transform.position.y;//ĞİÏ¢ÇøÓòY
+                        float RestArea_X = ObjectKeeper_Singleton.Instance.Rest_Area.transform.position.x;//ä¼‘æ¯åŒºåŸŸx
+                        float RestArea_Y = ObjectKeeper_Singleton.Instance.Rest_Area.transform.position.y;//ä¼‘æ¯åŒºåŸŸY
 
                         Vector2 stroll = new Vector2(RestArea_X + randomX, RestArea_Y + randomY);
 
@@ -305,14 +307,14 @@ public class CharaController : MonoBehaviour
                 }
                 else
                 {
-                    animator.Play("z_move");//ĞĞ×ß¶¯»­
+                    animator.Play("z_move");//è¡Œèµ°åŠ¨ç”»
 
                     Move_Right_OR_Left();
                 }
                 break;
 
 
-            case NPC_status.GoTo_TouchFish://Ğ¡¶¯ÎïÈ¥ÃşÓã
+            case NPC_status.GoTo_TouchFish://å°åŠ¨ç‰©å»æ‘¸é±¼
 
                 Move_Right_OR_Left();
                 animator.Play("z_move");
@@ -321,75 +323,77 @@ public class CharaController : MonoBehaviour
                 {
                     ShortestPath(ObjectKeeper_Singleton.Instance.TouchFish_Area);
                 }
-                //ÈôÕÒµ½ÁË¹¤×÷µØµã²¢Ç°Íù£¬µ«¹¤×÷µØµãÒÑ¾­±»ÆäËûĞ¡¶¯ÎïÌáÇ°Õ¼ÓÃ£¬ÔòÖØĞÂÑ°ÕÒ¹¤×÷µØµã
+                //è‹¥æ‰¾åˆ°äº†å·¥ä½œåœ°ç‚¹å¹¶å‰å¾€ï¼Œä½†å·¥ä½œåœ°ç‚¹å·²ç»è¢«å…¶ä»–å°åŠ¨ç‰©æå‰å ç”¨ï¼Œåˆ™é‡æ–°å¯»æ‰¾å·¥ä½œåœ°ç‚¹
                 else if (!Target.target.GetComponent<Map_Target>().Is_Empty)
                 {
                     Target.target = null;
                 }
                 
-                Leave_Field();//Àë¿ªÌïµØ£¬ÌïµØµÄ¸ºÔğÈËÖÃ¿Õ
+                Leave_Field();//ç¦»å¼€ç”°åœ°ï¼Œç”°åœ°çš„è´Ÿè´£äººç½®ç©º
                 HungryTime_calculation();
                 break;
 
-            case NPC_status.TouchFish://ÃşÓã
+            case NPC_status.TouchFish://æ‘¸é±¼
 
                 this.transform.rotation = Quaternion.Euler(0, 180, 0);
 
-                animator.Play("b_sit");//×ø
+                animator.Play("b_sit");//å
 
                 HungryTime_calculation();
 
                 break;
         
-            case NPC_status.GoToEat://Ğ¡¶¯ÎïÈ¥³Ô¶«Î÷
-                //ÅĞ¶Ï×óÓÒ
+            case NPC_status.GoToEat://å°åŠ¨ç‰©å»åƒä¸œè¥¿
+                //åˆ¤æ–­å·¦å³
                 Move_Right_OR_Left();
 
-                animator.Play("z_move");//ĞĞ×ß¶¯»­
+                animator.Play("z_move");//è¡Œèµ°åŠ¨ç”»
 
                 Target.target = null;
 
-                Leave_Field();//Àë¿ªÌïµØ£¬ÌïµØµÄ¸ºÔğÈËÖÃ¿Õ
+                Leave_Field();//ç¦»å¼€ç”°åœ°ï¼Œç”°åœ°çš„è´Ÿè´£äººç½®ç©º
                  
                 if (Target.target == null)
                 {
                     ShortestPath(ObjectKeeper_Singleton.Instance.Eat_Area);
                 }
-                else if (!Target.target.GetComponent<Map_Target>().Is_Empty)//Èç¹ûÄ¿±êµã±»Õ¼ÓÃ£¬ÔòÖØĞÂÑ°ÕÒÄ¿±êµã
+                else if (!Target.target.GetComponent<Map_Target>().Is_Empty)//å¦‚æœç›®æ ‡ç‚¹è¢«å ç”¨ï¼Œåˆ™é‡æ–°å¯»æ‰¾ç›®æ ‡ç‚¹
                 {
                     Target.target = null;
                 }
                 break;
 
-            case NPC_status.Eat://Ğ¡¶¯Îï³Ô¶«Î÷
+            case NPC_status.Eat://å°åŠ¨ç‰©åƒä¸œè¥¿
 
-                animator.Play("b_sit");//²¥·Å ±³¶Ô ×ø×Ë¶¯»­
-                //ÖØÖÃÌïµØ×´Ì¬
+                this.transform.rotation = Quaternion.Euler(0, 0, 0);
+
+                animator.Play("b_sit");//æ’­æ”¾ èƒŒå¯¹ åå§¿åŠ¨ç”»
+                //é‡ç½®ç”°åœ°çŠ¶æ€
                 Leave_Field();
-                //¿ªÊ¼³Ô·¹µ¹¼ÆÊ±
+                //å¼€å§‹åƒé¥­å€’è®¡æ—¶
                 GameManager.GetInstance().FixedUpdate_Timer(ref data.Eat_Time,1f, ref Standard_Second);
-                //¾Í²ÍÍê±Ï
+                //å°±é¤å®Œæ¯•
                 if(data.Eat_Time<=0)
                 {
-                    //¼ÓÊ³ÎïBuff
+                    //åŠ é£Ÿç‰©Buff
                     //data.Work_Speed += ObjectKeeper_Singleton.Instance.foodData.Buff;
                     //data.MoveSpeed += ObjectKeeper_Singleton.Instance.foodData.Buff;
-                    //½øĞĞÊıÖµ¼ÆËã(Ğ¡¶¯ÎïÃ¿´Î½øÊ³¿Û³ı²Í·Ñ)
+                    //è¿›è¡Œæ•°å€¼è®¡ç®—(å°åŠ¨ç‰©æ¯æ¬¡è¿›é£Ÿæ‰£é™¤é¤è´¹)
                     ObjectKeeper_Singleton.Instance.gamerData.Money += ObjectKeeper_Singleton.Instance.foodData.Cost;
-                    //¸üĞÂÊıÖµÏÔÊ¾
+                    //æ›´æ–°æ•°å€¼æ˜¾ç¤º
                     EventCenter.GetInstance().EventTrigger("Info_Update");
-                    //¸üĞÂNPC×´Ì¬
+                    //æ›´æ–°NPCçŠ¶æ€
                     NPC_Status = NPC_status.GoToWork;
-                    //ÖØÖÃËùÓĞÊ±¼ä
+                    //é‡ç½®æ‰€æœ‰æ—¶é—´
                     Time_Data_Reset();
                 }
                 break;
 
-            case NPC_status.Transport://°áÔË
+            case NPC_status.Transport://æ¬è¿
 
-                animator.Play("z_hug");//°áÔË¶¯»­
+                animator.Play("z_hug");//æ¬è¿åŠ¨ç”»
 
-                Move_Right_OR_Left();//ÅĞ¶Ï×óÓÒ²¢½øĞĞ·­×ª
+                Move_Right_OR_Left();//åˆ¤æ–­å·¦å³å¹¶è¿›è¡Œç¿»è½¬
 
                 if (freight.ID!=0)
                 {
@@ -416,44 +420,44 @@ public class CharaController : MonoBehaviour
         return false;
     }
     /// <summary>
-    /// ÅĞ¶ÏĞ¡¶¯ÎïÊÇÍùÓÒ»¹ÊÇÍù×ó×ßÁË
+    /// åˆ¤æ–­å°åŠ¨ç‰©æ˜¯å¾€å³è¿˜æ˜¯å¾€å·¦èµ°äº†
     /// </summary>
     public void Move_Right_OR_Left()
     {
-        if (aiPath.desiredVelocity.x > 0)
+        if (aiPath.desiredVelocity.x > 0)//å³è¾¹
         {
             this.transform.rotation = Quaternion.Euler(0, 0, 0);
         }
-        else if (aiPath.desiredVelocity.x < 0)
+        else if (aiPath.desiredVelocity.x < 0)//å·¦è¾¹
         {
             this.transform.rotation = Quaternion.Euler(0, 180, 0);
         }
     }
     /// <summary>
-    /// Èç¹ûÓĞµÈ´ı°áÔËµÄ»õÎï£¬ÔòÓÅÏÈ°áÔË»õÎï
+    /// å¦‚æœæœ‰ç­‰å¾…æ¬è¿çš„è´§ç‰©ï¼Œåˆ™ä¼˜å…ˆæ¬è¿è´§ç‰©
     /// </summary>
     public void Freight_Wait()
     {
-        //»ñÈ¡ËùÓĞ»õÎï
+        //è·å–æ‰€æœ‰è´§ç‰©
         GameObject[] Freights = ObjectKeeper_Singleton.Instance.Freight_Target;
-        //±éÀúËùÓĞµÈ´ı°áÔËµÄ»õÎï
+        //éå†æ‰€æœ‰ç­‰å¾…æ¬è¿çš„è´§ç‰©
         foreach (var gameObject in Freights)
         {
             Map_Target map_Target = gameObject.GetComponent<Map_Target>();
-            //Èç¹û»õÎïÃ»ÓĞ±»Õ¼ÓÃ£¬Ôò°á×ß
+            //å¦‚æœè´§ç‰©æ²¡æœ‰è¢«å ç”¨ï¼Œåˆ™æ¬èµ°
             if(map_Target.Freight.Name!=null&&map_Target.Is_Empty&&map_Target.GetComponent<SpriteRenderer>().enabled)
             {
-                NPC_Status=NPC_status.Transport;//°áÔË
+                NPC_Status=NPC_status.Transport;//æ¬è¿
                 Target.target = gameObject.transform;
             }
-            else//Èç¹û±»°á×ßÁË£¬¾ÍÖØĞÂ¼ÆËã
+            else//å¦‚æœè¢«æ¬èµ°äº†ï¼Œå°±é‡æ–°è®¡ç®—
             {
                 NPC_Status = NPC_status.GoToWork;
             }
         }
     }
     /// <summary>
-    /// ¼ÆËã¼¢¶öÊ±¼ä£¬¶öÁË¾Í²»¹ÜÈıÆß¶şÊ®Ò»È¥³Ô·¹
+    /// è®¡ç®—é¥¥é¥¿æ—¶é—´ï¼Œé¥¿äº†å°±ä¸ç®¡ä¸‰ä¸ƒäºŒåä¸€å»åƒé¥­
     /// </summary>
     public void HungryTime_calculation()
     {
@@ -465,25 +469,25 @@ public class CharaController : MonoBehaviour
             if (data.Hungry_Time <= 0)
             {
                 NPC_Status = NPC_status.GoToEat;
-                //ÖØÖÃÊı¾İ
+                //é‡ç½®æ•°æ®
                 Time_Data_Reset();
             }
         }
     }
     /// <summary>
-    /// ÖØÖÃÊ±¼ä/¹¤×÷ ³Ô·¹ ¼¢¶öµÈÊ±¼ä
+    /// é‡ç½®æ—¶é—´/å·¥ä½œ åƒé¥­ é¥¥é¥¿ç­‰æ—¶é—´
     /// </summary>
     public void Time_Data_Reset()
     {
-        data.Work_Time = Template_data.Work_Time;//ÖØÖÃ¹¤×÷Ê±¼ä
-        data.Eat_Time= Template_data.Eat_Time;//ÖØÖÃ³Ô·¹Ê±¼ä
-        data.Hungry_Time = Template_data.Hungry_Time;//ÖØÖÃ¼¢¶öÊ±¼ä
+        data.Work_Time = Template_data.Work_Time;//é‡ç½®å·¥ä½œæ—¶é—´
+        data.Eat_Time= Template_data.Eat_Time;//é‡ç½®åƒé¥­æ—¶é—´
+        data.Hungry_Time = Template_data.Hungry_Time;//é‡ç½®é¥¥é¥¿æ—¶é—´
     }
     /// <summary>
-    /// Ëæ×ÅºÃ¸Ğ¶È¸üĞÂ£¬¸üĞÂÍµÀÁ¸ÅÂÊ
+    /// éšç€å¥½æ„Ÿåº¦æ›´æ–°ï¼Œæ›´æ–°å·æ‡’æ¦‚ç‡
     /// </summary>
-    /// <param name="favorability">ºÃ¸Ğ¶È</param>
-    /// <returns>ÍµÀÁÊı</returns>
+    /// <param name="favorability">å¥½æ„Ÿåº¦</param>
+    /// <returns>å·æ‡’æ•°</returns>
     public int Lazy_Check(int favorability)
     {
         int LazyNum = Random.Range(0, favorability);
@@ -491,24 +495,24 @@ public class CharaController : MonoBehaviour
     }
 
     /// <summary>
-    /// Ñ¡Ôñ¹¤×÷µÄÌïµØ
+    /// é€‰æ‹©å·¥ä½œçš„ç”°åœ°
     /// </summary>
-    /// <returns>¹¤×÷µÄÌïµØ</returns>
+    /// <returns>å·¥ä½œçš„ç”°åœ°</returns>
     public plant_State Choosen_Field()
     {
         for(int i=0; i < ObjectKeeper_Singleton.Instance.Farm_Field.Length; i++)
         {
             GameObject Field = ObjectKeeper_Singleton.Instance.Farm_Field[i];
             plant_State plant_State = Field.GetComponent<plant_State>();
-            //µ±¸ÃÍÁµØÈ·Êµ´æÔÚÖ²Îï£¬ÇÒÃ»ÓĞĞ¡¶¯ÎïÔÚÍÁµØÉÏ¹¤×÷,ÇÒÖ²ÎïÃ»ÓĞ´¦ÓÚ×ÔÓÉÉú³¤×´Ì¬Ê±
-            if (plant_State.State != Plant_State.Empty &&//²»Îª¿Õ
-                plant_State.State != Plant_State.Germinate &&//²»ÔÚ·¢Ñ¿½×¶Î
-                plant_State.State != Plant_State.Grown1 && plant_State.State != Plant_State.Grown2&&//²»ÔÚ³É³¤½×¶Î
-                plant_State.State!=Plant_State.Mature &&//²»ÔÚ³ÉÊì½×¶Î
-                plant_State.npc_Data.ID==0)// Ã»ÓĞĞ¡¶¯ÎïÔÚÌïµØ¹¤×÷
+            //å½“è¯¥åœŸåœ°ç¡®å®å­˜åœ¨æ¤ç‰©ï¼Œä¸”æ²¡æœ‰å°åŠ¨ç‰©åœ¨åœŸåœ°ä¸Šå·¥ä½œ,ä¸”æ¤ç‰©æ²¡æœ‰å¤„äºè‡ªç”±ç”Ÿé•¿çŠ¶æ€æ—¶
+            if (plant_State.State != Plant_State.Empty &&//ä¸ä¸ºç©º
+                plant_State.State != Plant_State.Germinate &&//ä¸åœ¨å‘èŠ½é˜¶æ®µ
+                plant_State.State != Plant_State.Grown1 && plant_State.State != Plant_State.Grown2&&//ä¸åœ¨æˆé•¿é˜¶æ®µ
+                plant_State.State!=Plant_State.Mature &&//ä¸åœ¨æˆç†Ÿé˜¶æ®µ
+                plant_State.npc_Data.ID==0)// æ²¡æœ‰å°åŠ¨ç‰©åœ¨ç”°åœ°å·¥ä½œ
             {
 
-                plant_State.npc_Data = data;//ÎªÌïµØÉèÖÃ¹¤×÷Õß
+                plant_State.npc_Data = data;//ä¸ºç”°åœ°è®¾ç½®å·¥ä½œè€…
 
                 return plant_State;
             }
@@ -517,21 +521,21 @@ public class CharaController : MonoBehaviour
         return null;
     }
     /// <summary>
-    /// Àë¿ªÌïµØ,ÓÃÓÚÖÃ¿Õ¹¤×÷ÌïµØ
+    /// ç¦»å¼€ç”°åœ°,ç”¨äºç½®ç©ºå·¥ä½œç”°åœ°
     /// </summary>
     public void Leave_Field()
     {
-        if(Work_Field!=null)//Èç¹ûÓĞ¹¤×÷ÌïµØ
+        if(Work_Field!=null)//å¦‚æœæœ‰å·¥ä½œç”°åœ°
         {
-            Target.target= null;//½«Ä¿±êÖÃ¿Õ
-            Work_Field.npc_Data = new NPCData(null);//Ê¹ÌïµØ»Øµ½ÎŞÖ÷Ö®µØ×´Ì¬
-            Work_Field = null;//ÖÃ¿Õ¹¤×÷ÌïµØ
+            Target.target= null;//å°†ç›®æ ‡ç½®ç©º
+            Work_Field.npc_Data = new NPCData(null);//ä½¿ç”°åœ°å›åˆ°æ— ä¸»ä¹‹åœ°çŠ¶æ€
+            Work_Field = null;//ç½®ç©ºå·¥ä½œç”°åœ°
         }
     }
     /// <summary>
-    /// Ñ°ÕÒ×î¶Ì¾àÀëµÄÄ¿±êµã
+    /// å¯»æ‰¾æœ€çŸ­è·ç¦»çš„ç›®æ ‡ç‚¹
     /// </summary>
-    /// <param name="gameObjects">Ñ°Â·Ä¿±ê×é</param>
+    /// <param name="gameObjects">å¯»è·¯ç›®æ ‡ç»„</param>
     public void ShortestPath(GameObject[] gameObjects)
     {
         Distance = Mathf.Infinity;

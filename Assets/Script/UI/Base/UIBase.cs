@@ -4,7 +4,18 @@ using UnityEngine.UI;
 public class UIBase : MonoBehaviour
 {
     protected Button Current_Button;
-
+    protected virtual void Update()
+    {
+        // ç›‘å¬ Esc é”®
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            OnEscapePressed();
+        }
+    }
+    protected virtual void OnEscapePressed()
+    {
+        UIManager.GetInstance().HideUI(gameObject.name);
+    }
 
     protected void CloseUI(CanvasGroup canvasGroup)
     {
@@ -19,11 +30,11 @@ public class UIBase : MonoBehaviour
         canvasGroup.blocksRaycasts = true;
     }
     /// <summary>
-    /// ±»Ñ¡ÖĞµÄ°´Å¥×ª»»ÎªÑ¡ÖĞ×´Ì¬
+    /// è¢«é€‰ä¸­çš„æŒ‰é’®è½¬æ¢ä¸ºé€‰ä¸­çŠ¶æ€
     /// </summary>
-    /// <param name="ButtonGroup">°´Å¥ËùÊôµÄ°´Å¥×é</param>
-    /// <param name="Clicked_Image">°´Å¥±»µã»÷ºóµÄÍ¼Æ¬</param>
-    /// <param name="Start_Image">°´Å¥µÄ³õÊ¼Í¼Æ¬</param>
+    /// <param name="ButtonGroup">æŒ‰é’®æ‰€å±çš„æŒ‰é’®ç»„</param>
+    /// <param name="Clicked_Image">æŒ‰é’®è¢«ç‚¹å‡»åçš„å›¾ç‰‡</param>
+    /// <param name="Start_Image">æŒ‰é’®çš„åˆå§‹å›¾ç‰‡</param>
     protected void Button_Image_Change(GameObject ButtonGroup, Sprite Clicked_Image, Sprite Start_Image)
     {
         for (int i = 0; i < ButtonGroup.transform.childCount; i++)

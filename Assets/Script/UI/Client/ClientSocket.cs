@@ -109,7 +109,7 @@ public class ClientSocket : MonoBehaviour
         }
         catch (Exception e)
         {
-            //Debug.LogError(e);
+            Debug.LogError(e);
         }
         finally
         {
