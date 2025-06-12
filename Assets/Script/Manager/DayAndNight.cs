@@ -9,20 +9,20 @@ using UnityEngine.Rendering.Universal;
 
 public class DayAndNight : MonoBehaviour
 {
-    //2DµÆ¹â
+    //2Dç¯å…‰
     public Light2D Globallight;
     public List<Light2D> light2Ds;
-    //ºó´¦Àí
+    //åå¤„ç†
     public VolumeProfile volume;
     public Bloom bloom;
-    //±³¾°ÒôÀÖ
-    public string BKMusic_Name;
-    public string Current_BKMusic_Name;
+    //èƒŒæ™¯éŸ³ä¹
+    //public string BKMusic_Name;
+    //public string Current_BKMusic_Name;
     private void Start()
     {
         volume.TryGet(out bloom);
         EventCenter.GetInstance().AddEventListener("Day_Night",Day_Night);
-        AudioManager.GetInstance().PlayBKMusic(BKMusic_Name);
+        //AudioManager.GetInstance().PlayBKMusic(BKMusic_Name);
     }
     private void Update()
     {
@@ -35,7 +35,7 @@ public class DayAndNight : MonoBehaviour
         {
             Globallight.intensity = 1f;
             bloom.intensity.value = 0.25f;
-            BKMusic_Name = "µÂ¹ú°øÍíµÄĞİÏĞ¹ã³¡";
+            //BKMusic_Name = "å¾·å›½å‚æ™šçš„ä¼‘é—²å¹¿åœº";
 
             for (int i=0;i<light2Ds.Count;i++)
             {
@@ -46,7 +46,7 @@ public class DayAndNight : MonoBehaviour
         {
             Globallight.intensity = 0.65f;
             bloom.intensity.value = 2f;
-            BKMusic_Name = "µÂ¹ú°øÍíµÄĞİÏĞ¹ã³¡";
+            //BKMusic_Name = "å¾·å›½å‚æ™šçš„ä¼‘é—²å¹¿åœº";
 
             for (int i = 0; i < light2Ds.Count; i++)
             {

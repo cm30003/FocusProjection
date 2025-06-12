@@ -6,12 +6,18 @@ using UnityEngine.Events;
 
 public class AudioManager : BaseManager<AudioManager>
 {
-    private AudioSource BkMusic=null;//±³¾°ÒôÀÖ
-    private float BkMusicVolume=1f;//ÒôÁ¿
+    private AudioSource BkMusic=null;//èƒŒæ™¯éŸ³ä¹
+    private float BkMusicVolume=1f;//éŸ³é‡
 
-    private GameObject SoundObj = null;//ÓÃÓÚ¹ÒÔØÒôĞ§µÄ¶ÔÏó
-    private List<AudioSource> soundList = new List<AudioSource>();//ÒôĞ§ÁĞ±í
+    private GameObject SoundObj = null;//ç”¨äºæŒ‚è½½éŸ³æ•ˆçš„å¯¹è±¡
+    private List<AudioSource> soundList = new List<AudioSource>();//éŸ³æ•ˆåˆ—è¡¨
     private float soundVolume=1f;
+
+    public bool BKMusic_isPlaying;//èƒŒæ™¯éŸ³ä¹æ˜¯å¦æ­£åœ¨æ’­æ”¾
+    public string BKMusic_Name;
+    public float BKMusic_PlaybackTime;//èƒŒæ™¯éŸ³ä¹å·²ç»æ’­æ”¾çš„æ—¶é—´
+    public float BKMusic_TotalDuration;//èƒŒæ™¯éŸ³ä¹æ€»æ—¶é•¿
+    public float BKMusic_PlayBackPercentage;//èƒŒæ™¯éŸ³ä¹æ’­æ”¾çš„ç™¾åˆ†æ¯”
     public AudioManager()
     {
         MonoManager.GetInstance().AddUpdateLisener(Update);
@@ -20,39 +26,64 @@ public class AudioManager : BaseManager<AudioManager>
     {
         for(int i=soundList.Count-1; i>=0; i++)
         {
-            // Ôö¼Ó null ¼ì²é
+            // å¢åŠ  null æ£€æŸ¥
             if (soundList[i] == null)
             {
                 soundList.RemoveAt(i);
                 continue;
             }
-            if (!soundList[i].isPlaying)//Èç¹ûÒôÆµ²¥·ÅÍê±Ï
+            if (!soundList[i].isPlaying)//å¦‚æœéŸ³é¢‘æ’­æ”¾å®Œæ¯•
             {
-                GameObject.Destroy(soundList[i]);//Ïú»Ù¸ÃÒôĞ§
-                soundList.RemoveAt(i);//´ÓÒôĞ§ÁĞ±íÖĞÒÆ³ı
+                GameObject.Destroy(soundList[i]);//é”€æ¯è¯¥éŸ³æ•ˆ
+                soundList.RemoveAt(i);//ä»éŸ³æ•ˆåˆ—è¡¨ä¸­ç§»é™¤
             }
         }
     }
-    // ²¥·Å±³¾°ÒôÀÖ
-    public void PlayBKMusic(string name)
+    /// <summary>
+    /// æ’­æ”¾èƒŒæ™¯éŸ³ä¹
+    /// </summary>
+    /// <param name="name">éŸ³ä¹åç§°</param>
+    /// <param name="action">æ’­æ”¾æ—¶ä½¿ç”¨çš„æ–¹æ³•</param>
+    /// <param name="UpdateInfo">éŸ³ä¹çš„æ•°æ®ï¼ˆé•¿åº¦/å·²æ’­æ”¾æ—¶é—´ç­‰ï¼‰</param>
+    public void PlayBKMusic(string name,UnityAction action=null,bool UpdateInfo=false)
     {
+        
         if (BkMusic == null)
         {
             GameObject gameObject = new GameObject();
             gameObject.name = "BKMusic";
             BkMusic = gameObject.AddComponent<AudioSource>();
         }
-        //Òì²½¼ÓÔØ±³¾°ÒôÀÖ ¼ÓÔØÍê³Éºó²¥·Å
+        //å¼‚æ­¥åŠ è½½èƒŒæ™¯éŸ³ä¹ åŠ è½½å®Œæˆåæ’­æ”¾
         ResourceManager.GetInstance().LoadAsync<AudioClip>("Audio/BackGroundMusic/"+name,(Clip)=>
         {
-            BkMusic.clip = Clip;//ÉèÖÃÒôĞ§
-            BkMusic.loop = true;//Ñ­»·²¥·Å
+            BkMusic.clip = Clip;//è®¾ç½®éŸ³æ•ˆ
+            BkMusic.loop = true;//å¾ªç¯æ’­æ”¾
             BkMusic.volume = BkMusicVolume;
             BkMusic.Play();
+            if(UpdateInfo)
+            {
+                BKMusicInfo();
+                MonoManager.GetInstance().AddUpdateLisener(BKMusicInfo);
+            }
+            action?.Invoke();
         });
+
     }
     /// <summary>
-    /// ÔİÍ£±³¾°ÒôÀÖ
+    /// æ›´æ–°èƒŒæ™¯éŸ³ä¹ä¿¡æ¯
+    /// </summary>
+    public void BKMusicInfo()
+    {
+        BKMusic_isPlaying = BkMusic != null && BkMusic.isPlaying;
+        BKMusic_Name = BkMusic.clip.name;
+        BKMusic_PlaybackTime = BkMusic.time;
+        BKMusic_TotalDuration = BkMusic.clip.length;
+        BKMusic_PlayBackPercentage = BKMusic_PlaybackTime / BKMusic_TotalDuration;
+        //Debug.Log(BKMusic_isPlaying + " " + BKMusic_Name + " " + BKMusic_PlaybackTime + " " + BKMusic_TotalDuration + " " + BKMusic_PlayBackPercentage);
+    }
+    /// <summary>
+    /// æš‚åœèƒŒæ™¯éŸ³ä¹
     /// </summary>
     public void PauseBKMusic()
     {
@@ -63,7 +94,7 @@ public class AudioManager : BaseManager<AudioManager>
         BkMusic.Pause();
     }
     /// <summary>
-    /// Í£Ö¹±³¾°ÒôÀÖ
+    /// åœæ­¢èƒŒæ™¯éŸ³ä¹
     /// </summary>
     public void StopBKMusic()
     {
@@ -74,30 +105,31 @@ public class AudioManager : BaseManager<AudioManager>
         BkMusic.Stop();
     }
     /// <summary>
-    /// ¸Ä±ä±³¾°ÒôÀÖÒôÁ¿
+    /// æ”¹å˜èƒŒæ™¯éŸ³ä¹éŸ³é‡
     /// </summary>
-    /// <param name="volumeValue">ÒôÁ¿</param>
+    /// <param name="volumeValue">éŸ³é‡</param>
     public void ChangeBKValue(float volumeValue)
     {
         BkMusicVolume = volumeValue;
         if (BkMusic != null)
         {
-            return;//return:Á¢¼´ÍË³öµ±Ç°·½·¨
+            return;//return:ç«‹å³é€€å‡ºå½“å‰æ–¹æ³•
         }
         BkMusic.volume = volumeValue;
     }
+
     /// <summary>
-    /// ²¥·ÅÒôĞ§
+    /// æ’­æ”¾éŸ³æ•ˆ
     /// </summary>
     /// <param name="name"></param>
     public void PlaySound(string name,bool isLoop,UnityAction<AudioSource> callBack=null)
     {
         if(SoundObj==null)
         {
-            SoundObj = new GameObject();//Éú³É¹ÒÔØÒôĞ§µÄ¶ÔÏó
+            SoundObj = new GameObject();//ç”ŸæˆæŒ‚è½½éŸ³æ•ˆçš„å¯¹è±¡
             SoundObj.name = "Sound";
         }
-        //Òì²½¼ÓÔØ±³¾°ÒôÀÖ ¼ÓÔØÍê³ÉºóÌí¼ÓÔÚÒôĞ§ÁĞ±íÖĞ
+        //å¼‚æ­¥åŠ è½½èƒŒæ™¯éŸ³ä¹ åŠ è½½å®Œæˆåæ·»åŠ åœ¨éŸ³æ•ˆåˆ—è¡¨ä¸­
         ResourceManager.GetInstance().LoadAsync<AudioClip>("Audio/Sound/" + name, (Clip) =>
         {
             AudioSource audio = SoundObj.AddComponent<AudioSource>();
@@ -113,9 +145,9 @@ public class AudioManager : BaseManager<AudioManager>
         });
     }
     /// <summary>
-    /// ¸Ä±äÒôĞ§ÉùÒô´óĞ¡
+    /// æ”¹å˜éŸ³æ•ˆå£°éŸ³å¤§å°
     /// </summary>
-    /// <param name="volumeValue">ÒôÁ¿</param>
+    /// <param name="volumeValue">éŸ³é‡</param>
     public void ChangeSoundValue(float volumeValue)
     {
         soundVolume = volumeValue;
@@ -125,9 +157,9 @@ public class AudioManager : BaseManager<AudioManager>
         }
     }
     /// <summary>
-    /// ÒôĞ§Í£Ö¹
+    /// éŸ³æ•ˆåœæ­¢
     /// </summary>
-    /// <param name="source">ÒôĞ§</param>
+    /// <param name="source">éŸ³æ•ˆ</param>
     public void StopSound(AudioSource source)
     {
         if(soundList.Contains(source))

@@ -10,13 +10,13 @@ using DG.Tweening;
 public class MainUI : UIBase
 {
     [Header("————各系统————")]
-    public CanvasGroup ShopUI;//商店界面
+    //public CanvasGroup ShopUI;//商店界面
 
-    public CanvasGroup NCP_Manager_UI;//动物管理
+    //public CanvasGroup NCP_Manager_UI;//动物管理
     //public CanvasGroup Plant_Manage_UI;//植物管理
 
-    public CanvasGroup WareHouse_UI;//仓库
-    public CanvasGroup DiningHall_UI;//食堂
+    //public CanvasGroup WareHouse_UI;//仓库
+    //public CanvasGroup DiningHall_UI;//食堂
     public CanvasGroup Timer_UI;//计时器二级界面
 
     public GameObject Phone_UI;
@@ -65,12 +65,14 @@ public class MainUI : UIBase
     }
     private void InitClick()
     {
-        Phone_Button.onClick.AddListener(Open_Phone_UI);//手机界面
+
         //Shop_Button.onClick.AddListener(Open_Shop_UI);//商店
-        NPCManager_Button.onClick.AddListener(Open_NCP_Manager_UI);//动物管理
-        DiningHall_Button.onClick.AddListener(Open_DiningHall_UI);//食堂
-        WareHouse_Button.onClick.AddListener(Open_WareHouse_UI);//仓库
+        //NPCManager_Button.onClick.AddListener(Open_NCP_Manager_UI);//动物管理
+        //DiningHall_Button.onClick.AddListener(Open_DiningHall_UI);//食堂
+        //WareHouse_Button.onClick.AddListener(Open_WareHouse_UI);//仓库
         //PlantManager_Button.onClick.AddListener(Open_Plant_Manage_UI);//植物管理
+
+        Phone_Button.onClick.AddListener(Open_Phone_UI);//手机界面
         Timer_Button.onClick.AddListener(Open_Timer_UI);//计时器
 
         Player_IDCard_Button.onClick.AddListener(Open_Player_IDCard);//打开玩家名片
@@ -229,10 +231,10 @@ public class MainUI : UIBase
     //{
     //    OpenUI(Player_ID_Card_UI);
     //}
-    public void Open_NCP_Manager_UI()
-    {
-        OpenUI(NCP_Manager_UI);
-    }
+    //public void Open_NCP_Manager_UI()
+    //{
+    //    OpenUI(NCP_Manager_UI);
+    //}
     //public void Open_Calendar_UI()
     //{
     //    OpenUI(Calendar_UI);
@@ -249,14 +251,14 @@ public class MainUI : UIBase
     {
         UIManager.GetInstance().ShowOldUI<MailUI>("——Mail——");
     }
-    public void Open_WareHouse_UI()
-    {
-        OpenUI(WareHouse_UI);
-    }
-    public void Open_DiningHall_UI()
-    {
-        OpenUI(DiningHall_UI);
-    }
+    //public void Open_WareHouse_UI()
+    //{
+    //    OpenUI(WareHouse_UI);
+    //}
+    //public void Open_DiningHall_UI()
+    //{
+    //    OpenUI(DiningHall_UI);
+    //}
     public void QuitGame()
     {
         Debug.Log("Quit");
