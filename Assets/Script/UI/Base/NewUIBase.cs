@@ -6,16 +6,16 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 /// <summary>
-/// ĞÂµÄUI»ùÀà
-/// °ïÖú¿ª·¢ÕßÍ¨¹ıÔÚ´úÂëÖĞ¿ìËÙ»ñÈ¡¿Ø¼ş½Å±¾
-/// ·½±ãÔÚ×ÓÀàÖĞ´¦ÀíÂß¼­
-/// ½ÚÔ¼ÕÒµ½¿Ø¼şµÄÊ±¼ä
+/// æ–°çš„UIåŸºç±»
+/// å¸®åŠ©å¼€å‘è€…é€šè¿‡åœ¨ä»£ç ä¸­å¿«é€Ÿè·å–æ§ä»¶è„šæœ¬
+/// æ–¹ä¾¿åœ¨å­ç±»ä¸­å¤„ç†é€»è¾‘
+/// èŠ‚çº¦æ‰¾åˆ°æ§ä»¶çš„æ—¶é—´
 /// </summary>
 public class NewUIBase : MonoBehaviour
 {
-    //Í¨¹ıÀïÊ½½»»»Ô­Ôò£¬ÓÃ×Öµä´æ´¢ËùÓĞ¿Ø¼ş
-    //ÀïÊ½½»»»Ô­Ôò£º¿ÉÌæ»»ĞÔ£º×ÓÀà¶ÔÏóÓ¦¸ÃÄÜ¹»Ìæ»»¸¸Àà¶ÔÏó¶ø²»»áÓ°Ïì³ÌĞòµÄÕıÈ·ĞÔ¡£
-    //ĞĞÎªÒ»ÖÂĞÔ£º×ÓÀàÓ¦¸Ã×ñÑ­¸¸ÀàµÄÆõÔ¼£¬¼´×ÓÀàÓ¦¸ÃÊµÏÖ¸¸Àà¶¨ÒåµÄĞĞÎª£¬¶ø²»ÄÜ¸Ä±ä¸¸ÀàµÄĞĞÎª¡£
+    //é€šè¿‡é‡Œå¼äº¤æ¢åŸåˆ™ï¼Œç”¨å­—å…¸å­˜å‚¨æ‰€æœ‰æ§ä»¶
+    //é‡Œå¼äº¤æ¢åŸåˆ™ï¼šå¯æ›¿æ¢æ€§ï¼šå­ç±»å¯¹è±¡åº”è¯¥èƒ½å¤Ÿæ›¿æ¢çˆ¶ç±»å¯¹è±¡è€Œä¸ä¼šå½±å“ç¨‹åºçš„æ­£ç¡®æ€§ã€‚
+    //è¡Œä¸ºä¸€è‡´æ€§ï¼šå­ç±»åº”è¯¥éµå¾ªçˆ¶ç±»çš„å¥‘çº¦ï¼Œå³å­ç±»åº”è¯¥å®ç°çˆ¶ç±»å®šä¹‰çš„è¡Œä¸ºï¼Œè€Œä¸èƒ½æ”¹å˜çˆ¶ç±»çš„è¡Œä¸ºã€‚
     private Dictionary<string,List<UIBehaviour>>ControlDic=new Dictionary<string, List<UIBehaviour>>();
 
     protected Button Current_Button;
@@ -27,29 +27,29 @@ public class NewUIBase : MonoBehaviour
     }
     protected virtual void Update()
     {
-        // ¼àÌı Esc ¼ü
+        // ç›‘å¬ Esc é”®
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             OnEscapePressed();
         }
     }
     /// <summary>
-    /// µ± Esc ¼ü±»°´ÏÂÊ±µ÷ÓÃ£¬Ä¬ÈÏÒş²Ø×ÔÉí
-    /// ×ÓÀà¿ÉÖØĞ´ÒÔÊµÏÖ×Ô¶¨Òå¹Ø±ÕÂß¼­£¨Èç²¥·Å¶¯»­ºó¹Ø±Õ£©
+    /// å½“ Esc é”®è¢«æŒ‰ä¸‹æ—¶è°ƒç”¨ï¼Œé»˜è®¤éšè—è‡ªèº«
+    /// å­ç±»å¯é‡å†™ä»¥å®ç°è‡ªå®šä¹‰å…³é—­é€»è¾‘ï¼ˆå¦‚æ’­æ”¾åŠ¨ç”»åå…³é—­ï¼‰
     /// </summary>
     protected virtual void OnEscapePressed()
     {
         UIManager.GetInstance().HideUI(gameObject.name);
     }
     /// <summary>
-    /// ÏÔÊ¾¿Ø¼ş
+    /// æ˜¾ç¤ºæ§ä»¶
     /// </summary>
     public virtual void ShowMe()
     {
 
     }
     /// <summary>
-    /// Òş²Ø¿Ø¼ş
+    /// éšè—æ§ä»¶
     /// </summary>
     public virtual void HideMe()
     {
@@ -60,10 +60,10 @@ public class NewUIBase : MonoBehaviour
         
     }
     /// <summary>
-    /// µÃµ½¶ÔÓ¦Ãû×ÖµÄ¶ÔÓ¦¿Ø¼ş½Å±¾
+    /// å¾—åˆ°å¯¹åº”åå­—çš„å¯¹åº”æ§ä»¶è„šæœ¬
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    /// <param name="Controlname">Ãû×Ö</param>
+    /// <param name="Controlname">åå­—</param>
     /// <returns></returns>
     protected T GetControl<T>(string Controlname) where T : UIBehaviour
     {
@@ -80,18 +80,18 @@ public class NewUIBase : MonoBehaviour
         return null;
     }
     /// <summary>
-    /// µÃµ½¶ÔÓ¦Ãû×ÖµÄ¶ÔÓ¦¿Ø¼ş£¨ÔÚÕâÀïÊÇButton/ImageµÈ£©
+    /// å¾—åˆ°å¯¹åº”åå­—çš„å¯¹åº”æ§ä»¶ï¼ˆåœ¨è¿™é‡Œæ˜¯Button/Imageç­‰ï¼‰
     /// </summary>
-    /// <typeparam name="T">Àà</typeparam>
+    /// <typeparam name="T">ç±»</typeparam>
     private void FindChildrenControl<T>() where T : UIBehaviour
     {
-        //µÃµ½ËùÓĞ×Ó¿Ø¼ş
+        //å¾—åˆ°æ‰€æœ‰å­æ§ä»¶
         T[] Controls=this.GetComponentsInChildren<T>();
-        //±éÀúËùÓĞ×Ó¿Ø¼ş
+        //éå†æ‰€æœ‰å­æ§ä»¶
         for(int i=0;i<Controls.Length;i++)
         {
             string ObjName =Controls[i].gameObject.name;
-            if(ControlDic.ContainsKey(ObjName))//Èç¹û×ÖµäÖĞ°üº¬Õâ¸ö¿Ø¼şµÄÃû×Ö
+            if(ControlDic.ContainsKey(ObjName))//å¦‚æœå­—å…¸ä¸­åŒ…å«è¿™ä¸ªæ§ä»¶çš„åå­—
             {
                 //
                 ControlDic[ObjName].Add(Controls[i]);
@@ -100,7 +100,7 @@ public class NewUIBase : MonoBehaviour
             {
                 ControlDic.Add(ObjName,new List<UIBehaviour>() { Controls[i] });
             }
-            //Èç¹û»ñÈ¡µÄ¿Ø¼şÊÇButton£¬ÄÇÃ´¾ÍÌí¼Óµã»÷ÊÂ¼ş
+            //å¦‚æœè·å–çš„æ§ä»¶æ˜¯Buttonï¼Œé‚£ä¹ˆå°±æ·»åŠ ç‚¹å‡»äº‹ä»¶
             if(Controls[i] is Button)
             {
                 Button button = Controls[i] as Button;
@@ -113,11 +113,11 @@ public class NewUIBase : MonoBehaviour
     }
 
     /// <summary>
-    /// ±»Ñ¡ÖĞµÄ°´Å¥×ª»»ÎªÑ¡ÖĞ×´Ì¬
+    /// è¢«é€‰ä¸­çš„æŒ‰é’®è½¬æ¢ä¸ºé€‰ä¸­çŠ¶æ€
     /// </summary>
-    /// <param name="ButtonGroup">°´Å¥ËùÊôµÄ°´Å¥×é</param>
-    /// <param name="Clicked_Image">°´Å¥±»µã»÷ºóµÄÍ¼Æ¬</param>
-    /// <param name="Start_Image">°´Å¥µÄ³õÊ¼Í¼Æ¬</param>
+    /// <param name="ButtonGroup">æŒ‰é’®æ‰€å±çš„æŒ‰é’®ç»„</param>
+    /// <param name="Clicked_Image">æŒ‰é’®è¢«ç‚¹å‡»åçš„å›¾ç‰‡</param>
+    /// <param name="Start_Image">æŒ‰é’®çš„åˆå§‹å›¾ç‰‡</param>
     protected void Button_Image_Change(GameObject ButtonGroup, Sprite Clicked_Image, Sprite Start_Image)
     {
         for (int i = 0; i < ButtonGroup.transform.childCount; i++)

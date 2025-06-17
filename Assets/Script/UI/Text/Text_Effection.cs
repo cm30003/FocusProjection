@@ -2,58 +2,55 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using UnityEngine.XR;
 
 public enum EffectType
 {
-    typeWriter=0,//´ò×Ö»ú
-    Floating=1,//¸¡¶¯
-    Italic=2,//Ğ±Ìå
+    typeWriter=0,//æ‰“å­—æœº
+    Floating=1,//æµ®åŠ¨
+    Italic=2,//æ–œä½“
 }
-
-
-//RequireComponent£º±£Ö¤¶ÔÏóÓµÓĞ¸Ã×é¼ş
-//DisallowMultipleComponent£º±£Ö¤¶ÔÏó²»´æÔÚ¶à¸ö¸Ã×é¼ş
+//RequireComponentï¼šä¿è¯å¯¹è±¡æ‹¥æœ‰è¯¥ç»„ä»¶
+//DisallowMultipleComponentï¼šä¿è¯å¯¹è±¡ä¸å­˜åœ¨å¤šä¸ªè¯¥ç»„ä»¶
 [RequireComponent(typeof(TextMeshProUGUI)), DisallowMultipleComponent]
 public class Text_Effection : MonoBehaviour
 {
     public TMP_Text m_text;
-    [Range(0, 1)] public float speed = 1;//´ò×Ö»úÏÔÊ¾ËÙ¶È
+    [Range(0, 1)] public float speed = 1;//æ‰“å­—æœºæ˜¾ç¤ºé€Ÿåº¦
     [SerializeField]
     private EffectType effectType = EffectType.typeWriter;
-    private int characterCount = 0;//Text×Ü×Ö·ûÊı
+    private int characterCount = 0;//Textæ€»å­—ç¬¦æ•°
 
 
-    [Header("¸¡¶¯")]
+    [Header("æµ®åŠ¨")]
     [SerializeField, Range(1, 5)]
-    private float frequence = 1.0f;//¸¡¶¯ÆµÂÊ
-    [SerializeField, Range(1, 5), Tooltip("¸¡¶¯·¶Î§")]
-    private float floatRange = 1.0f;//¸¡¶¯·¶Î§
+    private float frequence = 1.0f;//æµ®åŠ¨é¢‘ç‡
+    [SerializeField, Range(1, 5), Tooltip("æµ®åŠ¨èŒƒå›´")]
+    private float floatRange = 1.0f;//æµ®åŠ¨èŒƒå›´
 
-    [Header("Ğ±ÌåĞ§¹ûµÄÏà¹ØÉèÖÃ"), Space]
-    [SerializeField, Range(0, 60), Tooltip("Ğ±Ìå½Ç¶ÈX")]
+    [Header("æ–œä½“æ•ˆæœçš„ç›¸å…³è®¾ç½®"), Space]
+    [SerializeField, Range(0, 60), Tooltip("æ–œä½“è§’åº¦X")]
     private float slopXAngle = 0f;
-    [SerializeField,Range(0,45),Tooltip("Ğ±Ìå½Ç¶ÈY")]
+    [SerializeField,Range(0,45),Tooltip("æ–œä½“è§’åº¦Y")]
     private float slopYAngle = 0f;
-    [SerializeField,Tooltip("¹´Ñ¡¸ÃÑ¡Ïî£¬Ê¹×ÖÌåÏòÁíÒ»¸ö·½ÏòÆ«×ª")]
+    [SerializeField,Tooltip("å‹¾é€‰è¯¥é€‰é¡¹ï¼Œä½¿å­—ä½“å‘å¦ä¸€ä¸ªæ–¹å‘åè½¬")]
     private bool reverseDirection = false;
-    private Vector3[] originalVertices;//TextµÄÔ­Ê¼¶¥µãĞÅÏ¢
+    private Vector3[] originalVertices;//Textçš„åŸå§‹é¡¶ç‚¹ä¿¡æ¯
     private void Awake()
     {
-        gameObject.TryGetComponent<TMP_Text>(out m_text);//»ñÈ¡×é¼ş²¢Îªm_text¸³Öµ
+        gameObject.TryGetComponent<TMP_Text>(out m_text);//è·å–ç»„ä»¶å¹¶ä¸ºm_textèµ‹å€¼
     }
     private void Start()
     {
-        if(m_text==null)//Èç¹ûm_textÎª¿Õ£¬Ôò´´½¨Ò»¸öTMP_Text×é¼ş£¬²¢Îªm_text¸³Öµ
+        if(m_text==null)//å¦‚æœm_textä¸ºç©ºï¼Œåˆ™åˆ›å»ºä¸€ä¸ªTMP_Textç»„ä»¶ï¼Œå¹¶ä¸ºm_textèµ‹å€¼
         {
             gameObject.AddComponent<TMP_Text>();
             gameObject.TryGetComponent<TMP_Text>(out m_text);
         }
-        //Ç¿ÖÆ¸üĞÂÍø¸ñÊı¾İ
+        //å¼ºåˆ¶æ›´æ–°ç½‘æ ¼æ•°æ®
         m_text.ForceMeshUpdate();
-        //»ñÈ¡Text×Ü×Ö·ûÊıÁ¿
+        //è·å–Textæ€»å­—ç¬¦æ•°é‡
         characterCount=m_text.textInfo.characterCount;
-        //¿½±´Ô­Ê¼¶¥µãĞÅÏ¢
+        //æ‹·è´åŸå§‹é¡¶ç‚¹ä¿¡æ¯
         originalVertices=m_text.textInfo.meshInfo[0].vertices;
 
         StartCoroutine(MainBody());
@@ -62,30 +59,30 @@ public class Text_Effection : MonoBehaviour
     {
         while(true) 
         {
-            //Ç¿ÖÆ¸üĞÂÍø¸ñÊı¾İ
+            //å¼ºåˆ¶æ›´æ–°ç½‘æ ¼æ•°æ®
             m_text.ForceMeshUpdate();
-            //´æ´¢ÒªÏÔÊ¾µÄÎÄ×Ö¼°ÆäÍø¸ñĞÅÏ¢
+            //å­˜å‚¨è¦æ˜¾ç¤ºçš„æ–‡å­—åŠå…¶ç½‘æ ¼ä¿¡æ¯
             TMP_TextInfo textInfo = m_text.textInfo;
-            //¿½±´Íø¸ñµÄ¶¥µãÊı¾İ
+            //æ‹·è´ç½‘æ ¼çš„é¡¶ç‚¹æ•°æ®
             TMP_MeshInfo[] textInfoCopy = textInfo.CopyMeshInfoVertexData();
-            //×Ö·û×ÜÊıÁ¿
+            //å­—ç¬¦æ€»æ•°é‡
             characterCount = textInfo.characterCount;
-            for (int i = 0; i < characterCount; i++)//»ñÈ¡Ã¿¸öÎÄ×ÖµÄ¶¥µãĞÅÏ¢£¬²¢×öÏàÓ¦ĞŞ¸Ä
+            for (int i = 0; i < characterCount; i++)//è·å–æ¯ä¸ªæ–‡å­—çš„é¡¶ç‚¹ä¿¡æ¯ï¼Œå¹¶åšç›¸åº”ä¿®æ”¹
             {
-                //´æ´¢Ã¿¸öÎÄ×ÖµÄÏêÏ¸ĞÅÏ¢
+                //å­˜å‚¨æ¯ä¸ªæ–‡å­—çš„è¯¦ç»†ä¿¡æ¯
                 TMP_CharacterInfo characterInfo = textInfo.characterInfo[i];
-                //»ñÈ¡µ±Ç°½ÇÉ«Ê¹ÓÃµÄ²ÄÖÊË÷Òı
+                //è·å–å½“å‰è§’è‰²ä½¿ç”¨çš„æè´¨ç´¢å¼•
                 int materialIndex = textInfo.characterInfo[i].materialReferenceIndex;
 
-                //»ñÈ¡´ËÎÄ±¾ÄØÔªËØÊ¹ÓÃµÄµÚÒ»¸ö¶¥µãµÄË÷Òı
+                //è·å–æ­¤æ–‡æœ¬å‘¢å…ƒç´ ä½¿ç”¨çš„ç¬¬ä¸€ä¸ªé¡¶ç‚¹çš„ç´¢å¼•
                 int vertexIndex = textInfo.characterInfo[i].vertexIndex;
-                //»ñÈ¡ÎÄ±¾ÔªËØÊ¹ÓÃµÄÍø¸ñµÄ¶¥µãÑÕÉ«
+                //è·å–æ–‡æœ¬å…ƒç´ ä½¿ç”¨çš„ç½‘æ ¼çš„é¡¶ç‚¹é¢œè‰²
                 Color32[] vertexColor = textInfo.meshInfo[characterInfo.materialReferenceIndex].colors32;
-                //vertices: Êı×é£¬°üº¬ÎÄ±¾ÖĞËùÓĞ×Ö·ûµÄ¶¥µãÎ»ÖÃĞÅÏ¢¡£
-                //Ã¿¸ö×Ö·ûÍ¨³£ÓĞËÄ¸ö¶¥µã£¨×óÏÂ¡¢×óÉÏ¡¢ÓÒÉÏ¡¢ÓÒÏÂ£©£¬ÕâĞ©¶¥µãÓÃÓÚ¶¨Òå×Ö·ûµÄ¼¸ºÎĞÎ×´ºÍÎ»ÖÃ¡£
+                //vertices: æ•°ç»„ï¼ŒåŒ…å«æ–‡æœ¬ä¸­æ‰€æœ‰å­—ç¬¦çš„é¡¶ç‚¹ä½ç½®ä¿¡æ¯ã€‚
+                //æ¯ä¸ªå­—ç¬¦é€šå¸¸æœ‰å››ä¸ªé¡¶ç‚¹ï¼ˆå·¦ä¸‹ã€å·¦ä¸Šã€å³ä¸Šã€å³ä¸‹ï¼‰ï¼Œè¿™äº›é¡¶ç‚¹ç”¨äºå®šä¹‰å­—ç¬¦çš„å‡ ä½•å½¢çŠ¶å’Œä½ç½®ã€‚
                 Vector3[] vertices = textInfo.meshInfo[materialIndex].vertices;
                 Vector3[] Copyvertices = textInfoCopy[materialIndex].vertices;
-                //Ìø¹ı²»¿É¼ûµÄ×Ö·û£¬µ±×Ö·û²»¿É¼ûÊ±£¬²»Ö´ĞĞÈÎºÎ²Ù×÷
+                //è·³è¿‡ä¸å¯è§çš„å­—ç¬¦ï¼Œå½“å­—ç¬¦ä¸å¯è§æ—¶ï¼Œä¸æ‰§è¡Œä»»ä½•æ“ä½œ
                 if(!characterInfo.isVisible)
                 {
                     continue;
@@ -112,31 +109,31 @@ public class Text_Effection : MonoBehaviour
             {
                 TMP_MeshInfo meshInfo = textInfo.meshInfo[i];
                 meshInfo.mesh.vertices = meshInfo.vertices;
-                //¸üĞÂ¼¯ºÏÍø¸ñÊı¾İ
+                //æ›´æ–°é›†åˆç½‘æ ¼æ•°æ®
                 m_text.UpdateGeometry(meshInfo.mesh, i);
             }
-            //¸üĞÂ¶¥µãÊı¾İ
+            //æ›´æ–°é¡¶ç‚¹æ•°æ®
             m_text.UpdateVertexData(TMP_VertexDataUpdateFlags.Colors32);
             yield return null;
         }
     }
-    private IEnumerator TypeWriter()//´ò×Ö»úÎÄ×ÖÏÔÊ¾Ğ§¹û
+    private IEnumerator TypeWriter()//æ‰“å­—æœºæ–‡å­—æ˜¾ç¤ºæ•ˆæœ
     {
-        m_text.ForceMeshUpdate();//¸üĞÂÎÄ×ÖMesh
-        TMP_TextInfo textInfo = m_text.textInfo;//»ñÈ¡ÎÄ×ÖĞÅÏ¢
-        int TotalNum=textInfo.characterCount;//»ñÈ¡ÎÄ±¾¶ÔÏóÖĞµÄÎÄ×ÖÊıÁ¿
-        bool compelete = false;//ÊÇ·ñ´òÓ¡Íê³É
-        int currentNum = 0;//µ±Ç°ÒÑÏÔÊ¾µÄÎÄ×ÖÊıÁ¿
-        //ÒÔÏÂÎª´ò×Ö»úÂß¼­
-        while (!compelete)//µ±ÎÄ±¾Î´´òÓ¡Íê³ÉÊ±
+        m_text.ForceMeshUpdate();//æ›´æ–°æ–‡å­—Mesh
+        TMP_TextInfo textInfo = m_text.textInfo;//è·å–æ–‡å­—ä¿¡æ¯
+        int TotalNum=textInfo.characterCount;//è·å–æ–‡æœ¬å¯¹è±¡ä¸­çš„æ–‡å­—æ•°é‡
+        bool compelete = false;//æ˜¯å¦æ‰“å°å®Œæˆ
+        int currentNum = 0;//å½“å‰å·²æ˜¾ç¤ºçš„æ–‡å­—æ•°é‡
+        //ä»¥ä¸‹ä¸ºæ‰“å­—æœºé€»è¾‘
+        while (!compelete)//å½“æ–‡æœ¬æœªæ‰“å°å®Œæˆæ—¶
         {
-            if(currentNum>TotalNum)//µ±ÒÑÏÔÊ¾µÄÎÄ×ÖÊıÁ¿´óÓÚ×ÜÎÄ×ÖÊıÁ¿Ê±
+            if(currentNum>TotalNum)//å½“å·²æ˜¾ç¤ºçš„æ–‡å­—æ•°é‡å¤§äºæ€»æ–‡å­—æ•°é‡æ—¶
             {
                 currentNum=TotalNum;
                 yield return new WaitForSeconds(1);
-                compelete = true;//Íê³É´òÓ¡£¬Ìø³öÑ­»·
+                compelete = true;//å®Œæˆæ‰“å°ï¼Œè·³å‡ºå¾ªç¯
             }
-            //maxVisibleCharacters:¿ØÖÆÎÄ±¾ÖĞ¿É¼û×Ö·ûµÄ×î´óÊıÁ¿
+            //maxVisibleCharacters:æ§åˆ¶æ–‡æœ¬ä¸­å¯è§å­—ç¬¦çš„æœ€å¤§æ•°é‡
             m_text.maxVisibleCharacters = currentNum;
             currentNum += 1;
             yield return new WaitForSeconds(speed);
@@ -144,31 +141,31 @@ public class Text_Effection : MonoBehaviour
         yield return null;
     }
     /// <summary>
-    /// ¸¡¶¯ÎÄ×Ö
+    /// æµ®åŠ¨æ–‡å­—
     /// </summary>
-    /// <param name="VertexIndex">¶¥µãË÷ÒıÖµ</param>
-    /// <param name="vertices">´æ´¢¶¥µãµÄÊı×é</param>
+    /// <param name="VertexIndex">é¡¶ç‚¹ç´¢å¼•å€¼</param>
+    /// <param name="vertices">å­˜å‚¨é¡¶ç‚¹çš„æ•°ç»„</param>
     private void Floating(int VertexIndex,ref Vector3[] vertices)
     {
-        for(int i=0;i<4;i++)//Ã¿¸ö×ÖÌåÍø¸ñÖ»ÓĞËÄ¸ö¶¥µã
+        for(int i=0;i<4;i++)//æ¯ä¸ªå­—ä½“ç½‘æ ¼åªæœ‰å››ä¸ªé¡¶ç‚¹
         {
-            Vector3 originalValue= vertices[VertexIndex+i];//´æ´¢ÎÄ×Öµ±Ç°µÄ¶¥µãĞÅÏ¢
-            //Ê¹ÓÃÈı½Çº¯ÊıÊµÏÖ¸¡¶¯
-            //Mathf.PI ÊÇ Unity ÖĞ Mathf ÀàµÄÒ»¸ö¾²Ì¬³£Á¿£¬±íÊ¾Ô²ÖÜÂÊ ¦Ğ µÄÖµ¡£
+            Vector3 originalValue= vertices[VertexIndex+i];//å­˜å‚¨æ–‡å­—å½“å‰çš„é¡¶ç‚¹ä¿¡æ¯
+            //ä½¿ç”¨ä¸‰è§’å‡½æ•°å®ç°æµ®åŠ¨
+            //Mathf.PI æ˜¯ Unity ä¸­ Mathf ç±»çš„ä¸€ä¸ªé™æ€å¸¸é‡ï¼Œè¡¨ç¤ºåœ†å‘¨ç‡ Ï€ çš„å€¼ã€‚
             float VerticesYPosition = Mathf.Sin(Time.time*frequence*Mathf.PI+originalValue.x)*floatRange;
             vertices[VertexIndex+i]=originalValue+new Vector3(0,VerticesYPosition,0);
         }
     }
     /// <summary>
-    /// Ğ±ÌåÎÄ×Ö
+    /// æ–œä½“æ–‡å­—
     /// </summary>
-    /// <param name="VertexIndex">¶¥µãË÷ÒıÖµ</param>
-    /// <param name="vertices">´æ´¢¶¥µãµÄÊı×é</param>
+    /// <param name="VertexIndex">é¡¶ç‚¹ç´¢å¼•å€¼</param>
+    /// <param name="vertices">å­˜å‚¨é¡¶ç‚¹çš„æ•°ç»„</param>
     public void Italic(int VertexIndex,Vector3[] vertices)
     {
         for(int i=0;i<4;i++)
         {
-            //½Ç¶È×ª»¡¶È
+            //è§’åº¦è½¬å¼§åº¦
             float XAngle = slopXAngle * (Mathf.PI/180);
             float YAngle = slopYAngle * (Mathf.PI/180);
 

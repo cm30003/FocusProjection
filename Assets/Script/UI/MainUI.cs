@@ -10,6 +10,7 @@ using DG.Tweening;
 public class MainUI : UIBase
 {
     [Header("————各系统————")]
+    #region  已过时的UI
     //public CanvasGroup ShopUI;//商店界面
 
     //public CanvasGroup NCP_Manager_UI;//动物管理
@@ -17,13 +18,14 @@ public class MainUI : UIBase
 
     //public CanvasGroup WareHouse_UI;//仓库
     //public CanvasGroup DiningHall_UI;//食堂
-    public CanvasGroup Timer_UI;//计时器二级界面
 
-    public GameObject Phone_UI;
     //public CanvasGroup Player_ID_Card_UI;//玩家名片
     //public CanvasGroup System_Menue_UI;//系统菜单
     //public CanvasGroup Mail_UI;//邮件
     //public CanvasGroup Calendar_UI;//日历
+    #endregion
+    public CanvasGroup Timer_UI;//计时器二级界面
+    public GameObject Phone_UI;//手机UI界面
     [Header("————底部工具栏————")]
     public Button Quit_Button;//退出
     public Button fullscreen_Button;//全屏
@@ -63,15 +65,21 @@ public class MainUI : UIBase
         }
         InitClick();
     }
+    /// <summary>
+    /// 按钮点击事件
+    /// </summary>
     private void InitClick()
     {
-
+        #region 已过时的按钮点击事件
+        //System_Menue_Button.onClick.AddListener(Open_System_Menue_UI);//打开系统菜单
+        //Mail_Button.onClick.AddListener(Open_Mail_UI);//邮件
+        //Calendar_Button.onClick.AddListener(Open_Calendar_UI);//日历
         //Shop_Button.onClick.AddListener(Open_Shop_UI);//商店
         //NPCManager_Button.onClick.AddListener(Open_NCP_Manager_UI);//动物管理
         //DiningHall_Button.onClick.AddListener(Open_DiningHall_UI);//食堂
         //WareHouse_Button.onClick.AddListener(Open_WareHouse_UI);//仓库
         //PlantManager_Button.onClick.AddListener(Open_Plant_Manage_UI);//植物管理
-
+        #endregion
         Phone_Button.onClick.AddListener(Open_Phone_UI);//手机界面
         Timer_Button.onClick.AddListener(Open_Timer_UI);//计时器
 
@@ -79,17 +87,13 @@ public class MainUI : UIBase
         Quit_Button.onClick.AddListener(QuitGame);//退出
 
         Hide_UI_Button.onClick.AddListener(Hide_Main_UI);//隐藏主UI
-
-        //System_Menue_Button.onClick.AddListener(Open_System_Menue_UI);//打开系统菜单
-        //Mail_Button.onClick.AddListener(Open_Mail_UI);//邮件
-        //Calendar_Button.onClick.AddListener(Open_Calendar_UI);//日历
+        fullscreen_Button.onClick.AddListener(FullScreen);//全屏
 
         EventCenter.GetInstance().AddEventListener("Info_Update", Info_Update);//信息更新事件
         Info_Update();
 
         //Plan_Panel_Button();
     }
-
     /// <summary>
     /// 更新主UI中的玩家信息
     /// </summary>
@@ -103,81 +107,81 @@ public class MainUI : UIBase
     /// <summary>
     /// 为计划板添加按钮事件-输入文本框选择事件
     /// </summary>
-    private void Plan_Panel_Button()
-    {
-        //获取完成按钮
-        Button[] Finish_buttons = PlanText_Group.GetComponentsInChildren<Button>();
-        //获取输入文本框
-        TMP_InputField[] inputField = PlanText_Group.GetComponentsInChildren<TMP_InputField>();
+    //private void Plan_Panel_Button()
+    //{
+    //    //获取完成按钮
+    //    Button[] Finish_buttons = PlanText_Group.GetComponentsInChildren<Button>();
+    //    //获取输入文本框
+    //    TMP_InputField[] inputField = PlanText_Group.GetComponentsInChildren<TMP_InputField>();
 
-        for (int i = 0; i < Finish_buttons.Length; i++)
-        {
-            Button button = Finish_buttons[i];
-            TMP_InputField field = inputField[i];
-            field.onSelect.AddListener((text) => Open_Choosen_Bar(field));
-            button.onClick.AddListener(() => Finish_Button(ref field));
-        }
-    }
-    /// <summary>
-    /// 完成项目事件,当完成该项目，则将其保存到本地
-    /// </summary>
-    /// <param name="Option">对应的项目</param>
-    private void Finish_Button(ref TMP_InputField Option)
-    {
-        mission_ADay.Day = DateTime.Now.ToString("yyyy/M/d");//存储当前日期
-        if (Option != null && Option.text != "")//option变量不为空，且存在文本
-        {
-            //当字典中存在此键/日期时，说明此前曾经存储过同一天的内容，更新字典
-            if (mission_ADay.ADay_Options_Dic.ContainsKey(mission_ADay.Day))
-            {
-                mission_ADay.Options = mission_ADay.ADay_Options_Dic[mission_ADay.Day] = mission_ADay.Options;
-                mission_ADay.Options.Add(Option.text);
-            }
-            else//不存在此键/日期时，添加此键/日期及其相对应的完成项目列表
-            {
-                mission_ADay.Options.Clear();
-                mission_ADay.Options.Add(Option.text);
-                mission_ADay.ADay_Options_Dic.Add(mission_ADay.Day, mission_ADay.Options);
-            }
-        }
-        //存储今日数据到本地
-        JsonManager.Instance.SaveData(mission_ADay, "ADay");
-        Option.text = "";
-    }
-    /// <summary>
-    /// 打开当前计划框
-    /// </summary>
-    /// <param name="text"></param>
-    private void Open_Choosen_Bar(TMP_InputField text)
-    {
-        //确认计划板当前是否打开，并判断输入框是否为空
-        if(Choose_Bar.transform.localScale==Vector3.zero&&text.text!="")
-        {
-            //创建占位符
-            GameObject placeHolder = Instantiate(PlaceHolder);
+    //    for (int i = 0; i < Finish_buttons.Length; i++)
+    //    {
+    //        Button button = Finish_buttons[i];
+    //        TMP_InputField field = inputField[i];
+    //        field.onSelect.AddListener((text) => Open_Choosen_Bar(field));
+    //        button.onClick.AddListener(() => Finish_Button(ref field));
+    //    }
+    //}
+    ///// <summary>
+    ///// 完成项目事件,当完成该项目，则将其保存到本地
+    ///// </summary>
+    ///// <param name="Option">对应的项目</param>
+    //private void Finish_Button(ref TMP_InputField Option)
+    //{
+    //    mission_ADay.Day = DateTime.Now.ToString("yyyy/M/d");//存储当前日期
+    //    if (Option != null && Option.text != "")//option变量不为空，且存在文本
+    //    {
+    //        //当字典中存在此键/日期时，说明此前曾经存储过同一天的内容，更新字典
+    //        if (mission_ADay.ADay_Options_Dic.ContainsKey(mission_ADay.Day))
+    //        {
+    //            mission_ADay.Options = mission_ADay.ADay_Options_Dic[mission_ADay.Day] = mission_ADay.Options;
+    //            mission_ADay.Options.Add(Option.text);
+    //        }
+    //        else//不存在此键/日期时，添加此键/日期及其相对应的完成项目列表
+    //        {
+    //            mission_ADay.Options.Clear();
+    //            mission_ADay.Options.Add(Option.text);
+    //            mission_ADay.ADay_Options_Dic.Add(mission_ADay.Day, mission_ADay.Options);
+    //        }
+    //    }
+    //    //存储今日数据到本地
+    //    JsonManager.Instance.SaveData(mission_ADay, "ADay");
+    //    Option.text = "";
+    //}
+    ///// <summary>
+    ///// 打开当前计划框
+    ///// </summary>
+    ///// <param name="text"></param>
+    //private void Open_Choosen_Bar(TMP_InputField text)
+    //{
+    //    //确认计划板当前是否打开，并判断输入框是否为空
+    //    if(Choose_Bar.transform.localScale==Vector3.zero&&text.text!="")
+    //    {
+    //        //创建占位符
+    //        GameObject placeHolder = Instantiate(PlaceHolder);
 
-            placeHolder.transform.SetParent(PlanText_Group.transform);
+    //        placeHolder.transform.SetParent(PlanText_Group.transform);
 
-            placeHolder.transform.localRotation = Quaternion.Euler(0, 0, 0);
+    //        placeHolder.transform.localRotation = Quaternion.Euler(0, 0, 0);
 
-            placeHolder.transform.SetSiblingIndex(0);
+    //        placeHolder.transform.SetSiblingIndex(0);
 
-            text.transform.SetSiblingIndex(1);
+    //        text.transform.SetSiblingIndex(1);
 
-            Choose_Bar.transform.localScale = Vector3.one;
-            Choose_Bar.GetComponentInChildren<TextMeshProUGUI>().text = text.text;
-        } 
-    }
-    /// <summary>
-    /// 关闭当前计划框
-    /// </summary>
-    public void Close_Choosen_Bar()
-    {
-        Choose_Bar.transform.localScale = Vector3.zero;
+    //        Choose_Bar.transform.localScale = Vector3.one;
+    //        Choose_Bar.GetComponentInChildren<TextMeshProUGUI>().text = text.text;
+    //    } 
+    //}
+    ///// <summary>
+    ///// 关闭当前计划框
+    ///// </summary>
+    //public void Close_Choosen_Bar()
+    //{
+    //    Choose_Bar.transform.localScale = Vector3.zero;
 
-        GameObject placeHolder = PlanText_Group.transform.GetChild(0).gameObject;
-        Destroy(placeHolder);
-    }
+    //    GameObject placeHolder = PlanText_Group.transform.GetChild(0).gameObject;
+    //    Destroy(placeHolder);
+    //}
     #endregion 计划板相关
     #region 左上角玩家信息相关
     public void Player_Left_Up()//左上角玩家信息更新
@@ -222,11 +226,21 @@ public class MainUI : UIBase
     {
         OpenUI(Timer_UI);
     }
+    public void Open_Mail_UI()
+    {
+        UIManager.GetInstance().ShowOldUI<MailUI>("——Mail——");
+    }
+    private bool isBorderless = false;
+    public void FullScreen()
+    {
+        isBorderless = !isBorderless;
+        Screen.fullScreen = isBorderless;
+        Screen.SetResolution(Screen.currentResolution.width, Screen.currentResolution.height, isBorderless);
+    }
     //public void Open_Shop_UI()
     //{
     //    OpenUI(ShopUI);
     //}
-
     //public void Open_Player_ID_Card_UI()
     //{
     //    OpenUI(Player_ID_Card_UI);
@@ -247,10 +261,6 @@ public class MainUI : UIBase
     //{
     //    OpenUI(System_Menue_UI);
     //}
-    public void Open_Mail_UI()
-    {
-        UIManager.GetInstance().ShowOldUI<MailUI>("——Mail——");
-    }
     //public void Open_WareHouse_UI()
     //{
     //    OpenUI(WareHouse_UI);

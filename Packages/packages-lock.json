@@ -1,5 +1,13 @@
 {
   "dependencies": {
+    "com.coffee.ui-effect": {
+      "version": "file:D:/Unity/packages/UIEffect-5.9.2/UIEffect-5.9.2/Packages/src",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {
+        "com.unity.ugui": "1.0.0"
+      }
+    },
     "com.unity.2d.animation": {
       "version": "9.0.4",
       "depth": 1,

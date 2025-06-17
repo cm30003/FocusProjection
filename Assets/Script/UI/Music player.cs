@@ -22,11 +22,24 @@ public class Musicplayer : NewUIBase
     [SerializeField] private string folderPath = ""; // Resources 下的文件夹路径（可选）
     [Header("————数据————")]
     public int CurrentIndex = 0;
+
+    public float scrollSpeed = 50f; // 滚动速度
+    private RectTransform textRectTransform;
+    private RectTransform contentRectTransform;
+    private float textWidth;
     void Start()
     {
         LoadAudioClips(folderPath);
 
         Play();
+
+        //音乐名称滚动
+        textRectTransform = Music_Name.GetComponent<RectTransform>();
+        contentRectTransform = Music_Name.transform.parent.GetComponent<RectTransform>();
+        // 强制更新布局以获取正确宽度
+        LayoutRebuilder.ForceRebuildLayoutImmediate(contentRectTransform);
+        textWidth = textRectTransform.rect.width;
+        MonoManager.GetInstance().AddUpdateLisener(MusicName_Move);
         #region 调试用方法
         // 打印加载结果（调试用）
         //foreach (var clip in audioClips)
@@ -34,6 +47,21 @@ public class Musicplayer : NewUIBase
         //    Debug.Log("Loaded AudioClip: " + clip.name);
         //}
         #endregion
+    }
+    public void MusicName_Move()
+    {
+        // 向左移动
+        textRectTransform.anchoredPosition += Vector2.left * scrollSpeed * Time.deltaTime;
+
+        // 获取当前X坐标
+        float currentX = textRectTransform.anchoredPosition.x;
+
+        // 如果超出左边，则重置到右边
+        if (currentX + textWidth < -contentRectTransform.rect.width / 2)
+        {
+            float newX = textWidth - contentRectTransform.rect.width / 2;
+            textRectTransform.anchoredPosition = new Vector2(newX, textRectTransform.anchoredPosition.y);
+        }
     }
     #region 播放控制
     protected override void OnClick(string btnName, Button button)
@@ -127,7 +155,7 @@ public class Musicplayer : NewUIBase
     public void BKMusicInfo_SignIn_Once()
     {
         //音乐名称
-        Music_Name.text = "正在播放：" + "\n" + audioClips[CurrentIndex].name;
+        Music_Name.text =audioClips[CurrentIndex].name;
         //音乐总长度
         Music_TotalTime.text = Minutes_Transformer(AudioManager.GetInstance().BKMusic_TotalDuration);
     }
