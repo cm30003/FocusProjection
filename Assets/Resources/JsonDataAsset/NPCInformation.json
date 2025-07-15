@@ -22,5 +22,21 @@
     "Personality": "内敛",
     "Description": "这里是描述",
     "BirthDay": "2001.1.1"
+  },
+  {
+    "ID": 1004,
+    "Name": "NekoGG",
+    "Hobby": "刷尾巴毛",
+    "Personality": "阴沉",
+    "Description": "这里是描述",
+    "BirthDay": "2002.1.1"
+  },
+  {
+    "ID": 1005,
+    "Name": "NekoMM",
+    "Hobby": "刷已把毛",
+    "Personality": "快乐",
+    "Description": "这里是描述",
+    "BirthDay": "2002.1.1"
   }
 ]

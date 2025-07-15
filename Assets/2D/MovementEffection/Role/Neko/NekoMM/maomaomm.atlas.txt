@@ -1,0 +1,181 @@
+
+maomaomm.png
+size: 2509,1318
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+maomm_b_fashi1
+  rotate: true
+  xy: 2152, 599
+  size: 344, 355
+  orig: 344, 356
+  offset: 0, 1
+  index: -1
+maomm_b_fashi2
+  rotate: true
+  xy: 1415, 287
+  size: 347, 322
+  orig: 347, 322
+  offset: 0, 0
+  index: -1
+maomm_b_shenti
+  rotate: false
+  xy: 1739, 348
+  size: 326, 289
+  orig: 326, 308
+  offset: 0, 18
+  index: -1
+maomm_b_tou
+  rotate: false
+  xy: 808, 636
+  size: 801, 680
+  orig: 804, 680
+  offset: 0, 0
+  index: -1
+maomm_b_weiba
+  rotate: true
+  xy: 2, 67
+  size: 538, 678
+  orig: 540, 678
+  offset: 1, 0
+  index: -1
+maomm_b_youbi
+  rotate: false
+  xy: 950, 20
+  size: 141, 217
+  orig: 141, 218
+  offset: 0, 0
+  index: -1
+maomm_b_youer
+  rotate: true
+  xy: 1739, 150
+  size: 196, 254
+  orig: 219, 254
+  offset: 23, 0
+  index: -1
+maomm_b_youtui
+  rotate: false
+  xy: 1605, 94
+  size: 120, 191
+  orig: 122, 200
+  offset: 0, 9
+  index: -1
+maomm_b_zuobi
+  rotate: true
+  xy: 1727, 34
+  size: 114, 207
+  orig: 114, 208
+  offset: 0, 0
+  index: -1
+maomm_b_zuoer
+  rotate: false
+  xy: 1440, 97
+  size: 163, 188
+  orig: 166, 190
+  offset: 0, 0
+  index: -1
+maomm_b_zuotui
+  rotate: false
+  xy: 2244, 123
+  size: 120, 191
+  orig: 122, 200
+  offset: 0, 9
+  index: -1
+maomm_z_fashi1
+  rotate: false
+  xy: 682, 239
+  size: 365, 366
+  orig: 365, 366
+  offset: 0, 0
+  index: -1
+maomm_z_fashi2
+  rotate: false
+  xy: 1049, 268
+  size: 364, 366
+  orig: 365, 367
+  offset: 0, 1
+  index: -1
+maomm_z_shenti1
+  rotate: false
+  xy: 2067, 316
+  size: 298, 281
+  orig: 298, 282
+  offset: 0, 0
+  index: -1
+maomm_z_shenti2
+  rotate: false
+  xy: 2152, 945
+  size: 352, 371
+  orig: 352, 371
+  offset: 0, 0
+  index: -1
+maomm_z_tou
+  rotate: false
+  xy: 2, 607
+  size: 804, 709
+  orig: 804, 709
+  offset: 0, 0
+  index: -1
+maomm_z_weiba
+  rotate: false
+  xy: 1611, 639
+  size: 539, 677
+  orig: 539, 678
+  offset: 0, 1
+  index: -1
+maomm_z_wuguang
+  rotate: false
+  xy: 682, 25
+  size: 266, 212
+  orig: 266, 212
+  offset: 0, 0
+  index: -1
+maomm_z_youbi1
+  rotate: false
+  xy: 1298, 49
+  size: 140, 217
+  orig: 140, 218
+  offset: 0, 1
+  index: -1
+maomm_z_youbi2
+  rotate: false
+  xy: 2367, 372
+  size: 134, 225
+  orig: 134, 226
+  offset: 0, 0
+  index: -1
+maomm_z_youer
+  rotate: true
+  xy: 1995, 133
+  size: 181, 247
+  orig: 181, 269
+  offset: 0, 22
+  index: -1
+maomm_z_youtui
+  rotate: true
+  xy: 1936, 13
+  size: 118, 207
+  orig: 118, 207
+  offset: 0, 0
+  index: -1
+maomm_z_zuobi
+  rotate: true
+  xy: 2145, 2
+  size: 119, 207
+  orig: 119, 207
+  offset: 0, 0
+  index: -1
+maomm_z_zuoer
+  rotate: false
+  xy: 1093, 65
+  size: 203, 201
+  orig: 203, 202
+  offset: 0, 1
+  index: -1
+maomm_z_zuotui
+  rotate: false
+  xy: 2366, 107
+  size: 117, 207
+  orig: 119, 207
+  offset: 0, 0
+  index: -1

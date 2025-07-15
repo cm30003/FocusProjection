@@ -4,54 +4,58 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using UnityEngine.UI;
+using LitJson;
+using UnityEngine.Events;
 
 public class ObjectKeeper_Singleton:SingletonMono<ObjectKeeper_Singleton>
 {
-    [Header("¡ª¡ª¡ª¡ª´æ´¢Êı¾İ¡ª¡ª¡ª¡ª")]
-    public GamerData gamerData;
-    [Header("¡ª¡ª¡ª¡ªÌõ¼ş¡ª¡ª¡ª¡ª")]
-    public bool Is_Set;//ÊÇ·ñÉè¶¨×¨×¢Ê±¼ä
-    [Header("¡ª¡ª¡ª¡ªÔÚ³¡µÄ¶ÔÏó¡ª¡ª¡ª¡ª")]
-    public FoodItem_Data foodData;//Éè¶¨µÄÊ³ÌÃÊ³Îï
 
-    public GameObject WareHouse;//¿â·¿
+    [Header("â€”â€”â€”â€”æ¡ä»¶â€”â€”â€”â€”")]
+    public bool Is_Set;//æ˜¯å¦è®¾å®šä¸“æ³¨æ—¶é—´
+    [Header("â€”â€”â€”â€”åœ¨åœºçš„å¯¹è±¡â€”â€”â€”â€”")]
+    public FoodItem_Data foodData;//è®¾å®šçš„é£Ÿå ‚é£Ÿç‰©
+
+    public GameObject WareHouse;//åº“æˆ¿
 
     public GameObject Farm_Group;
 
-    public GameObject[] Freight_Target;//ÊÕ»ñµÄ»õÎï
+    public GameObject[] Freight_Target;//æ”¶è·çš„è´§ç‰©
 
-    public GameObject[] Farm_Field;//ÌïµØ×é
+    public GameObject[] Farm_Field;//ç”°åœ°ç»„
 
-    public GameObject[] Farm_Machine;//Æ½°å´¥ÃşÆÁ
+    public GameObject[] Farm_Machine;//å¹³æ¿è§¦æ‘¸å±
 
-    public GameObject[] Eat_Area;//³Ô·¹µÄÇøÓò
+    public GameObject[] Eat_Area;//åƒé¥­çš„åŒºåŸŸ
 
-    public GameObject Rest_Area;//ĞİÏ¢µÄÇøÓò
+    public GameObject Rest_Area;//ä¼‘æ¯çš„åŒºåŸŸ
 
-    public GameObject[] TouchFish_Area;//ÃşÓãµÄÇøÓò
-    [Header("¡ª¡ª¡ª¡ªÒôĞ§¡ª¡ª¡ª¡ª")]
+    public GameObject[] TouchFish_Area;//æ‘¸é±¼çš„åŒºåŸŸ
+    [Header("â€”â€”â€”â€”éŸ³æ•ˆâ€”â€”â€”â€”")]
     public string DayBGM_Path;
     public string NightBGM_Path;
-    [Header("¡ª¡ª¡ª¡ªĞ¡¶¯Îï¡ª¡ª¡ª¡ª")]
-    public List<GameObject> Work_NPCs;//¹¤×÷µÄNPC
-    public GameObject[] NPCs;//NPC×Ü×é
-    public List<GameObject> Waiting_NPCs;
+    [Header("â€”â€”â€”â€”å°åŠ¨ç‰©â€”â€”â€”â€”")]
+    public List<GameObject> Work_NPCs;//å·¥ä½œçš„NPCç»„
+    public GameObject[] NPCs;//NPCæ€»ç»„
+    public List<GameObject> Waiting_NPCs;//ç­‰å¾…å·¥ä½œçš„NPCç»„
+    [Header("â€”â€”â€”â€”éå­˜å‚¨æ•°æ®â€”â€”â€”â€”")]
+    public List<GiftData> Gift_list;
 
+    public List<ClothItem_Data> Cloth_list;
+
+    public List<FoodItem_Data> Food_List;
+
+    public List<PlantItem_Data> PlantItem_List;
+
+    public List<Map_Data> Map_list;
+    [Header("â€”â€”â€”â€”å­˜å‚¨æ•°æ®â€”â€”â€”â€”")]
+    public GamerData gamerData;
     protected override void Awake()
     {
         base.Awake();
-        //´æ´¢ÔÚ³¡¶ÔÏó
-
-        WareHouse=GameObject.FindGameObjectWithTag("WareHouse_Area");
-        Freight_Target=GameObject.FindGameObjectsWithTag("Freight_Target");
-        Farm_Group = GameObject.FindGameObjectWithTag("Farm_Field");
-        NPCs=GameObject.FindGameObjectsWithTag("NPC");
-        Farm_Machine = GameObject.FindGameObjectsWithTag("Farm_Machine");
-        Eat_Area=GameObject.FindGameObjectsWithTag("Eat_Area");
-        Rest_Area = GameObject.FindGameObjectWithTag("Rest_Area");
-        TouchFish_Area = GameObject.FindGameObjectsWithTag("TouchFish_Area");
-        //×¢²áÊÂ¼ş
-        EventCenter.GetInstance().AddEventListener<Button>("Gifted", Buy);//ËÍÀñÊÂ¼ş
+        //æ³¨å†Œäº‹ä»¶
+        Object_Get();
+        JsonData_Get();
+        //EventCenter.GetInstance().AddEventListener<Button>("Gifted", Buy);//é€ç¤¼äº‹ä»¶
     }
     private void Start()
     {
@@ -62,7 +66,45 @@ public class ObjectKeeper_Singleton:SingletonMono<ObjectKeeper_Singleton>
         Current_Food(null);
     }
     /// <summary>
-    /// Ìí¼Ó¹¤×÷NPCµ½ÁĞ±í,ÁĞ±í×î´óÖµÎª3
+    /// è·å–åœºæ™¯ä¸­çš„å¯¹è±¡
+    /// </summary>
+    public void Object_Get()
+    {
+        WareHouse = GameObject.FindGameObjectWithTag("WareHouse_Area");
+        Freight_Target = GameObject.FindGameObjectsWithTag("Freight_Target");
+        Farm_Group = GameObject.FindGameObjectWithTag("Farm_Field");
+        NPCs = GameObject.FindGameObjectsWithTag("NPC");
+        Farm_Machine = GameObject.FindGameObjectsWithTag("Farm_Machine");
+        Eat_Area = GameObject.FindGameObjectsWithTag("Eat_Area");
+        Rest_Area = GameObject.FindGameObjectWithTag("Rest_Area");
+        TouchFish_Area = GameObject.FindGameObjectsWithTag("TouchFish_Area");
+    }
+    /// <summary>
+    /// è·å–å­˜å‚¨çš„Jsonæ•°æ®
+    /// </summary>
+    public void JsonData_Get()
+    {
+        //è·å–æ•°æ®åˆ—è¡¨ä¸­çš„GiftJsonæ•°æ®
+        string GiftData = ResourceManager.GetInstance().Load<TextAsset>("JsonDataAsset/Gift_Data").text;
+        string ClothData = ResourceManager.GetInstance().Load<TextAsset>("JsonDataAsset/Cloth_Data").text;
+        string FoodInfo = ResourceManager.GetInstance().Load<TextAsset>("JsonDataAsset/FoodItem_Data").text;
+        string PlantInfo = ResourceManager.GetInstance().Load<TextAsset>("JsonDataAsset/Plant_Data").text;
+        string MapInfo = ResourceManager.GetInstance().Load<TextAsset>("JsonDataAsset/Map_Data").text;
+        //ååºåˆ—åŒ–è§£æä¸ºå¯¹åº”çš„æ•°æ®ç»“æ„
+        GiftData[] Gift_Datas = JsonMapper.ToObject<GiftData[]>(GiftData);
+        ClothItem_Data[] Cloth_Datas = JsonMapper.ToObject<ClothItem_Data[]>(ClothData);
+        FoodItem_Data[] foodItem_Datas = JsonMapper.ToObject<FoodItem_Data[]>(FoodInfo);
+        PlantItem_Data[] PlantItem_Datas = JsonMapper.ToObject<PlantItem_Data[]>(PlantInfo);
+        Map_Data[] Map_Datas = JsonMapper.ToObject<Map_Data[]>(MapInfo);
+        //æ•°ç»„è½¬åŒ–ä¸ºåˆ—è¡¨
+        Gift_list = new List<GiftData>(Gift_Datas);
+        Cloth_list = new List<ClothItem_Data>(Cloth_Datas);
+        Food_List = new List<FoodItem_Data>(foodItem_Datas);
+        PlantItem_List = new List<PlantItem_Data>(PlantItem_Datas);
+        Map_list = new List<Map_Data>(Map_Datas);
+    }
+    /// <summary>
+    /// æ·»åŠ å·¥ä½œNPCåˆ°åˆ—è¡¨,åˆ—è¡¨æœ€å¤§å€¼ä¸º3
     /// </summary>
     /// <param name="worknpc"></param>
     public void Add_WorkNpcs(GameObject worknpc)
@@ -78,7 +120,7 @@ public class ObjectKeeper_Singleton:SingletonMono<ObjectKeeper_Singleton>
         }
     }
     /// <summary>
-    /// ÒÆ³ıÔÚÁĞ±íÖĞµÄ¹¤×÷Ğ¡¶¯Îï£¬ÕâÍ¨³£´ú±íĞ¡¶¯ÎïÈ¥ĞİÏ¢ÁË
+    /// ç§»é™¤åœ¨åˆ—è¡¨ä¸­çš„å·¥ä½œå°åŠ¨ç‰©ï¼Œè¿™é€šå¸¸ä»£è¡¨å°åŠ¨ç‰©å»ä¼‘æ¯äº†
     /// </summary>
     /// <param name="worknpc"></param>
     public void Remove_WorkNpc(GameObject worknpc)
@@ -97,36 +139,70 @@ public class ObjectKeeper_Singleton:SingletonMono<ObjectKeeper_Singleton>
             Waiting_NPCs.Add(worknpc);
         }
     }
-    /// <summary>
-    /// ¹«ÓÃ¹ºÂò·½·¨
-    /// </summary>
-    /// <param name="Info">±»¹ºÂòµÄ¶ÔÏóµÄĞÅÏ¢</param>
-    public void Buy(Button Info)
+    public void Buy(GiftData giftData)
     {
-        if(Info.GetComponent<Gift>()!=null)
+        if (giftData != null&&gamerData.Money>giftData.Cost)//å¦‚æœæ˜¯ç¤¼ç‰©
         {
-            gamerData.Money -= Info.GetComponent<Gift>().Data.Cost;//Íæ¼Ò¿Û³ıÏàÓ¦µÄÀñÎï»¨Ïú
+            gamerData.Money -= giftData.Cost;//ç©å®¶æ‰£é™¤ç›¸åº”çš„ç¤¼ç‰©èŠ±é”€
+            if (gamerData.Player_GiftNum != null && gamerData.Player_GiftNum.ContainsKey(giftData.ID))//ç©å®¶å·²ç»æ‹¥æœ‰è¯¥ç¤¼ç‰©äº†
+            {
+                gamerData.Player_GiftNum[giftData.ID] += 1;//æ•°é‡+1
+            }
+            else//ç©å®¶æ²¡æœ‰è¯¥ç¤¼ç‰©
+            {
+                gamerData.Player_GiftNum.Add(giftData.ID, 1);//æ·»åŠ è¯¥ç¤¼ç‰©åˆ°å­—å…¸
+            }
+            EventCenter.GetInstance().EventTrigger("Info_Update");
         }
-        else if(Info.GetComponent<Item_Gift_Cloth>()!=null)
+        else
         {
-            gamerData.Money -= Info.GetComponent<Item_Gift_Cloth>().Data.Cost;//Íæ¼Ò¿Û³ıÏàÓ¦µÄÖ²Îï»¨Ïú
+            return;
+        }
+    }
+    public void Buy(ClothItem_Data clothData,UnityAction callBack_Action=null)
+    {
+        if (clothData != null&&gamerData.Money > clothData.Cost&&!gamerData.Player_ClothBought.Contains(clothData.ID))//å¦‚æœæ˜¯è¡£æœ
+        {
+            gamerData.Money -= clothData.Cost;//ç©å®¶æ‰£é™¤ç›¸åº”çš„æœè£…èŠ±é”€
+            gamerData.Player_ClothBought.Add(clothData.ID);
+            if(callBack_Action!=null)
+            {
+                callBack_Action();
+            }
+
+            EventCenter.GetInstance().EventTrigger("Info_Update");
+        }
+        else
+        {
+            return;
+        }
+    }
+    /// <summary>
+    /// å…¬ç”¨è´­ä¹°æ–¹æ³•
+    /// </summary>
+    /// <param name="Info">è¢«è´­ä¹°çš„å¯¹è±¡çš„ä¿¡æ¯</param>
+    public void Buy(Map_Data mapData)
+    {
+        if(mapData != null)//å¦‚æœæ˜¯åœ°å›¾
+        {
+            gamerData.Money-=mapData.Cost;
         }
         EventCenter.GetInstance().EventTrigger("Info_Update");
     }
     /// <summary>
-    /// Íæ¼ÒÖÖÖ²ÁË,¸üĞÂ½ğÇ®
+    /// ç©å®¶ç§æ¤äº†,æ›´æ–°é‡‘é’±
     /// </summary>
     /// <param name="Info"></param>
     public void Planted(Button Info)
     {
-        gamerData.Money -= Info.GetComponent<Plant>().Data.Cost;//Íæ¼Ò¿Û³ıÏàÓ¦µÄÖ²Îï»¨Ïú
+        gamerData.Money -= Info.GetComponent<Plant>().Data.Cost;//ç©å®¶æ‰£é™¤ç›¸åº”çš„æ¤ç‰©èŠ±é”€
         EventCenter.GetInstance().EventTrigger("Info_Update");
     }
     /// <summary>
-    /// µ±Ç°ÔÚÊ³ÌÃÑ¡ÔñµÄÊ³Îï
+    /// å½“å‰åœ¨é£Ÿå ‚é€‰æ‹©çš„é£Ÿç‰©
     /// </summary>
-    /// <param name="foodData">Ê³ÎïÊı¾İ</param>
-    /// <returns>Ê³ÎïÊı¾İ</returns>
+    /// <param name="foodData">é£Ÿç‰©æ•°æ®</param>
+    /// <returns>é£Ÿç‰©æ•°æ®</returns>
     public FoodItem_Data Current_Food(FoodItem_Data foodData)
     {
         if(foodData==null)
@@ -137,15 +213,15 @@ public class ObjectKeeper_Singleton:SingletonMono<ObjectKeeper_Singleton>
         return foodData;
     }
     /// <summary>
-    /// »ñÈ¡ÌïµØ×é
+    /// è·å–ç”°åœ°ç»„
     /// </summary>
-    /// <returns>·µ»ØÌï×é</returns>
+    /// <returns>è¿”å›ç”°ç»„</returns>
     public GameObject[] Field_SignIn()
     {
-        // ´´½¨Ò»¸öÊı×éÀ´´æ´¢×ÓÎïÌå
+        // åˆ›å»ºä¸€ä¸ªæ•°ç»„æ¥å­˜å‚¨å­ç‰©ä½“
         GameObject[] children = new GameObject[Farm_Group.transform.childCount];
 
-        // ±éÀúËùÓĞ×ÓÎïÌå²¢½«ËüÃÇÌí¼Óµ½Êı×éÖĞ
+        // éå†æ‰€æœ‰å­ç‰©ä½“å¹¶å°†å®ƒä»¬æ·»åŠ åˆ°æ•°ç»„ä¸­
         for (int i = 0; i < Farm_Group.transform.childCount; i++)
         {
             children[i] = Farm_Group.transform.GetChild(i).gameObject;
@@ -154,71 +230,44 @@ public class ObjectKeeper_Singleton:SingletonMono<ObjectKeeper_Singleton>
         return children;
     }
     /// <summary>
-    /// Íæ¼ÒÊ×´ÎµÇÈë
+    /// ç©å®¶é¦–æ¬¡ç™»å…¥
     /// </summary>
     public void PlayerFirst_SignIn()
     {
         gamerData = JsonManager.Instance.LoadData<GamerData>("GamerData");
-        //µÚÒ»´Î½øÈëÓÎÏ·Ê±£¬ÉèÖÃµÚÒ»´Î½øÈëÓÎÏ·Ê±¼ä
+        //ç¬¬ä¸€æ¬¡è¿›å…¥æ¸¸æˆæ—¶ï¼Œè®¾ç½®ç¬¬ä¸€æ¬¡è¿›å…¥æ¸¸æˆæ—¶é—´
         if (gamerData.First_SignIn_Date == null)
         {
-            //ÉèÖÃµÚÒ»´Î½øÈëÓÎÏ·Ê±¼ä
-            gamerData.First_SignIn_Date = DateTime.Now.ToString("yyyyÄêMMÔÂddºÅ");
-            //±£´æµÚÒ»´Î½øÈëÓÎÏ·µÄÊ±¼ä
+            gamerData=new GamerData();
+            //è®¾ç½®ç¬¬ä¸€æ¬¡è¿›å…¥æ¸¸æˆæ—¶é—´
+            gamerData.First_SignIn_Date = DateTime.Now.ToString("yyyyå¹´MMæœˆddå·");
+            //ä¿å­˜ç¬¬ä¸€æ¬¡è¿›å…¥æ¸¸æˆçš„æ—¶é—´
             JsonManager.Instance.SaveData(gamerData, "GamerData");
         }
-        if(gamerData.HarvestItems==null)
-        {
-            gamerData.HarvestItems=new List<PlantItem_Data>();
-            JsonManager.Instance.SaveData(gamerData, "GamerData");
-        }
+        //if(gamerData.Player_PlantNum==null)
+        //{
+        //    gamerData.Player_PlantNum = 
+        //    JsonManager.Instance.SaveData(gamerData, "GamerData");
+        //}
         for(int i=0;i<NPCs.Length;i++)
         {
-            //¼ÓÔØ´æ´¢µÄNPCºÃ¸Ğ¶È
+            //åŠ è½½å­˜å‚¨çš„NPCå¥½æ„Ÿåº¦
             NPCs[i].GetComponent<CharaController>().data.Favorability = JsonManager.Instance.LoadData<NPCData>(NPCs[i].name).Favorability;
         }
-        EventCenter.GetInstance().AddEventListener("SaveGamerData", Save_GamerData);//´æ´¢ÊÂ¼ş
+        EventCenter.GetInstance().AddEventListener("SaveGamerData", Save_GamerData);//å­˜å‚¨äº‹ä»¶
     }
     /// <summary>
-    /// ´æ´¢Êı¾İ
+    /// å­˜å‚¨æ•°æ®
     /// </summary>
     public void Save_GamerData()
     {
-        //´æ´¢NPCÊı¾İ
+        //å­˜å‚¨NPCæ•°æ®
         for (int i = 0; i < NPCs.Length; i++)
         {
             NPCInformation npcData = NPCs[i].GetComponent<CharaController>().npc_Information;
             JsonManager.Instance.SaveData(npcData, npcData.Name);
         }
-        //´æ´¢Íæ¼ÒÊı¾İ
+        //å­˜å‚¨ç©å®¶æ•°æ®
         JsonManager.Instance.SaveData(gamerData, "GamerData");
     }
-}
-[Serializable]
-public class Mission_ADay//Êı¾İÀà£¬Í³¼ÆÍæ¼ÒÃ¿ÌìÍê³ÉµÄÈÎÎñ¼°Æä×¨×¢Ê±¼ä
-{
-    public int Focus_Time;//×¨×¢Ê±¼ä
-    public string Day;//ÈÕÆÚ
-    public List<string> Options=new List<string>();//Íê³ÉÏîÄ¿
-    public Dictionary<string,int> ADay_FocusTime_Dic=new Dictionary<string, int>();//¸ÃÈÕÆÚµÄ×¨×¢Ê±¼ä
-    public Dictionary<string, List<string>> ADay_Options_Dic=new Dictionary<string, List<string>>();//¸ÃÈÕÆÚÏÂµÄÍê³ÉÏîÄ¿
-}
-[Serializable]
-public class GamerData//Íæ¼ÒÊı¾İ
-{
-    //Í³¼Æ²¿·Ö
-    public float PlantTime;//ÖÖµØÊ±¼ä
-    public int HarvestNum;//Å©×÷ÎïµÄÊÕ»ñÊıÁ¿
-    public string First_SignIn_Date;//µÚÒ»´Î½øÈëÓÎÏ·µÄÊ±¼ä
-    public int Money;//½ğÇ®Í³¼Æ
-    public int Level;//Íæ¼ÒµÈ¼¶
-    public float Current_XP;//Íæ¼Ò¾­Ñé
-    public float Max_XP;//Íæ¼Ò×î´ó¾­Ñé
-    public List<PlantItem_Data> HarvestItems;//ÊÕ»ñµÄ×÷Îï
-    //×Ô¶¨Òå²¿·Ö
-    public Sprite Player_HeadImage;//Íæ¼ÒÍ·Ïñ
-    public string PlayerBirthDay;//Íæ¼ÒÉúÈÕ
-    public string PlayerName;//Íæ¼ÒÃû
-    public string PlayerTitle;//Íæ¼Ò³ÆºÅ
-    public string PlayerMotto;//Íæ¼Ò×ùÓÒÃú
 }

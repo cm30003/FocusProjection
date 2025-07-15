@@ -7,22 +7,16 @@ using UnityEngine.UI;
 
 public class Phone_DinningHall : NewUIBase
 {
-    [Header("¡ª¡ª¡ª¡ªÊ³Îï¡ª¡ª¡ª¡ª")]
+    [Header("â€”â€”â€”â€”é£Ÿç‰©â€”â€”â€”â€”")]
     public FoodItem_Data Current_Food;
 
-    public List<FoodItem_Data> Food_List;//Òª¶Á±íµÄÊı¾İÁĞ±í
-
-    public Transform Buttons_Group;//°´Å¥Éú³ÉµÄÎ»ÖÃ
-    [Header("¡ª¡ª¡ª¡ªËØ²Ä¡ª¡ª¡ª¡ª")]
+    public Transform Buttons_Group;//æŒ‰é’®ç”Ÿæˆçš„ä½ç½®
+    [Header("â€”â€”â€”â€”ç´ æâ€”â€”â€”â€”")]
     public List<Button> Gift_Buttons_Prefab;
     public Sprite Clicked_Sprite;
     public Sprite Stat_Sprite;
     private void Start()
     {
-        string FoodInfo = ResourceManager.GetInstance().Load<TextAsset>("JsonDataAsset/FoodItem_Data").text;
-        //·´ĞòÁĞ»¯½âÎöÎª¶ÔÓ¦µÄÊı¾İ½á¹¹
-        FoodItem_Data[] foodItem_Datas = JsonMapper.ToObject<FoodItem_Data[]>(FoodInfo);
-        Food_List = new List<FoodItem_Data>(foodItem_Datas);
         Food_SignIn();
     }
 
@@ -36,31 +30,31 @@ public class Phone_DinningHall : NewUIBase
         }
     }
     /// <summary>
-    /// ¸ù¾İ¶Á±í¶¯Ì¬Éú³ÉÊ³Æ·°´Å¥
+    /// æ ¹æ®è¯»è¡¨åŠ¨æ€ç”Ÿæˆé£Ÿå“æŒ‰é’®
     /// </summary>
     public void Food_SignIn()
     {
-        for (int i = 0; i < Food_List.Count; i++)
+        for (int i = 0; i < ObjectKeeper_Singleton.Instance.Food_List.Count; i++)
         {
-            //´´½¨°´Å¥
-            Button button = Instantiate(Gift_Buttons_Prefab[i % Gift_Buttons_Prefab.Count], Buttons_Group.transform);//Éú³É°´Å¥
+            //åˆ›å»ºæŒ‰é’®
+            Button button = Instantiate(Gift_Buttons_Prefab[i % Gift_Buttons_Prefab.Count], Buttons_Group.transform);//ç”ŸæˆæŒ‰é’®
 
             Button Buy_Button = button.transform.GetChild(3).GetComponent<Button>();
-            //ĞŞ¸Ä°´Å¥Ï¸½Ú
-            button.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = Food_List[i].Description;
-            button.transform.GetChild(1).GetComponent<Image>().sprite = ResourceManager.GetInstance().Load<Sprite>(Food_List[i].ResPath);
-            button.transform.GetChild(2).GetComponentInChildren<TextMeshProUGUI>().text = Food_List[i].Name;
-            //¸³Öµ
-            button.GetComponent<Item_Food>().Data = Food_List[i];
+            //ä¿®æ”¹æŒ‰é’®ç»†èŠ‚
+            button.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = ObjectKeeper_Singleton.Instance.Food_List[i].Description;
+            button.transform.GetChild(1).GetComponent<Image>().sprite = ResourceManager.GetInstance().Load<Sprite>(ObjectKeeper_Singleton.Instance.Food_List[i].ResPath);
+            button.transform.GetChild(2).GetComponentInChildren<TextMeshProUGUI>().text = ObjectKeeper_Singleton.Instance.Food_List[i].Name;
+            //èµ‹å€¼
+            button.GetComponent<Item_Food>().Data = ObjectKeeper_Singleton.Instance.Food_List[i];
 
             button.onClick.AddListener(() => Click(button));
             Buy_Button.onClick.AddListener(() => Buy(button));
         }
     }
     /// <summary>
-    /// µã»÷ÊÂ¼ş
+    /// ç‚¹å‡»äº‹ä»¶
     /// </summary>
-    /// <param name="current">µ±Ç°±»µã»÷µÄ°´Å¥/Item</param>
+    /// <param name="current">å½“å‰è¢«ç‚¹å‡»çš„æŒ‰é’®/Item</param>
     public void Click(Button parent)
     {
         Current_Button = parent;
@@ -82,9 +76,9 @@ public class Phone_DinningHall : NewUIBase
         }
     }
     /// <summary>
-    /// ¹ºÂòÊÂ¼ş
+    /// è´­ä¹°äº‹ä»¶
     /// </summary>
-    /// <param name="button">µ±Ç°Item</param>
+    /// <param name="button">å½“å‰Item</param>
     public void Buy(Button button)
     {
         if(ObjectKeeper_Singleton.Instance.gamerData.Money< button.GetComponent<Item_Food>().Data.Cost)

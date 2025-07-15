@@ -18,7 +18,7 @@ public class ChatRoomUI : NewUIBase//UI 控件管理、用户输入处理、消�
 
     public Button loginBtn;// 登录/断开按钮
 
-    public Button sendBtn;
+    public Button sendBtn;//消息发送按钮
 
     public TextMeshProUGUI stateTxt;// 显示当前连接的状态文本
 
@@ -30,7 +30,7 @@ public class ChatRoomUI : NewUIBase//UI 控件管理、用户输入处理、消�
 
     void Start()
     {
-        chatMsgTxt.text = "";
+        chatMsgTxt.text = "";//清空聊天记录
 
         loginBtn.onClick.AddListener(() =>
         {
@@ -72,8 +72,6 @@ public class ChatRoomUI : NewUIBase//UI 控件管理、用户输入处理、消�
         {
             chatMsgTxt.SetAllDirty(); //通知 Unity 的 UI 文本组件（如 Text 或 TMP_Text）内容发生了变化，需要重新渲染。
             chatMsgTxt.text += msg + "\n";//将新消息追加到聊天框文本中，并换行。
-
-            Debug.Log("RecvCallBack: " + msg);
         }
     }
     /// <summary>
@@ -83,6 +81,7 @@ public class ChatRoomUI : NewUIBase//UI 控件管理、用户输入处理、消�
     /// <param name="msg"></param>
     private void Send(string protocol, string msg = "")
     {
+        #region 弃用
         //JSONObject jsonObj = new JSONObject();
         //jsonObj["protocol"] = protocol;
         //jsonObj["uname"] = unameInput.text;
@@ -93,7 +92,7 @@ public class ChatRoomUI : NewUIBase//UI 控件管理、用户输入处理、消�
         //byte[] data = System.Text.Encoding.UTF8.GetBytes(jsonStr);
         //// 发送消息给服务端
         //clientSocket.SendData(data);
-
+        #endregion
         // 构建要发送的数据对象，包含协议、用户名、消息等字段，形式为字典
         Dictionary<string, string> sendData = new Dictionary<string, string>
         {

@@ -1,16 +1,16 @@
-/******************************************************************************
+﻿/******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated July 28, 2023. Replaces all prior versions.
+ * Last updated January 1, 2020. Replaces all prior versions.
  *
- * Copyright (c) 2013-2023, Esoteric Software LLC
+ * Copyright (c) 2013-2020, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
  * conditions of Section 2 of the Spine Editor License Agreement:
  * http://esotericsoftware.com/spine-editor-license
  *
- * Otherwise, it is permitted to integrate the Spine Runtimes into software or
- * otherwise create derivative works of the Spine Runtimes (collectively,
+ * Otherwise, it is permitted to integrate the Spine Runtimes into software
+ * or otherwise create derivative works of the Spine Runtimes (collectively,
  * "Products"), provided that each user of the Products must obtain their own
  * Spine Editor license and redistribution of the Products in any form must
  * include this license and copyright notice.
@@ -23,20 +23,16 @@
  * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
  * BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THE
- * SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
 #if UNITY_2018_3 || UNITY_2019 || UNITY_2018_3_OR_NEWER
 #define NEW_PREFAB_SYSTEM
 #endif
 
-#if UNITY_2018_2_OR_NEWER
-#define HAS_GET_SHARED_MATERIALS
-#endif
-
-using System.Collections.Generic;
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace Spine.Unity.Examples {
 
@@ -46,7 +42,8 @@ namespace Spine.Unity.Examples {
 	[ExecuteInEditMode]
 #endif
 	[RequireComponent(typeof(MeshRenderer)), RequireComponent(typeof(MeshFilter))]
-	public class RenderExistingMesh : MonoBehaviour {
+	public class RenderExistingMesh : MonoBehaviour
+	{
 		public MeshRenderer referenceRenderer;
 
 		bool updateViaSkeletonCallback = false;
@@ -63,28 +60,20 @@ namespace Spine.Unity.Examples {
 
 		private Dictionary<Material, Material> replacementMaterialDict = new Dictionary<Material, Material>();
 		private Material[] sharedMaterials = new Material[0];
-#if HAS_GET_SHARED_MATERIALS
-		private List<Material> parentMaterials = new List<Material>();
-#endif
 
 #if UNITY_EDITOR
 		private void Reset () {
 			if (referenceRenderer == null) {
-				if (this.transform.parent)
-					referenceRenderer = this.transform.parent.GetComponentInParent<MeshRenderer>();
-				if (referenceRenderer == null) return;
+				referenceRenderer = this.transform.parent.GetComponentInParent<MeshRenderer>();
+				if (!referenceRenderer)
+					return;
 			}
-#if HAS_GET_SHARED_MATERIALS
-			referenceRenderer.GetSharedMaterials(parentMaterials);
-			int parentMaterialsCount = parentMaterials.Count;
-#else
-			Material[] parentMaterials = referenceRenderer.sharedMaterials;
-			int parentMaterialsCount = parentMaterials.Length;
-#endif
-			if (replacementMaterials.Length != parentMaterialsCount) {
-				replacementMaterials = new MaterialReplacement[parentMaterialsCount];
+
+			var parentMaterials = referenceRenderer.sharedMaterials;
+			if (replacementMaterials.Length != parentMaterials.Length) {
+				replacementMaterials = new MaterialReplacement[parentMaterials.Length];
 			}
-			for (int i = 0; i < parentMaterialsCount; ++i) {
+			for (int i = 0; i < parentMaterials.Length; ++i) {
 				replacementMaterials[i].originalMaterial = parentMaterials[i];
 				replacementMaterials[i].replacementMaterial = parentMaterials[i];
 			}
@@ -94,47 +83,39 @@ namespace Spine.Unity.Examples {
 #endif
 
 		void Awake () {
-			ownRenderer = this.GetComponent<MeshRenderer>();
-			ownMeshFilter = this.GetComponent<MeshFilter>();
-
 			if (referenceRenderer == null) {
-				if (this.transform.parent != null)
-					referenceRenderer = this.transform.parent.GetComponentInParent<MeshRenderer>();
-				if (referenceRenderer == null) return;
+				referenceRenderer = this.transform.parent.GetComponentInParent<MeshRenderer>();
 			}
-			referenceMeshFilter = referenceRenderer.GetComponent<MeshFilter>();
 
 			// subscribe to OnMeshAndMaterialsUpdated
-			SkeletonAnimation skeletonRenderer = referenceRenderer.GetComponent<SkeletonAnimation>();
+			var skeletonRenderer = referenceRenderer.GetComponent<SkeletonAnimation>();
 			if (skeletonRenderer) {
 				skeletonRenderer.OnMeshAndMaterialsUpdated -= UpdateOnCallback;
 				skeletonRenderer.OnMeshAndMaterialsUpdated += UpdateOnCallback;
 				updateViaSkeletonCallback = true;
 			}
+			referenceMeshFilter = referenceRenderer.GetComponent<MeshFilter>();
+			ownRenderer = this.GetComponent<MeshRenderer>();
+			ownMeshFilter = this.GetComponent<MeshFilter>();
 
 			InitializeDict();
 		}
 
-#if UNITY_EDITOR
-		// handle disabled scene reload
-		private void OnEnable () {
-			if (Application.isPlaying)
-				Awake();
-		}
-
+		#if UNITY_EDITOR
 		private void Update () {
-			if (!Application.isPlaying)
+			if (!Application.isPlaying) {
 				InitializeDict();
+			}
 		}
-#endif
+		#endif
 
 		void LateUpdate () {
-#if UNITY_EDITOR
+			#if UNITY_EDITOR
 			if (!Application.isPlaying) {
 				UpdateMaterials();
 				return;
 			}
-#endif
+			#endif
 
 			if (updateViaSkeletonCallback)
 				return;
@@ -146,24 +127,14 @@ namespace Spine.Unity.Examples {
 		}
 
 		void UpdateMaterials () {
-#if UNITY_EDITOR
-			if (!referenceRenderer) return;
-			if (!referenceMeshFilter) Reset();
-#endif
 			ownMeshFilter.sharedMesh = referenceMeshFilter.sharedMesh;
 
-#if HAS_GET_SHARED_MATERIALS
-			referenceRenderer.GetSharedMaterials(parentMaterials);
-			int parentMaterialsCount = parentMaterials.Count;
-#else
-			Material[] parentMaterials = referenceRenderer.sharedMaterials;
-			int parentMaterialsCount = parentMaterials.Length;
-#endif
-			if (sharedMaterials.Length != parentMaterialsCount) {
-				sharedMaterials = new Material[parentMaterialsCount];
+			var parentMaterials = referenceRenderer.sharedMaterials;
+			if (sharedMaterials.Length != parentMaterials.Length) {
+				sharedMaterials = new Material[parentMaterials.Length];
 			}
-			for (int i = 0; i < parentMaterialsCount; ++i) {
-				Material parentMaterial = parentMaterials[i];
+			for (int i = 0; i < parentMaterials.Length; ++i) {
+				var parentMaterial = parentMaterials[i];
 				if (replacementMaterialDict.ContainsKey(parentMaterial)) {
 					sharedMaterials[i] = replacementMaterialDict[parentMaterial];
 				}
@@ -172,9 +143,8 @@ namespace Spine.Unity.Examples {
 		}
 
 		void InitializeDict () {
-			replacementMaterialDict.Clear();
 			for (int i = 0; i < replacementMaterials.Length; ++i) {
-				MaterialReplacement entry = replacementMaterials[i];
+				var entry = replacementMaterials[i];
 				replacementMaterialDict[entry.originalMaterial] = entry.replacementMaterial;
 			}
 		}

@@ -10,24 +10,112 @@ using UnityEngine;
 public class FoodItem_Data
 {
     public int ID;
-
     public string Name;//名字
     public string Description;//描述
     public int Cost;//购买/售卖价格
     public float Buff;//增益
     public string ResPath;//资源路径
 }
+
+
+[Serializable]
+public class NPCInformation//NPC信息类（UI显示）
+{
+    [Header("————基本信息————")]
+    public int ID;
+    public string Name;//名字
+    public string Hobby;//爱好
+    public string Personality;//性格
+    public string Description;//描述文本
+    public string BirthDay;//生日
+    public NPCInformation(NPCInformation other)
+    {
+        if (other == null)
+        {
+            // 如果传入的参数为 null，则初始化为默认值
+            ID = 0;
+            Name = string.Empty;
+            Hobby = string.Empty;
+            Personality = string.Empty;
+            Description = string.Empty;
+            BirthDay = string.Empty;
+        }
+        else
+        {
+            ID = other.ID;
+            Name = other.Name;
+            Hobby = other.Hobby;
+            Personality = other.Personality;
+            Description = other.Description;
+            BirthDay = other.BirthDay;
+        }
+    }
+    // 公共无参构造函数
+    public NPCInformation()
+    {
+        ID = 0;
+        Name = string.Empty;
+        Hobby = string.Empty;
+        Personality = string.Empty;
+        Description = string.Empty;
+        BirthDay = string.Empty;
+    }
+}
 /// <summary>
-/// 植物的数据额类
+/// 商城衣物数据类
+/// </summary>
+[Serializable]
+public class ClothItem_Data
+{
+    public int ID;
+
+    public string Name;
+    public string Description;
+    public int Cost;
+
+    public int Target_Animal_ID;
+
+    public string ResPath;
+
+    public bool Is_Bought;
+}
+/// <summary>
+/// 商城礼物数据类
+/// </summary>
+[Serializable]
+public class GiftData
+{
+    public int ID;
+    public string Name;//名字
+    public string Description;//描述
+    public int Cost;//购买/售卖价格
+    [Tooltip("好感度加成")]
+    public int Default_Affinity;//默认好感度
+    public int Like_Affinity;//喜爱好感度
+    public int Favorate_Affinity;//珍视/最高好感度
+    [Tooltip("资源路径")]
+    public string Sprite_ResPath;
+}
+[SerializeField]
+public class Map_Data
+{
+    public int ID;//地图ID
+    public string Name;//地图名字
+    public string Description;//地图描述
+    public int Cost;//购买价格
+    public string ResPath;//地图资源路径
+}
+/// <summary>
+/// 植物的数据类
 /// </summary>
 [Serializable]
 public class PlantItem_Data
 {
-    public int ID;
-    public string Name;
-    public string Description;
-    public int Sell_Price;
-    public int Cost;
+    public int ID;//植物ID
+    public string Name;//植物名称
+    public string Description;//植物描述
+    public int Sell_Price;//植物出售价格
+    public int Cost;//植物购买价格
     [Tooltip("播种时间")]
     public float Plant_Time;//播种时间
     [Tooltip("发芽时间")]
@@ -50,7 +138,7 @@ public class PlantItem_Data
 
     [Tooltip("收获数量")]
     public int Harvest_Num;//收获数量
-    public int Gamer_Num;//玩家拥有该植物的数量
+    public int Player_Num;//玩家拥有该植物的数量
 
     public string Germinate_SpriteResPath;//发芽图片路径
     public string Grown_SpriteResPath;//成长图片路径
@@ -60,8 +148,8 @@ public class PlantItem_Data
         if (other == null)
         {
             ID = 0;
-            Name =null;
-            Description =null;
+            Name = null;
+            Description = null;
             Sell_Price = 0;
             Cost = 0;
 
@@ -71,7 +159,7 @@ public class PlantItem_Data
             Mature_Time = 0;
             Plant_Time = 0;
             Water_Time1 = 0;
-            Water_Time2=0;
+            Water_Time2 = 0;
 
             fertilize_Time = 0;
             BugControl_Time = 0;
@@ -79,9 +167,9 @@ public class PlantItem_Data
 
             Harvest_Num = 0;
 
-            Germinate_SpriteResPath=null;
-            Grown_SpriteResPath=null;
-            Mature_SpriteResPath=null;
+            Germinate_SpriteResPath = null;
+            Grown_SpriteResPath = null;
+            Mature_SpriteResPath = null;
         }
         else
         {
@@ -133,7 +221,7 @@ public class PlantItem_Data
             $"<color=white>Harvest_Time:</color> <color=green>{Harvest_Time}</color>\n" +
 
             $"<color=white>Harvest_Num:</color> <color=green>{Harvest_Num}</color>, " +
-            $"<color=white>Gamer_Num:</color> <color=green>{Gamer_Num}</color>\n" +
+            $"<color=white>Gamer_Num:</color> <color=green>{Player_Num}</color>\n" +
 
             $"<color=white>Germinate_SpriteResPath:</color> <color=green>{Germinate_SpriteResPath}</color>\n" +
             $"<color=white>Grown_SpriteResPath:</color> <color=green>{Grown_SpriteResPath}</color>\n" +
@@ -147,7 +235,7 @@ public class PlantItem_Data
         Mature_Time = 0;
         Plant_Time = 0;
         Water_Time1 = 0;
-        Water_Time2 = 0;    
+        Water_Time2 = 0;
         fertilize_Time = 0;
         BugControl_Time = 0;
         Harvest_Time = 0;
@@ -157,65 +245,8 @@ public class PlantItem_Data
         Mature_SpriteResPath = null;
     }
 }
-/// <summary>
-/// 商城衣物数据类
-/// </summary>
-[Serializable]
-public class ClothItem_Data
-{
-    public int ID;
 
-    public string Name;
-    public string Description;
-    public int Cost;
-
-    public int Target_Animal_ID;
-
-    public string ResPath;
-}
-[Serializable]
-public class NPCInformation//NPC信息类（UI显示）
-{
-    [Header("————基本信息————")]
-    public int ID;
-    public string Name;//名字
-    public string Hobby;//爱好
-    public string Personality;//性格
-    public string Description;//描述文本
-    public string BirthDay;//生日
-    public NPCInformation(NPCInformation other)
-    {
-        if (other == null)
-        {
-            // 如果传入的参数为 null，则初始化为默认值
-            ID = 0;
-            Name = string.Empty;
-            Hobby = string.Empty;
-            Personality = string.Empty;
-            Description = string.Empty;
-            BirthDay = string.Empty;
-        }
-        else
-        {
-            ID = other.ID;
-            Name = other.Name;
-            Hobby = other.Hobby;
-            Personality = other.Personality;
-            Description = other.Description;
-            BirthDay = other.BirthDay;
-        }
-    }
-    // 公共无参构造函数
-    public NPCInformation()
-    {
-        ID = 0;
-        Name = string.Empty;
-        Hobby = string.Empty;
-        Personality = string.Empty;
-        Description = string.Empty;
-        BirthDay = string.Empty;
-    }
-}
+#region 需要被保存的数据类
 [Serializable]
 public class NPCData//NPC数据类
 {
@@ -240,7 +271,7 @@ public class NPCData//NPC数据类
     {
         if (other == null)
         {
-            ID  = 0;
+            ID = 0;
 
             Favorability = 0;
 
@@ -254,11 +285,11 @@ public class NPCData//NPC数据类
             Eat_Time = 0f;
             Hungry_Time = 0f;
 
-            Sprite_Res=null;
+            Sprite_Res = null;
         }
         else
         {
-            ID=other.ID;
+            ID = other.ID;
 
             Favorability = other.Favorability;
 
@@ -294,6 +325,7 @@ public class NPCData//NPC数据类
 
         Sprite_Res = null;
     }
+    //重写的ToString()方法
     public override string ToString()
     {
         return
@@ -313,23 +345,41 @@ public class NPCData//NPC数据类
             $"<color=white>Sprite_Res:</color> <color=green>{Sprite_Res}</color>";
     }
 }
-/// <summary>
-/// 商城礼物数据类
-/// </summary>
 [Serializable]
-public class GiftData
+public class Mission_ADay//数据类，统计玩家每天完成的任务及其专注时间
 {
-    public int ID;
-    public string Name;//名字
-    public string Description;//描述
-    public int Cost;//购买/售卖价格
-    [Tooltip("好感度加成")]
-    public int Default_Affinity;//默认好感度
-    public int Like_Affinity;//喜爱好感度
-    public int Favorate_Affinity;//最高好感度
-
-    [Tooltip("资源路径")]
-    public string Sprite_ResPath;
+    public int Focus_Time;//专注时间
+    public string Day;//日期
+    public List<string> Finished_Options = new List<string>();//完成项目
+    public Dictionary<string, int> ADay_FocusTime_Dic = new Dictionary<string, int>();//该日期的专注时间
+    public Dictionary<string, List<string>> ADay_Options_Dic = new Dictionary<string, List<string>>();//该日期下的完成项目
 }
+
+[Serializable]
+public class GamerData//玩家数据
+{
+    //统计部分
+    public float PlantTime;//总计种地时间
+    public int HarvestNum;//农作物的总收获数量/显示在名片上
+    public string First_SignIn_Date;//第一次进入游戏的时间
+    public int Money;//金钱统计
+    public int Level;//玩家等级
+    public float Current_XP;//玩家经验
+    public float Max_XP;//玩家最大经验
+
+    public Dictionary<int, int> Player_PlantNum = new Dictionary<int, int>();//玩家拥有的作物数量
+    public Dictionary<int, int> Player_GiftNum=new Dictionary<int, int>();//玩家拥有的礼物数量
+    public Dictionary<int,int> Role_Favorability=new Dictionary<int, int>();//小动物对玩家的好感度
+    public List<int> Player_MapBought=new List<int>();//玩家拥有的地图
+    public List<int> Player_ClothBought=new List<int>();//玩家拥有的小动物皮肤
+
+    //自定义部分
+    public Sprite Player_HeadImage;//玩家头像
+    public string PlayerBirthDay;//玩家生日
+    public string PlayerName;//玩家名
+    public string PlayerTitle;//玩家称号
+    public string PlayerMotto;//玩家座右铭
+}
+#endregion
 
 

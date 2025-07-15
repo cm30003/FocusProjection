@@ -186,7 +186,7 @@ public class UIManager : BaseManager<UIManager>
         //如果已加载UI字典中存在该UI，则证明该UI已经加载
         if (LoadedNewUIDic.ContainsKey(uiName))
         {
-            Debug.Log("New " + uiName + " Hide");
+            //Debug.Log("New " + uiName + " Hide");
             LoadedNewUIDic[uiName].HideMe();
             //销毁UI
             GameObject.Destroy(LoadedNewUIDic[uiName].gameObject);
@@ -194,7 +194,7 @@ public class UIManager : BaseManager<UIManager>
         }
         else if(LoadedOldUIDic.ContainsKey(uiName))
         {
-            Debug.Log("Old " + uiName + " Hide");
+            //Debug.Log("Old " + uiName + " Hide");
             //销毁UI
             GameObject.Destroy(LoadedOldUIDic[uiName].gameObject);
             LoadedOldUIDic.Remove(uiName);

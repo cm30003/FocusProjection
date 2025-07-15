@@ -83,6 +83,14 @@ public class ExcelReader : Editor
         Grown_SpriteResPath,//生长图片资源路径
         Mature_SpriteResPath,//资源路径
     }
+    private enum Map_ExcelTitleEnum
+    {
+        ID,
+        Name,
+        Description,
+        Cost,
+        ResPath,
+    }
     /// <summary>
     /// 从Excel创建Json数据文件
     /// </summary>
@@ -104,6 +112,7 @@ public class ExcelReader : Editor
             ExcelWorksheet workSheet_Food = excel.Workbook.Worksheets[4];//食物数据
             ExcelWorksheet workSheet_Cloth = excel.Workbook.Worksheets[5];//衣物数据
             ExcelWorksheet workSheet_Plant = excel.Workbook.Worksheets[6];//植物数据
+            ExcelWorksheet workSheet_Map = excel.Workbook.Worksheets[7];//地图数据
 
             NPC_DataJson_Create(workSheet_NPCData);
             NPC_InformationJson_Create(workSheet_NPCInformation);
@@ -111,6 +120,7 @@ public class ExcelReader : Editor
             Gift_DataJson_Create(workSheet_Gift);
             Cloth_DataJson_Create(workSheet_Cloth);
             Plant_DataJson_Create(workSheet_Plant);
+            Map_DataJson_Create(workSheet_Map);
         }
     }
     /// <summary>
@@ -121,7 +131,7 @@ public class ExcelReader : Editor
     {
         int StartRow = 4, StartCol = 1;//起始行列
 
-        Debug.Log("NPCInformation:行:" + worksheet.Dimension.Rows + "列：" + worksheet.Dimension.Columns);
+        //Debug.Log("NPCInformation:行:" + worksheet.Dimension.Rows + "列：" + worksheet.Dimension.Columns);
 
         List<NPCInformation> list = new List<NPCInformation>();
 
@@ -158,7 +168,7 @@ public class ExcelReader : Editor
     {
         int StartRow = 4,StartCol=1;//起始行列
 
-        Debug.Log("FoodData:行:"+worksheet.Dimension.Rows+"列："+ worksheet.Dimension.Columns);
+        //Debug.Log("FoodData:行:"+worksheet.Dimension.Rows+"列："+ worksheet.Dimension.Columns);
 
         List<FoodItem_Data> list = new List<FoodItem_Data>();
         //将读取到的Excel数据填充到相应的可序列化字段中
@@ -194,7 +204,7 @@ public class ExcelReader : Editor
     {
         int StartRow = 4, StartCol = 1;//起始行列
 
-        Debug.Log("NPCData:行:" + worksheet.Dimension.Rows + "列：" + worksheet.Dimension.Columns);
+        //Debug.Log("NPCData:行:" + worksheet.Dimension.Rows + "列：" + worksheet.Dimension.Columns);
 
         List<NPCData> list = new List<NPCData>();
         //将读取到的Excel数据填充到相应的可序列化字段中
@@ -235,7 +245,7 @@ public class ExcelReader : Editor
     {
         int StartRow = 4, StartCol = 1;//起始行列
 
-        Debug.Log("GiftData:行:" + worksheet.Dimension.Rows + "列：" + worksheet.Dimension.Columns);
+        //Debug.Log("GiftData:行:" + worksheet.Dimension.Rows + "列：" + worksheet.Dimension.Columns);
 
         List<GiftData> list = new List<GiftData>();
         //将读取到的Excel数据填充到相应的可序列化字段中
@@ -273,14 +283,13 @@ public class ExcelReader : Editor
     {
         int StartRow = 4, StartCol = 1;//起始行列
 
-        Debug.Log("ClothData:行:" + worksheet.Dimension.Rows + "列：" + worksheet.Dimension.Columns);
+        //Debug.Log("ClothData:行:" + worksheet.Dimension.Rows + "列：" + worksheet.Dimension.Columns);
 
         List<ClothItem_Data> list = new List<ClothItem_Data>();
 
         //将读取到的Excel数据填充到相应的可序列化字段中
         for (int i = StartRow; i < worksheet.Dimension.Rows; i++)
         {
-            //Debug.Log(worksheet.Cells[i, StartCol + (int)Cloth_ExcelTitleEnum.Cost].Text);
 
             ClothItem_Data ClothData = new ClothItem_Data();
 
@@ -348,6 +357,43 @@ public class ExcelReader : Editor
         }
         //将可序列化数据转为Json数据并保存到目标路径
         string savePath = Path.Combine(Application.dataPath, "Resources/JsonDataAsset/Plant_Data.json");
+        //检测路径是否存在
+        if (!Directory.Exists(Path.GetDirectoryName(savePath)))
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(savePath));
+        }
+        File.WriteAllText(savePath, JsonConvert.SerializeObject(list, Formatting.Indented));
+
+        Debug.Log("生成JsonData于：" + savePath);
+    }
+    /// <summary>
+    /// 创建地图数据Map_Data.json文件
+    /// </summary>
+    /// <param name="worksheet"></param>
+    private static void Map_DataJson_Create(ExcelWorksheet worksheet)
+    {
+        int StartRow = 4, StartCol = 1;//起始行列
+
+        List<Map_Data> list = new List<Map_Data>();
+
+        //将读取到的Excel数据填充到相应的可序列化字段中
+        for (int i = StartRow; i <= worksheet.Dimension.Rows; i++)
+        {
+            Map_Data map_Data = new Map_Data();
+
+            Debug.Log(worksheet.Dimension.Rows);
+            map_Data.ID = int.Parse(worksheet.Cells[i, StartCol].Text);
+            map_Data.Name = worksheet.Cells[i, StartCol + (int)Map_ExcelTitleEnum.Name].Text;
+            map_Data.Description = worksheet.Cells[i, StartCol + (int)Map_ExcelTitleEnum.Description].Text;
+            map_Data.Cost= int.Parse(worksheet.Cells[i, StartCol + (int)Map_ExcelTitleEnum.Cost].Text);
+            map_Data.ResPath = worksheet.Cells[i, StartCol + (int)Map_ExcelTitleEnum.ResPath].Text;
+
+            list.Add(map_Data);
+
+            //Debug.Log(i);
+        }
+        //将可序列化数据转为Json数据并保存到目标路径
+        string savePath = Path.Combine(Application.dataPath, "Resources/JsonDataAsset/Map_Data.json");
         //检测路径是否存在
         if (!Directory.Exists(Path.GetDirectoryName(savePath)))
         {

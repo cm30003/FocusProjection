@@ -1,0 +1,20 @@
+
+warning line.png
+size: 601,51
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+banmaxian
+  rotate: false
+  xy: 2, 5
+  size: 360, 44
+  orig: 360, 44
+  offset: 0, 0
+  index: -1
+caution
+  rotate: false
+  xy: 364, 2
+  size: 235, 47
+  orig: 235, 47
+  offset: 0, 0
+  index: -1

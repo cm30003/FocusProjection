@@ -16,7 +16,7 @@
     "BugControl_Time": 10.0,
     "Harvest_Time": 10.0,
     "Harvest_Num": 3,
-    "Gamer_Num": 0,
+    "Player_Num": 0,
     "Germinate_SpriteResPath": "UI/Sprite/Plant/P基因小麦/P基因小麦萌芽期",
     "Grown_SpriteResPath": "UI/Sprite/Plant/P基因小麦/P基因小麦生长期",
     "Mature_SpriteResPath": "UI/Sprite/Plant/P基因小麦/P基因小麦成熟期"
@@ -38,7 +38,7 @@
     "BugControl_Time": 20.0,
     "Harvest_Time": 20.0,
     "Harvest_Num": 3,
-    "Gamer_Num": 0,
+    "Player_Num": 0,
     "Germinate_SpriteResPath": "UI/Sprite/Plant/玉米/玉米萌芽期",
     "Grown_SpriteResPath": "UI/Sprite/Plant/玉米/玉米生长期",
     "Mature_SpriteResPath": "UI/Sprite/Plant/玉米/玉米成熟期"
@@ -60,7 +60,7 @@
     "BugControl_Time": 30.0,
     "Harvest_Time": 30.0,
     "Harvest_Num": 3,
-    "Gamer_Num": 0,
+    "Player_Num": 0,
     "Germinate_SpriteResPath": "UI/Sprite/Plant/西蓝柿/西蓝柿萌芽期",
     "Grown_SpriteResPath": "UI/Sprite/Plant/西蓝柿/西蓝柿生长期",
     "Mature_SpriteResPath": "UI/Sprite/Plant/西蓝柿/西蓝柿成熟期"

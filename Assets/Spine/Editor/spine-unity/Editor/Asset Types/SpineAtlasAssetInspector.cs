@@ -1,16 +1,16 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated July 28, 2023. Replaces all prior versions.
+ * Last updated January 1, 2020. Replaces all prior versions.
  *
- * Copyright (c) 2013-2023, Esoteric Software LLC
+ * Copyright (c) 2013-2020, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
  * conditions of Section 2 of the Spine Editor License Agreement:
  * http://esotericsoftware.com/spine-editor-license
  *
- * Otherwise, it is permitted to integrate the Spine Runtimes into software or
- * otherwise create derivative works of the Spine Runtimes (collectively,
+ * Otherwise, it is permitted to integrate the Spine Runtimes into software
+ * or otherwise create derivative works of the Spine Runtimes (collectively,
  * "Products"), provided that each user of the Products must obtain their own
  * Spine Editor license and redistribution of the Products in any form must
  * include this license and copyright notice.
@@ -23,26 +23,26 @@
  * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
  * BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THE
- * SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
 //#define BAKE_ALL_BUTTON
 //#define REGION_BAKING_MESH
 
-using Spine;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
+using Spine;
 
 namespace Spine.Unity.Editor {
 	using Event = UnityEngine.Event;
 
 	[CustomEditor(typeof(SpineAtlasAsset)), CanEditMultipleObjects]
 	public class SpineAtlasAssetInspector : UnityEditor.Editor {
-		SerializedProperty atlasFile, materials, textureLoadingMode, onDemandTextureLoader;
+		SerializedProperty atlasFile, materials;
 		SpineAtlasAsset atlasAsset;
 
 		GUIContent spriteSlicesLabel;
@@ -70,16 +70,14 @@ namespace Spine.Unity.Editor {
 			SpineEditorUtilities.ConfirmInitialization();
 			atlasFile = serializedObject.FindProperty("atlasFile");
 			materials = serializedObject.FindProperty("materials");
-			textureLoadingMode = serializedObject.FindProperty("textureLoadingMode");
-			onDemandTextureLoader = serializedObject.FindProperty("onDemandTextureLoader");
 			materials.isExpanded = true;
 			atlasAsset = (SpineAtlasAsset)target;
-#if REGION_BAKING_MESH
+			#if REGION_BAKING_MESH
 			UpdateBakedList();
-#endif
+			#endif
 		}
 
-#if REGION_BAKING_MESH
+		#if REGION_BAKING_MESH
 		private List<bool> baked;
 		private List<GameObject> bakedObjects;
 
@@ -101,7 +99,7 @@ namespace Spine.Unity.Editor {
 				}
 			}
 		}
-#endif
+		#endif
 
 		override public void OnInspectorGUI () {
 			if (serializedObject.isEditingMultipleObjects) {
@@ -127,25 +125,19 @@ namespace Spine.Unity.Editor {
 
 			for (int i = 0; i < materials.arraySize; i++) {
 				SerializedProperty prop = materials.GetArrayElementAtIndex(i);
-				Material material = (Material)prop.objectReferenceValue;
+				var material = (Material)prop.objectReferenceValue;
 				if (material == null) {
 					EditorGUILayout.HelpBox("Materials cannot be null.", MessageType.Error);
 					return;
 				}
 			}
 
-			if (textureLoadingMode != null) {
-				EditorGUILayout.Space();
-				EditorGUILayout.PropertyField(textureLoadingMode);
-				EditorGUILayout.PropertyField(onDemandTextureLoader);
-			}
-
 			EditorGUILayout.Space();
 			if (SpineInspectorUtility.LargeCenteredButton(SpineInspectorUtility.TempContent("Set Mipmap Bias to " + SpinePreferences.DEFAULT_MIPMAPBIAS, tooltip: "This may help textures with mipmaps be less blurry when used for 2D sprites."))) {
-				foreach (Material m in atlasAsset.materials) {
-					Texture texture = m.mainTexture;
+				foreach (var m in atlasAsset.materials) {
+					var texture = m.mainTexture;
 					string texturePath = AssetDatabase.GetAssetPath(texture.GetInstanceID());
-					TextureImporter importer = (TextureImporter)TextureImporter.GetAtPath(texturePath);
+					var importer = (TextureImporter)TextureImporter.GetAtPath(texturePath);
 					importer.mipMapBias = SpinePreferences.DEFAULT_MIPMAPBIAS;
 					EditorUtility.SetDirty(texture);
 				}
@@ -155,15 +147,15 @@ namespace Spine.Unity.Editor {
 			EditorGUILayout.Space();
 			if (atlasFile.objectReferenceValue != null) {
 				if (SpineInspectorUtility.LargeCenteredButton(SpriteSlicesLabel)) {
-					Atlas atlas = atlasAsset.GetAtlas();
-					foreach (Material m in atlasAsset.materials)
+					var atlas = atlasAsset.GetAtlas();
+					foreach (var m in atlasAsset.materials)
 						UpdateSpriteSlices(m.mainTexture, atlas);
 				}
 			}
 
 			EditorGUILayout.Space();
 
-#if REGION_BAKING_MESH
+			#if REGION_BAKING_MESH
 			if (atlasFile.objectReferenceValue != null) {
 				Atlas atlas = asset.GetAtlas();
 				FieldInfo field = typeof(Atlas).GetField("regions", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.NonPublic);
@@ -227,7 +219,7 @@ namespace Spine.Unity.Editor {
 				}
 				EditorGUI.indentLevel--;
 
-#if BAKE_ALL_BUTTON
+				#if BAKE_ALL_BUTTON
 				// Check state
 				bool allBaked = true;
 				bool allUnbaked = true;
@@ -266,16 +258,16 @@ namespace Spine.Unity.Editor {
 					}
 
 				}
-#endif
+				#endif
 
 			}
-#else
+			#else
 			if (atlasFile.objectReferenceValue != null) {
 
 
 				int baseIndent = EditorGUI.indentLevel;
 
-				List<AtlasRegion> regions = SpineAtlasAssetInspector.GetRegions(atlasAsset.GetAtlas());
+				var regions = SpineAtlasAssetInspector.GetRegions(atlasAsset.GetAtlas());
 				int regionsCount = regions.Count;
 				using (new EditorGUILayout.HorizontalScope()) {
 					EditorGUILayout.LabelField("Atlas Regions", EditorStyles.boldLabel);
@@ -314,7 +306,7 @@ namespace Spine.Unity.Editor {
 				}
 				EditorGUI.indentLevel = baseIndent;
 			}
-#endif
+			#endif
 
 			if (serializedObject.ApplyModifiedProperties() || SpineInspectorUtility.UndoRedoPerformed(Event.current))
 				atlasAsset.Clear();
@@ -322,27 +314,28 @@ namespace Spine.Unity.Editor {
 
 		static public void UpdateSpriteSlices (Texture texture, Atlas atlas) {
 			string texturePath = AssetDatabase.GetAssetPath(texture.GetInstanceID());
-			TextureImporter t = (TextureImporter)TextureImporter.GetAtPath(texturePath);
+			var t = (TextureImporter)TextureImporter.GetAtPath(texturePath);
 			t.spriteImportMode = SpriteImportMode.Multiple;
-			SpriteMetaData[] spriteSheet = t.spritesheet;
-			List<SpriteMetaData> sprites = new List<SpriteMetaData>(spriteSheet);
+			var spriteSheet = t.spritesheet;
+			var sprites = new List<SpriteMetaData>(spriteSheet);
 
-			List<AtlasRegion> regions = SpineAtlasAssetInspector.GetRegions(atlas);
+			var regions = SpineAtlasAssetInspector.GetRegions(atlas);
+			char[] FilenameDelimiter = {'.'};
 			int updatedCount = 0;
 			int addedCount = 0;
 
-			foreach (AtlasRegion r in regions) {
-				string pageName = System.IO.Path.GetFileNameWithoutExtension(r.page.name);
+			foreach (var r in regions) {
+				string pageName = r.page.name.Split(FilenameDelimiter, StringSplitOptions.RemoveEmptyEntries)[0];
 				string textureName = texture.name;
 				bool pageMatch = string.Equals(pageName, textureName, StringComparison.Ordinal);
 
-				//				if (pageMatch) {
-				//					int pw = r.page.width;
-				//					int ph = r.page.height;
-				//					bool mismatchSize = pw != texture.width || pw > t.maxTextureSize || ph != texture.height || ph > t.maxTextureSize;
-				//					if (mismatchSize)
-				//						Debug.LogWarningFormat("Size mismatch found.\nExpected atlas size is {0}x{1}. Texture Import Max Size of texture '{2}'({4}x{5}) is currently set to {3}.", pw, ph, texture.name, t.maxTextureSize, texture.width, texture.height);
-				//				}
+//				if (pageMatch) {
+//					int pw = r.page.width;
+//					int ph = r.page.height;
+//					bool mismatchSize = pw != texture.width || pw > t.maxTextureSize || ph != texture.height || ph > t.maxTextureSize;
+//					if (mismatchSize)
+//						Debug.LogWarningFormat("Size mismatch found.\nExpected atlas size is {0}x{1}. Texture Import Max Size of texture '{2}'({4}x{5}) is currently set to {3}.", pw, ph, texture.name, t.maxTextureSize, texture.width, texture.height);
+//				}
 
 				int spriteIndex = pageMatch ? sprites.FindIndex(
 					(s) => string.Equals(s.name, r.name, StringComparison.Ordinal)
@@ -352,7 +345,7 @@ namespace Spine.Unity.Editor {
 				if (pageMatch) {
 					Rect spriteRect = new Rect();
 
-					if (r.degrees == 90) {
+					if (r.rotate) {
 						spriteRect.width = r.height;
 						spriteRect.height = r.width;
 					} else {
@@ -363,7 +356,7 @@ namespace Spine.Unity.Editor {
 					spriteRect.y = r.page.height - spriteRect.height - r.y;
 
 					if (spriteNameMatchExists) {
-						SpriteMetaData s = sprites[spriteIndex];
+						var s = sprites[spriteIndex];
 						s.rect = spriteRect;
 						sprites[spriteIndex] = s;
 						updatedCount++;

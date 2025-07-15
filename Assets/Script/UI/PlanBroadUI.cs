@@ -8,16 +8,17 @@ using UnityEngine.UI;
 
 public class PlanBroadUI : NewUIBase
 {
-    [Header("————右上计划板————")]
+    [Header("————UI————")]
     public GameObject Note;
 
     public GameObject PlanText_Group;
 
-    public GameObject Choose_Bar;
+    public Image Choose_Bar;
 
     public GameObject PlaceHolder;
-
-    public Mission_ADay mission_ADay;
+    [Header("————需要保存的数据————")]
+    public List<string> Mission_UnFinish;//未完成的任务
+    public Mission_ADay mission_ADay;//日期/专注时间/完成的任务
 
     public TextMeshProUGUI CurrentText;
     private void Start()
@@ -56,10 +57,14 @@ public class PlanBroadUI : NewUIBase
                 Open_Choosen_Bar(text,data);
                 CurrentText  = text;
             });
+            UIManager.AddCustomEventListener(Choose_Bar, EventTriggerType.PointerClick, (data) =>
+            {
+                Open_Note(PlanText_Group.transform.GetChild(0).GetComponent<TextMeshProUGUI>(), data);
+            });
             button.onClick.AddListener(() => Finish_Button(ref text));
         }
     }
-    private void Open_Note(TextMeshProUGUI text,BaseEventData data)
+    public void Open_Note(TextMeshProUGUI text,BaseEventData data)
     {
         if(text.text==string.Empty)
         {
@@ -91,6 +96,7 @@ public class PlanBroadUI : NewUIBase
     /// <param name="text"></param>
     private void Open_Choosen_Bar(TextMeshProUGUI text,BaseEventData data=null)
     {
+        #region 弃用
         ////创建占位符
         //GameObject placeHolder = Instantiate(PlaceHolder);
 
@@ -98,27 +104,37 @@ public class PlanBroadUI : NewUIBase
 
         //placeHolder.transform.localRotation = Quaternion.Euler(0, 0, 0);
 
-        PlaceHolder.transform.SetSiblingIndex(0);
+        //Choose_Bar.transform.localScale = new Vector3(1.25f,1.25f,1.25f);
 
-        text.transform.SetSiblingIndex(1);
-
-        Choose_Bar.transform.localScale = new Vector3(1.25f,1.25f,1.25f);
-        Choose_Bar.GetComponentInChildren<TextMeshProUGUI>().text =text.text;
+        ////更改文本父物体
+        //text.transform.SetParent(Choose_Bar.transform);
+        ////更改文本RectTranform
+        //RectTransform textRect = text.GetComponent<RectTransform>();
+        ////拉伸填充父物体
+        //textRect.anchorMin = Vector2.zero;
+        //textRect.anchorMax = Vector2.one;
+        //textRect.offsetMin = new Vector2(15,60);
+        //textRect.offsetMax = new Vector2(-15,-45.5f);
+        #endregion
+        text.transform.SetSiblingIndex(0);
+        Choose_Bar.GetComponentInChildren<TextMeshProUGUI>().text = text.text;
     }
+    #region 关闭选择框功能（已弃用）
     /// <summary>
     /// 关闭当前计划框
     /// </summary>
-    public void Close_Choosen_Bar()
-    {
-        Choose_Bar.transform.localScale = Vector3.zero;
+    //public void Close_Choosen_Bar()
+    //{
+    //    Choose_Bar.transform.localScale = Vector3.zero;
 
-        GameObject placeHolder = PlanText_Group.transform.GetChild(0).gameObject;
-        Destroy(placeHolder);
-    }
+    //    GameObject placeHolder = PlanText_Group.transform.GetChild(0).gameObject;
+    //    Destroy(placeHolder);
+    //}
     /// <summary>
     /// 完成项目事件,当完成该项目，则将其保存到本地
     /// </summary>
     /// <param name="Option">对应的项目</param>
+    #endregion
     private void Finish_Button(ref TextMeshProUGUI Option)
     {
         mission_ADay.Day = DateTime.Now.ToString("yyyy/M/d");//存储当前日期
@@ -127,14 +143,14 @@ public class PlanBroadUI : NewUIBase
             //当字典中存在此键/日期时，说明此前曾经存储过同一天的内容，更新字典
             if (mission_ADay.ADay_Options_Dic.ContainsKey(mission_ADay.Day))
             {
-                mission_ADay.Options = mission_ADay.ADay_Options_Dic[mission_ADay.Day] = mission_ADay.Options;
-                mission_ADay.Options.Add(Option.text);
+                mission_ADay.Finished_Options = mission_ADay.ADay_Options_Dic[mission_ADay.Day] = mission_ADay.Finished_Options;
+                mission_ADay.Finished_Options.Add(Option.text);
             }
             else//不存在此键/日期时，添加此键/日期及其相对应的完成项目列表
             {
-                mission_ADay.Options.Clear();
-                mission_ADay.Options.Add(Option.text);
-                mission_ADay.ADay_Options_Dic.Add(mission_ADay.Day, mission_ADay.Options);
+                mission_ADay.Finished_Options.Clear();
+                mission_ADay.Finished_Options.Add(Option.text);
+                mission_ADay.ADay_Options_Dic.Add(mission_ADay.Day, mission_ADay.Finished_Options);
             }
         }
         //存储今日数据到本地

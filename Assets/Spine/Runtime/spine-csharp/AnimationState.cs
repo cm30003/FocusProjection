@@ -1,16 +1,16 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated July 28, 2023. Replaces all prior versions.
+ * Last updated January 1, 2020. Replaces all prior versions.
  *
- * Copyright (c) 2013-2023, Esoteric Software LLC
+ * Copyright (c) 2013-2020, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
  * conditions of Section 2 of the Spine Editor License Agreement:
  * http://esotericsoftware.com/spine-editor-license
  *
- * Otherwise, it is permitted to integrate the Spine Runtimes into software or
- * otherwise create derivative works of the Spine Runtimes (collectively,
+ * Otherwise, it is permitted to integrate the Spine Runtimes into software
+ * or otherwise create derivative works of the Spine Runtimes (collectively,
  * "Products"), provided that each user of the Products must obtain their own
  * Spine Editor license and redistribution of the Products in any form must
  * include this license and copyright notice.
@@ -23,8 +23,8 @@
  * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
  * BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THE
- * SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
 using System;
@@ -40,7 +40,7 @@ namespace Spine {
 	/// See <a href='http://esotericsoftware.com/spine-applying-animations/'>Applying Animations</a> in the Spine Runtimes Guide.</para>
 	/// </summary>
 	public class AnimationState {
-		internal static readonly Animation EmptyAnimation = new Animation("<empty>", new ExposedList<Timeline>(), 0);
+		static readonly Animation EmptyAnimation = new Animation("<empty>", new ExposedList<Timeline>(), 0);
 
 		/// 1) A previously applied timeline has set this property.<para />
 		/// Result: Mix from the current pose to the timeline pose.
@@ -49,9 +49,9 @@ namespace Spine {
 		/// 2) The next track entry applied after this one does not have a timeline to set this property.<para />
 		/// Result: Mix from the setup pose to the timeline pose.
 		internal const int First = 1;
-		/// 1) A previously applied timeline has set this property.<para />
-		/// 2) The next track entry to be applied does have a timeline to set this property.<para />
-		/// 3) The next track entry after that one does not have a timeline to set this property.<para />
+		/// 1) A previously applied timeline has set this property.<br>
+		/// 2) The next track entry to be applied does have a timeline to set this property.<br>
+		/// 3) The next track entry after that one does not have a timeline to set this property.<br>
 		/// Result: Mix from the current pose to the timeline pose, but do not mix out. This avoids "dipping" when crossfading
 		/// animations that key the same property. A subsequent timeline will set this property using a mix.
 		internal const int HoldSubsequent = 2;
@@ -73,7 +73,7 @@ namespace Spine {
 		/// out position.
 		internal const int HoldMix = 4;
 
-		internal const int Setup = 1, Current = 2;
+		internal const int Setup = 1,  Current = 2;
 
 		protected AnimationStateData data;
 		private readonly ExposedList<TrackEntry> tracks = new ExposedList<TrackEntry>();
@@ -87,10 +87,6 @@ namespace Spine {
 		internal void OnEvent (TrackEntry entry, Event e) { if (Event != null) Event(entry, e); }
 
 		public delegate void TrackEntryDelegate (TrackEntry trackEntry);
-		/// <summary>See <see href="http://esotericsoftware.com/spine-api-reference#AnimationStateListener-Methods">
-		/// API Reference documentation pages here</see> for details. Usage in C# and spine-unity is explained
-		/// <see href="http://esotericsoftware.com/spine-unity#Processing-AnimationState-Events">here</see>
-		/// on the spine-unity documentation pages.</summary>
 		public event TrackEntryDelegate Start, Interrupt, End, Dispose, Complete;
 
 		public delegate void TrackEntryEventDelegate (TrackEntry trackEntry, Event e);
@@ -116,7 +112,7 @@ namespace Spine {
 
 		// end of difference
 		private readonly EventQueue queue; // Initialized by constructor.
-		private readonly HashSet<string> propertyIds = new HashSet<string>();
+		private readonly HashSet<int> propertyIDs = new HashSet<int>();
 		private bool animationsChanged;
 		private float timeScale = 1;
 		private int unkeyedState;
@@ -138,7 +134,7 @@ namespace Spine {
 		/// <param name="delta">delta time</param>
 		public void Update (float delta) {
 			delta *= timeScale;
-			TrackEntry[] tracksItems = tracks.Items;
+			var tracksItems = tracks.Items;
 			for (int i = 0, n = tracks.Count; i < n; i++) {
 				TrackEntry current = tracksItems[i];
 				if (current == null) continue;
@@ -174,7 +170,7 @@ namespace Spine {
 					// Clear the track when there is no next entry, the track end time is reached, and there is no mixingFrom.
 					tracksItems[i] = null;
 					queue.End(current);
-					ClearNext(current);
+					DisposeNext(current);
 					continue;
 				}
 				if (current.mixingFrom != null && UpdateMixingFrom(current, delta)) {
@@ -204,18 +200,16 @@ namespace Spine {
 			from.animationLast = from.nextAnimationLast;
 			from.trackLast = from.nextTrackLast;
 
-			if (to.nextTrackLast != -1) { // The from entry was applied at least once.
-				bool discard = to.mixTime == 0 && from.mixTime == 0; // Discard the from entry when neither have advanced yet.
-				if (to.mixTime >= to.mixDuration || discard) {
-					// Require totalAlpha == 0 to ensure mixing is complete or the transition is a single frame or discarded.
-					if (from.totalAlpha == 0 || to.mixDuration == 0 || discard) {
-						to.mixingFrom = from.mixingFrom;
-						if (from.mixingFrom != null) from.mixingFrom.mixingTo = to;
-						to.interruptAlpha = from.interruptAlpha;
-						queue.End(from);
-					}
-					return finished;
+			// Require mixTime > 0 to ensure the mixing from entry was applied at least once.
+			if (to.mixTime > 0 && to.mixTime >= to.mixDuration) {
+				// Require totalAlpha == 0 to ensure mixing is complete, unless mixDuration == 0 (the transition is a single frame).
+				if (from.totalAlpha == 0 || to.mixDuration == 0) {
+					to.mixingFrom = from.mixingFrom;
+					if (from.mixingFrom != null) from.mixingFrom.mixingTo = to;
+					to.interruptAlpha = from.interruptAlpha;
+					queue.End(from);
 				}
+				return finished;
 			}
 
 			from.trackTime += delta * from.timeScale;
@@ -231,9 +225,9 @@ namespace Spine {
 			if (skeleton == null) throw new ArgumentNullException("skeleton", "skeleton cannot be null.");
 			if (animationsChanged) AnimationsChanged();
 
-			ExposedList<Event> events = this.events;
+			var events = this.events;
 			bool applied = false;
-			TrackEntry[] tracksItems = tracks.Items;
+			var tracksItems = tracks.Items;
 			for (int i = 0, n = tracks.Count; i < n; i++) {
 				TrackEntry current = tracksItems[i];
 				if (current == null || current.delay > 0) continue;
@@ -243,51 +237,43 @@ namespace Spine {
 				MixBlend blend = i == 0 ? MixBlend.First : current.mixBlend;
 
 				// Apply mixing from entries first.
-				float alpha = current.alpha;
+				float mix = current.alpha;
 				if (current.mixingFrom != null)
-					alpha *= ApplyMixingFrom(current, skeleton, blend);
+					mix *= ApplyMixingFrom(current, skeleton, blend);
 				else if (current.trackTime >= current.trackEnd && current.next == null) //
-					alpha = 0; // Set to setup pose the last time the entry will be applied.
-				bool attachments = alpha >= current.alphaAttachmentThreshold;
+					mix = 0; // Set to setup pose the last time the entry will be applied.
 
 				// Apply current entry.
-				float animationLast = current.animationLast, animationTime = current.AnimationTime, applyTime = animationTime;
-				ExposedList<Event> applyEvents = events;
-				if (current.reverse) {
-					applyTime = current.animation.duration - applyTime;
-					applyEvents = null;
-				}
-
+				float animationLast = current.animationLast, animationTime = current.AnimationTime;
 				int timelineCount = current.animation.timelines.Count;
-				Timeline[] timelines = current.animation.timelines.Items;
-				if ((i == 0 && alpha == 1) || blend == MixBlend.Add) {
-					if (i == 0) attachments = true;
+				var timelines = current.animation.timelines;
+				var timelinesItems = timelines.Items;
+				if ((i == 0 && mix == 1) || blend == MixBlend.Add) {
 					for (int ii = 0; ii < timelineCount; ii++) {
-						Timeline timeline = timelines[ii];
+						var timeline = timelinesItems[ii];
 						if (timeline is AttachmentTimeline)
-							ApplyAttachmentTimeline((AttachmentTimeline)timeline, skeleton, applyTime, blend, attachments);
+							ApplyAttachmentTimeline((AttachmentTimeline)timeline, skeleton, animationTime, blend, true);
 						else
-							timeline.Apply(skeleton, animationLast, applyTime, applyEvents, alpha, blend, MixDirection.In);
+							timeline.Apply(skeleton, animationLast, animationTime, events, mix, blend, MixDirection.In);
 					}
 				} else {
-					int[] timelineMode = current.timelineMode.Items;
+					var timelineMode = current.timelineMode.Items;
 
-					bool shortestRotation = current.shortestRotation;
-					bool firstFrame = !shortestRotation && current.timelinesRotation.Count != timelineCount << 1;
-					if (firstFrame) current.timelinesRotation.Resize(timelineCount << 1);
-					float[] timelinesRotation = current.timelinesRotation.Items;
+					bool firstFrame = current.timelinesRotation.Count != timelineCount << 1;
+					if (firstFrame) current.timelinesRotation.Resize(timelines.Count << 1);
+					var timelinesRotation = current.timelinesRotation.Items;
 
 					for (int ii = 0; ii < timelineCount; ii++) {
-						Timeline timeline = timelines[ii];
+						Timeline timeline = timelinesItems[ii];
 						MixBlend timelineBlend = timelineMode[ii] == AnimationState.Subsequent ? blend : MixBlend.Setup;
-						RotateTimeline rotateTimeline = timeline as RotateTimeline;
-						if (!shortestRotation && rotateTimeline != null)
-							ApplyRotateTimeline(rotateTimeline, skeleton, applyTime, alpha, timelineBlend, timelinesRotation,
+						var rotateTimeline = timeline as RotateTimeline;
+						if (rotateTimeline != null)
+							ApplyRotateTimeline(rotateTimeline, skeleton, animationTime, mix, timelineBlend, timelinesRotation,
 												ii << 1, firstFrame);
 						else if (timeline is AttachmentTimeline)
-							ApplyAttachmentTimeline((AttachmentTimeline)timeline, skeleton, applyTime, blend, attachments);
+							ApplyAttachmentTimeline((AttachmentTimeline)timeline, skeleton, animationTime, blend, true);
 						else
-							timeline.Apply(skeleton, animationLast, applyTime, applyEvents, alpha, timelineBlend, MixDirection.In);
+							timeline.Apply(skeleton, animationLast, animationTime, events, mix, timelineBlend, MixDirection.In);
 					}
 				}
 				QueueEvents(current, animationTime);
@@ -300,9 +286,9 @@ namespace Spine {
 			// subsequent timelines see any deform, but the subsequent timelines don't set an attachment (eg they are also mixing out or
 			// the time is before the first key).
 			int setupState = unkeyedState + Setup;
-			Slot[] slots = skeleton.slots.Items;
+			var slots = skeleton.slots.Items;
 			for (int i = 0, n = skeleton.slots.Count; i < n; i++) {
-				Slot slot = slots[i];
+				Slot slot = (Slot)slots[i];
 				if (slot.attachmentState == setupState) {
 					string attachmentName = slot.data.attachmentName;
 					slot.Attachment = (attachmentName == null ? null : skeleton.GetAttachment(slot.data.index, attachmentName));
@@ -314,44 +300,40 @@ namespace Spine {
 			return applied;
 		}
 
-		/// <summary>Version of <see cref="Apply"/> only applying and updating time at
-		/// EventTimelines for lightweight off-screen updates.</summary>
-		/// <param name="issueEvents">When set to false, only animation times of TrackEntries are updated.</param>
+		/// <summary>Version of <see cref="Apply"/> only applying EventTimelines for lightweight off-screen updates.</summary>
 		// Note: This method is not part of the libgdx reference implementation.
-		public bool ApplyEventTimelinesOnly (Skeleton skeleton, bool issueEvents = true) {
+		public bool ApplyEventTimelinesOnly (Skeleton skeleton) {
 			if (skeleton == null) throw new ArgumentNullException("skeleton", "skeleton cannot be null.");
 
-			ExposedList<Event> events = this.events;
+			var events = this.events;
 			bool applied = false;
-			TrackEntry[] tracksItems = tracks.Items;
+			var tracksItems = tracks.Items;
 			for (int i = 0, n = tracks.Count; i < n; i++) {
 				TrackEntry current = tracksItems[i];
 				if (current == null || current.delay > 0) continue;
 				applied = true;
 
 				// Apply mixing from entries first.
-				if (current.mixingFrom != null) ApplyMixingFromEventTimelinesOnly(current, skeleton, issueEvents);
+				if (current.mixingFrom != null)
+					ApplyMixingFromEventTimelinesOnly(current, skeleton);
 
 				// Apply current entry.
 				float animationLast = current.animationLast, animationTime = current.AnimationTime;
-
-				if (issueEvents) {
-					int timelineCount = current.animation.timelines.Count;
-					Timeline[] timelines = current.animation.timelines.Items;
-					for (int ii = 0; ii < timelineCount; ii++) {
-						Timeline timeline = timelines[ii];
-						if (timeline is EventTimeline)
-							timeline.Apply(skeleton, animationLast, animationTime, events, 1.0f, MixBlend.Setup, MixDirection.In);
-					}
-					QueueEvents(current, animationTime);
-					events.Clear(false);
+				int timelineCount = current.animation.timelines.Count;
+				var timelines = current.animation.timelines;
+				var timelinesItems = timelines.Items;
+				for (int ii = 0; ii < timelineCount; ii++) {
+					Timeline timeline = timelinesItems[ii];
+					if (timeline is EventTimeline)
+						timeline.Apply(skeleton, animationLast, animationTime, events, 1.0f, MixBlend.Setup, MixDirection.In);
 				}
+				QueueEvents(current, animationTime);
+				events.Clear(false);
 				current.nextAnimationLast = animationTime;
 				current.nextTrackLast = current.trackTime;
 			}
 
-			if (issueEvents)
-				queue.Drain();
+			queue.Drain();
 			return applied;
 		}
 
@@ -369,72 +351,66 @@ namespace Spine {
 				if (blend != MixBlend.First) blend = from.mixBlend; // Track 0 ignores track mix blend.
 			}
 
-			bool attachments = mix < from.mixAttachmentThreshold, drawOrder = mix < from.mixDrawOrderThreshold;
-			int timelineCount = from.animation.timelines.Count;
-			Timeline[] timelines = from.animation.timelines.Items;
+			var eventBuffer = mix < from.eventThreshold ? this.events : null;
+			bool attachments = mix < from.attachmentThreshold, drawOrder = mix < from.drawOrderThreshold;
+			float animationLast = from.animationLast, animationTime = from.AnimationTime;
+			var timelines = from.animation.timelines;
+			int timelineCount = timelines.Count;
+			var timelinesItems = timelines.Items;
 			float alphaHold = from.alpha * to.interruptAlpha, alphaMix = alphaHold * (1 - mix);
-			float animationLast = from.animationLast, animationTime = from.AnimationTime, applyTime = animationTime;
-			ExposedList<Event> events = null;
-			if (from.reverse)
-				applyTime = from.animation.duration - applyTime;
-			else {
-				if (mix < from.eventThreshold) events = this.events;
-			}
 
 			if (blend == MixBlend.Add) {
 				for (int i = 0; i < timelineCount; i++)
-					timelines[i].Apply(skeleton, animationLast, applyTime, events, alphaMix, blend, MixDirection.Out);
+					timelinesItems[i].Apply(skeleton, animationLast, animationTime, eventBuffer, alphaMix, blend, MixDirection.Out);
 			} else {
-				int[] timelineMode = from.timelineMode.Items;
-				TrackEntry[] timelineHoldMix = from.timelineHoldMix.Items;
+				var timelineMode = from.timelineMode.Items;
+				var timelineHoldMix = from.timelineHoldMix.Items;
 
-				bool shortestRotation = from.shortestRotation;
-				bool firstFrame = !shortestRotation && from.timelinesRotation.Count != timelineCount << 1;
-				if (firstFrame) from.timelinesRotation.Resize(timelineCount << 1);
-				float[] timelinesRotation = from.timelinesRotation.Items;
+				bool firstFrame = from.timelinesRotation.Count != timelineCount << 1;
+				if (firstFrame)	from.timelinesRotation.Resize(timelines.Count << 1); // from.timelinesRotation.setSize
+				var timelinesRotation = from.timelinesRotation.Items;
 
 				from.totalAlpha = 0;
 				for (int i = 0; i < timelineCount; i++) {
-					Timeline timeline = timelines[i];
+					Timeline timeline = timelinesItems[i];
 					MixDirection direction = MixDirection.Out;
 					MixBlend timelineBlend;
 					float alpha;
 					switch (timelineMode[i]) {
-					case AnimationState.Subsequent:
-						if (!drawOrder && timeline is DrawOrderTimeline) continue;
-						timelineBlend = blend;
-						alpha = alphaMix;
-						break;
-					case AnimationState.First:
-						timelineBlend = MixBlend.Setup;
-						alpha = alphaMix;
-						break;
-					case AnimationState.HoldSubsequent:
-						timelineBlend = blend;
-						alpha = alphaHold;
-						break;
-					case AnimationState.HoldFirst:
-						timelineBlend = MixBlend.Setup;
-						alpha = alphaHold;
-						break;
-					default: // HoldMix
-						timelineBlend = MixBlend.Setup;
-						TrackEntry holdMix = timelineHoldMix[i];
-						alpha = alphaHold * Math.Max(0, 1 - holdMix.mixTime / holdMix.mixDuration);
-						break;
+						case AnimationState.Subsequent:
+							if (!drawOrder && timeline is DrawOrderTimeline) continue;
+							timelineBlend = blend;
+							alpha = alphaMix;
+							break;
+						case AnimationState.First:
+							timelineBlend = MixBlend.Setup;
+							alpha = alphaMix;
+							break;
+						case AnimationState.HoldSubsequent:
+							timelineBlend = blend;
+							alpha = alphaHold;
+							break;
+						case AnimationState.HoldFirst:
+							timelineBlend = MixBlend.Setup;
+							alpha = alphaHold;
+							break;
+						default: // HoldMix
+							timelineBlend = MixBlend.Setup;
+							TrackEntry holdMix = timelineHoldMix[i];
+							alpha = alphaHold * Math.Max(0, 1 - holdMix.mixTime / holdMix.mixDuration);
+							break;
 					}
 					from.totalAlpha += alpha;
-					RotateTimeline rotateTimeline = timeline as RotateTimeline;
-					if (!shortestRotation && rotateTimeline != null) {
-						ApplyRotateTimeline(rotateTimeline, skeleton, applyTime, alpha, timelineBlend, timelinesRotation, i << 1,
-							firstFrame);
+					var rotateTimeline = timeline as RotateTimeline;
+					if (rotateTimeline != null) {
+						ApplyRotateTimeline(rotateTimeline, skeleton, animationTime, alpha, timelineBlend, timelinesRotation,
+											i << 1, firstFrame);
 					} else if (timeline is AttachmentTimeline) {
-						ApplyAttachmentTimeline((AttachmentTimeline)timeline, skeleton, applyTime, timelineBlend,
-							attachments && alpha >= from.alphaAttachmentThreshold);
+						ApplyAttachmentTimeline((AttachmentTimeline)timeline, skeleton, animationTime, timelineBlend, attachments);
 					} else {
 						if (drawOrder && timeline is DrawOrderTimeline && timelineBlend == MixBlend.Setup)
 							direction = MixDirection.In;
-						timeline.Apply(skeleton, animationLast, applyTime, events, alpha, timelineBlend, direction);
+						timeline.Apply(skeleton, animationLast, animationTime, eventBuffer, alpha, timelineBlend, direction);
 					}
 				}
 			}
@@ -447,39 +423,37 @@ namespace Spine {
 			return mix;
 		}
 
-		/// <summary>Version of <see cref="ApplyMixingFrom"/> only applying and updating time at
-		/// EventTimelines for lightweight off-screen updates.</summary>
-		/// <param name="issueEvents">When set to false, only animation times of TrackEntries are updated.</param>
+		/// <summary>Version of <see cref="ApplyMixingFrom"/> only applying EventTimelines for lightweight off-screen updates.</summary>
 		// Note: This method is not part of the libgdx reference implementation.
-		private float ApplyMixingFromEventTimelinesOnly (TrackEntry to, Skeleton skeleton, bool issueEvents) {
+		private float ApplyMixingFromEventTimelinesOnly (TrackEntry to, Skeleton skeleton) {
 			TrackEntry from = to.mixingFrom;
-			if (from.mixingFrom != null) ApplyMixingFromEventTimelinesOnly(from, skeleton, issueEvents);
-
+			if (from.mixingFrom != null) ApplyMixingFromEventTimelinesOnly(from, skeleton);
 
 			float mix;
 			if (to.mixDuration == 0) { // Single frame mix to undo mixingFrom changes.
 				mix = 1;
-			} else {
+			}
+			else {
 				mix = to.mixTime / to.mixDuration;
 				if (mix > 1) mix = 1;
 			}
 
-			ExposedList<Event> eventBuffer = mix < from.eventThreshold ? this.events : null;
-			if (eventBuffer == null) return mix;
+			var eventBuffer = mix < from.eventThreshold ? this.events : null;
+			if (eventBuffer == null)
+				return mix;
 
 			float animationLast = from.animationLast, animationTime = from.AnimationTime;
-			if (issueEvents) {
-				int timelineCount = from.animation.timelines.Count;
-				Timeline[] timelines = from.animation.timelines.Items;
-				for (int i = 0; i < timelineCount; i++) {
-					Timeline timeline = timelines[i];
-					if (timeline is EventTimeline)
-						timeline.Apply(skeleton, animationLast, animationTime, eventBuffer, 0, MixBlend.Setup, MixDirection.Out);
-				}
-
-				if (to.mixDuration > 0) QueueEvents(from, animationTime);
-				this.events.Clear(false);
+			var timelines = from.animation.timelines;
+			int timelineCount = timelines.Count;
+			var timelinesItems = timelines.Items;
+			for (int i = 0; i < timelineCount; i++) {
+				var timeline = timelinesItems[i];
+				if (timeline is EventTimeline)
+					timeline.Apply(skeleton, animationLast, animationTime, eventBuffer, 0, MixBlend.Setup, MixDirection.Out);
 			}
+
+			if (to.mixDuration > 0) QueueEvents(from, animationTime);
+			this.events.Clear(false);
 			from.nextAnimationLast = animationTime;
 			from.nextTrackLast = from.trackTime;
 
@@ -487,21 +461,28 @@ namespace Spine {
 		}
 
 		/// <summary> Applies the attachment timeline and sets <see cref="Slot.attachmentState"/>.</summary>
-		/// <param name="attachments">False when: 1) the attachment timeline is mixing out, 2) mix &lt; attachmentThreshold, and 3) the timeline
+		/// <param name="attachments">False when: 1) the attachment timeline is mixing out, 2) mix < attachmentThreshold, and 3) the timeline
 		/// is not the last timeline to set the slot's attachment. In that case the timeline is applied only so subsequent
 		/// timelines see any deform.</param>
 		private void ApplyAttachmentTimeline (AttachmentTimeline timeline, Skeleton skeleton, float time, MixBlend blend,
 			bool attachments) {
 
-			Slot slot = skeleton.slots.Items[timeline.SlotIndex];
+			Slot slot = skeleton.slots.Items[timeline.slotIndex];
 			if (!slot.bone.active) return;
 
 			float[] frames = timeline.frames;
 			if (time < frames[0]) { // Time is before first frame.
 				if (blend == MixBlend.Setup || blend == MixBlend.First)
 					SetAttachment(skeleton, slot, slot.data.attachmentName, attachments);
-			} else
-				SetAttachment(skeleton, slot, timeline.AttachmentNames[Timeline.Search(frames, time)], attachments);
+			}
+			else {
+				int frameIndex;
+				if (time >= frames[frames.Length - 1]) // Time is after last frame.
+					frameIndex = frames.Length - 1;
+				else
+					frameIndex = Animation.BinarySearch(frames, time) - 1;
+				SetAttachment(skeleton, slot, timeline.attachmentNames[frameIndex], attachments);
+			}
 
 			// If an attachment wasn't set (ie before the first frame or attachments is false), set the setup attachment later.
 			if (slot.attachmentState <= unkeyedState) slot.attachmentState = unkeyedState + Setup;
@@ -525,31 +506,45 @@ namespace Spine {
 				return;
 			}
 
-			Bone bone = skeleton.bones.Items[timeline.BoneIndex];
+			Bone bone = skeleton.bones.Items[timeline.boneIndex];
 			if (!bone.active) return;
 
 			float[] frames = timeline.frames;
 			float r1, r2;
 			if (time < frames[0]) { // Time is before first frame.
 				switch (blend) {
-				case MixBlend.Setup:
-					bone.rotation = bone.data.rotation;
-					goto default; // Fall through.
-				default:
-					return;
-				case MixBlend.First:
-					r1 = bone.rotation;
-					r2 = bone.data.rotation;
-					break;
+					case MixBlend.Setup:
+						bone.rotation = bone.data.rotation;
+						return;
+					default:
+						return;
+					case MixBlend.First:
+						r1 = bone.rotation;
+						r2 = bone.data.rotation;
+						break;
 				}
 			} else {
 				r1 = blend == MixBlend.Setup ? bone.data.rotation : bone.rotation;
-				r2 = bone.data.rotation + timeline.GetCurveValue(time);
+				if (time >= frames[frames.Length - RotateTimeline.ENTRIES]) // Time is after last frame.
+					r2 = bone.data.rotation + frames[frames.Length + RotateTimeline.PREV_ROTATION];
+				else {
+					// Interpolate between the previous frame and the current frame.
+					int frame = Animation.BinarySearch(frames, time, RotateTimeline.ENTRIES);
+					float prevRotation = frames[frame + RotateTimeline.PREV_ROTATION];
+					float frameTime = frames[frame];
+					float percent = timeline.GetCurvePercent((frame >> 1) - 1,
+						1 - (time - frameTime) / (frames[frame + RotateTimeline.PREV_TIME] - frameTime));
+
+					r2 = frames[frame + RotateTimeline.ROTATION] - prevRotation;
+					r2 -= (16384 - (int)(16384.499999999996 - r2 / 360)) * 360;
+					r2 = prevRotation + r2 * percent + bone.data.rotation;
+					r2 -= (16384 - (int)(16384.499999999996 - r2 / 360)) * 360;
+				}
 			}
 
 			// Mix between rotations using the direction of the shortest route on the first frame.
 			float total, diff = r2 - r1;
-			diff -= (float)Math.Ceiling(diff / 360 - 0.5f) * 360;
+			diff -= (16384 - (int)(16384.499999999996 - diff / 360)) * 360;
 			if (diff == 0) {
 				total = timelinesRotation[i];
 			} else {
@@ -558,26 +553,23 @@ namespace Spine {
 					lastTotal = 0;
 					lastDiff = diff;
 				} else {
-					lastTotal = timelinesRotation[i];
-					lastDiff = timelinesRotation[i + 1];
+					lastTotal = timelinesRotation[i]; // Angle and direction of mix, including loops.
+					lastDiff = timelinesRotation[i + 1]; // Difference between bones.
 				}
-				float loops = lastTotal - lastTotal % 360;
-				total = diff + loops;
-				bool current = diff >= 0, dir = lastTotal >= 0;
-				if (Math.Abs(lastDiff) <= 90 && Math.Sign(lastDiff) != Math.Sign(diff)) {
-					if (Math.Abs(lastTotal - loops) > 180) {
-						total += 360 * Math.Sign(lastTotal);
-						dir = current;
-					} else if (loops != 0)
-						total -= 360 * Math.Sign(lastTotal);
-					else
-						dir = current;
+				bool current = diff > 0, dir = lastTotal >= 0;
+				// Detect cross at 0 (not 180).
+				if (Math.Sign(lastDiff) != Math.Sign(diff) && Math.Abs(lastDiff) <= 90) {
+					// A cross after a 360 rotation is a loop.
+					if (Math.Abs(lastTotal) > 180) lastTotal += 360 * Math.Sign(lastTotal);
+					dir = current;
 				}
+				total = diff + lastTotal - lastTotal % 360; // Store loops as part of lastTotal.
 				if (dir != current) total += 360 * Math.Sign(lastTotal);
 				timelinesRotation[i] = total;
 			}
 			timelinesRotation[i + 1] = diff;
-			bone.rotation = r1 + total * alpha;
+			r1 += total * alpha;
+			bone.rotation = r1 - (16384 - (int)(16384.499999999996 - r1 / 360)) * 360;
 		}
 
 		private void QueueEvents (TrackEntry entry, float animationTime) {
@@ -586,7 +578,8 @@ namespace Spine {
 			float trackLastWrapped = entry.trackLast % duration;
 
 			// Queue events before complete.
-			Event[] eventsItems = this.events.Items;
+			var events = this.events;
+			var eventsItems = events.Items;
 			int i = 0, n = events.Count;
 			for (; i < n; i++) {
 				Event e = eventsItems[i];
@@ -597,14 +590,9 @@ namespace Spine {
 
 			// Queue complete if completed a loop iteration or the animation.
 			bool complete = false;
-			if (entry.loop) {
-				if (duration == 0)
-					complete = true;
-				else {
-					int cycles = (int)(entry.trackTime / duration);
-					complete = cycles > 0 && cycles > (int)(entry.trackLast / duration);
-				}
-			} else
+			if (entry.loop)
+				complete = duration == 0 || (trackLastWrapped > entry.trackTime % duration);
+			else
 				complete = animationTime >= animationEnd && entry.animationLast < animationEnd;
 			if (complete) queue.Complete(entry);
 
@@ -621,7 +609,7 @@ namespace Spine {
 		/// <para>
 		/// It may be desired to use <see cref="AnimationState.SetEmptyAnimations(float)"/> to mix the skeletons back to the setup pose,
 		/// rather than leaving them in their current pose.</para>
-		/// </summary>
+		 /// </summary>
 		public void ClearTracks () {
 			bool oldDrainDisabled = queue.drainDisabled;
 			queue.drainDisabled = true;
@@ -646,7 +634,7 @@ namespace Spine {
 
 			queue.End(current);
 
-			ClearNext(current);
+			DisposeNext(current);
 
 			TrackEntry entry = current;
 			while (true) {
@@ -667,7 +655,6 @@ namespace Spine {
 		private void SetCurrent (int index, TrackEntry current, bool interrupt) {
 			TrackEntry from = ExpandToIndex(index);
 			tracks.Items[index] = current;
-			current.previous = null;
 
 			if (from != null) {
 				if (interrupt) queue.Interrupt(from);
@@ -684,6 +671,7 @@ namespace Spine {
 
 			queue.Start(current); // triggers AnimationsChanged
 		}
+
 
 		/// <summary>Sets an animation by name. <seealso cref="SetAnimation(int, Animation, bool)" /></summary>
 		public TrackEntry SetAnimation (int trackIndex, string animationName, bool loop) {
@@ -708,11 +696,12 @@ namespace Spine {
 					tracks.Items[trackIndex] = current.mixingFrom;
 					queue.Interrupt(current);
 					queue.End(current);
-					ClearNext(current);
+					DisposeNext(current);
 					current = current.mixingFrom;
 					interrupt = false; // mixingFrom is current again, but don't interrupt it twice.
-				} else
-					ClearNext(current);
+				} else {
+					DisposeNext(current);
+				}
 			}
 			TrackEntry entry = NewTrackEntry(trackIndex, animation, loop, current);
 			SetCurrent(trackIndex, entry, interrupt);
@@ -732,8 +721,8 @@ namespace Spine {
 		/// equivalent to calling <see cref="SetAnimation(int, Animation, bool)"/>.</summary>
 		/// <param name="delay">
 		/// If &gt; 0, sets <see cref="TrackEntry.Delay"/>. If &lt;= 0, the delay set is the duration of the previous track entry
-		/// minus any mix duration (from the <see cref="AnimationStateData"/> plus the specified <c>Delay</c> (ie the mix
-		/// ends at (<c>Delay</c> = 0) or before (<c>Delay</c> &lt; 0) the previous track entry duration). If the
+		/// minus any mix duration (from the {@link AnimationStateData}) plus the specified <code>Delay</code> (ie the mix
+		/// ends at (<code>Delay</code> = 0) or before (<code>Delay</code> &lt; 0) the previous track entry duration). If the
 		/// previous entry is looping, its next loop completion is used instead of its duration.
 		/// </param>
 		/// <returns>A track entry to allow further customization of animation playback. References to the track entry must not be kept
@@ -754,8 +743,18 @@ namespace Spine {
 				queue.Drain();
 			} else {
 				last.next = entry;
-				entry.previous = last;
-				if (delay <= 0) delay += last.TrackComplete - entry.mixDuration;
+				if (delay <= 0) {
+					float duration = last.animationEnd - last.animationStart;
+					if (duration != 0) {
+						if (last.loop) {
+							delay += duration * (1 + (int)(last.trackTime / duration)); // Completion of next loop.
+						} else {
+							delay += Math.Max(duration, last.trackTime); // After duration, else next update.
+						}
+						delay -= data.GetMix(last.animation, animation);
+					} else
+						delay = last.trackTime; // Next update.
+				}
 			}
 
 			entry.delay = delay;
@@ -773,11 +772,11 @@ namespace Spine {
 		/// 0 still mixes out over one frame.</para>
 		/// <para>
 		/// Mixing in is done by first setting an empty animation, then adding an animation using
-		/// <see cref="AnimationState.AddAnimation(int, Animation, bool, float)"/> with the desired delay (an empty animation has a duration of 0) and on
-		/// the returned track entry, set the <see cref="TrackEntry.SetMixDuration(float)"/>. Mixing from an empty animation causes the new
-		/// animation to be applied more and more over the mix duration. Properties keyed in the new animation transition from the value
-		/// from lower tracks or from the setup pose value if no lower tracks key the property to the value keyed in the new
-		/// animation.</para></summary>
+		/// <see cref="AnimationState.AddAnimation(int, Animation, boolean, float)"/> and on the returned track entry, set the
+		/// <see cref="TrackEntry.SetMixDuration(float)"/>. Mixing from an empty animation causes the new animation to be applied more and
+		/// more over the mix duration. Properties keyed in the new animation transition from the value from lower tracks or from the
+		/// setup pose value if no lower tracks key the property to the value keyed in the new animation.</para>
+		/// </summary>
 		public TrackEntry SetEmptyAnimation (int trackIndex, float mixDuration) {
 			TrackEntry entry = SetAnimation(trackIndex, AnimationState.EmptyAnimation, false);
 			entry.mixDuration = mixDuration;
@@ -793,15 +792,15 @@ namespace Spine {
 		/// <param name="trackIndex">Track number.</param>
 		/// <param name="mixDuration">Mix duration.</param>
 		/// <param name="delay">If &gt; 0, sets <see cref="TrackEntry.Delay"/>. If &lt;= 0, the delay set is the duration of the previous track entry
-		/// minus any mix duration plus the specified <c>Delay</c> (ie the mix ends at (<c>Delay</c> = 0) or
-		/// before (<c>Delay</c> &lt; 0) the previous track entry duration). If the previous entry is looping, its next
+		/// minus any mix duration plus the specified <code>Delay</code> (ie the mix ends at (<code>Delay</code> = 0) or
+		/// before (<code>Delay</code> &lt; 0) the previous track entry duration). If the previous entry is looping, its next
 		/// loop completion is used instead of its duration.</param>
 		/// <returns> A track entry to allow further customization of animation playback. References to the track entry must not be kept
 		/// after the <see cref="AnimationState.Dispose"/> event occurs.
 		/// </returns>
 		public TrackEntry AddEmptyAnimation (int trackIndex, float mixDuration, float delay) {
+			if (delay <= 0) delay -= mixDuration;
 			TrackEntry entry = AddAnimation(trackIndex, AnimationState.EmptyAnimation, false, delay);
-			if (delay <= 0) entry.delay += entry.mixDuration - mixDuration;
 			entry.mixDuration = mixDuration;
 			entry.trackEnd = mixDuration;
 			return entry;
@@ -813,9 +812,8 @@ namespace Spine {
 		public void SetEmptyAnimations (float mixDuration) {
 			bool oldDrainDisabled = queue.drainDisabled;
 			queue.drainDisabled = true;
-			TrackEntry[] tracksItems = tracks.Items;
 			for (int i = 0, n = tracks.Count; i < n; i++) {
-				TrackEntry current = tracksItems[i];
+				TrackEntry current = tracks.Items[i];
 				if (current != null) SetEmptyAnimation(current.trackIndex, mixDuration);
 			}
 			queue.drainDisabled = oldDrainDisabled;
@@ -831,16 +829,15 @@ namespace Spine {
 		/// <summary>Object-pooling version of new TrackEntry. Obtain an unused TrackEntry from the pool and clear/initialize its values.</summary>
 		/// <param name="last">May be null.</param>
 		private TrackEntry NewTrackEntry (int trackIndex, Animation animation, bool loop, TrackEntry last) {
-			TrackEntry entry = trackEntryPool.Obtain();
+			TrackEntry entry = trackEntryPool.Obtain(); // Pooling
 			entry.trackIndex = trackIndex;
 			entry.animation = animation;
 			entry.loop = loop;
 			entry.holdPrevious = false;
 
 			entry.eventThreshold = 0;
-			entry.alphaAttachmentThreshold = 0;
-			entry.mixAttachmentThreshold = 0;
-			entry.mixDrawOrderThreshold = 0;
+			entry.attachmentThreshold = 0;
+			entry.drawOrderThreshold = 0;
 
 			entry.animationStart = 0;
 			entry.animationEnd = animation.Duration;
@@ -850,20 +847,19 @@ namespace Spine {
 			entry.delay = 0;
 			entry.trackTime = 0;
 			entry.trackLast = -1;
-			entry.nextTrackLast = -1;
-			entry.trackEnd = float.MaxValue;
+			entry.nextTrackLast = -1; // nextTrackLast == -1 signifies a TrackEntry that wasn't applied yet.
+			entry.trackEnd = float.MaxValue; // loop ? float.MaxValue : animation.Duration;
 			entry.timeScale = 1;
 
 			entry.alpha = 1;
 			entry.interruptAlpha = 1;
 			entry.mixTime = 0;
-			entry.mixDuration = last == null ? 0 : data.GetMix(last.animation, animation);
-			entry.mixBlend = MixBlend.Replace;
+			entry.mixDuration = (last == null) ? 0 : data.GetMix(last.animation, animation);
 			return entry;
 		}
 
-		/// <summary>Removes the <see cref="TrackEntry.Next">next entry</see> and all entries after it for the specified entry.</summary>
-		public void ClearNext (TrackEntry entry) {
+		/// <summary>Dispose all track entries queued after the given TrackEntry.</summary>
+		private void DisposeNext (TrackEntry entry) {
 			TrackEntry next = entry.next;
 			while (next != null) {
 				queue.Dispose(next);
@@ -876,14 +872,15 @@ namespace Spine {
 			animationsChanged = false;
 
 			// Process in the order that animations are applied.
-			propertyIds.Clear();
-			int n = tracks.Count;
-			TrackEntry[] tracksItems = tracks.Items;
-			for (int i = 0; i < n; i++) {
+			propertyIDs.Clear();
+
+			var tracksItems = tracks.Items;
+			for (int i = 0, n = tracks.Count; i < n; i++) {
 				TrackEntry entry = tracksItems[i];
 				if (entry == null) continue;
 				while (entry.mixingFrom != null) // Move to last entry, then iterate in reverse.
 					entry = entry.mixingFrom;
+
 				do {
 					if (entry.mixingTo == null || entry.mixBlend != MixBlend.Add) ComputeHold(entry);
 					entry = entry.mixingTo;
@@ -893,16 +890,16 @@ namespace Spine {
 
 		private void ComputeHold (TrackEntry entry) {
 			TrackEntry to = entry.mixingTo;
-			Timeline[] timelines = entry.animation.timelines.Items;
+			var timelines = entry.animation.timelines.Items;
 			int timelinesCount = entry.animation.timelines.Count;
-			int[] timelineMode = entry.timelineMode.Resize(timelinesCount).Items;
+			var timelineMode = entry.timelineMode.Resize(timelinesCount).Items; //timelineMode.setSize(timelinesCount);
 			entry.timelineHoldMix.Clear();
-			TrackEntry[] timelineHoldMix = entry.timelineHoldMix.Resize(timelinesCount).Items;
-			HashSet<string> propertyIds = this.propertyIds;
+			var timelineHoldMix = entry.timelineHoldMix.Resize(timelinesCount).Items; //timelineHoldMix.setSize(timelinesCount);
+			var propertyIDs = this.propertyIDs;
 
 			if (to != null && to.holdPrevious) {
 				for (int i = 0; i < timelinesCount; i++)
-					timelineMode[i] = propertyIds.AddAll(timelines[i].PropertyIds) ? AnimationState.HoldFirst : AnimationState.HoldSubsequent;
+					timelineMode[i] = propertyIDs.Add(timelines[i].PropertyId) ? AnimationState.HoldFirst : AnimationState.HoldSubsequent;
 
 				return;
 			}
@@ -910,15 +907,15 @@ namespace Spine {
 			// outer:
 			for (int i = 0; i < timelinesCount; i++) {
 				Timeline timeline = timelines[i];
-				String[] ids = timeline.PropertyIds;
-				if (!propertyIds.AddAll(ids))
+				int id = timeline.PropertyId;
+				if (!propertyIDs.Add(id))
 					timelineMode[i] = AnimationState.Subsequent;
 				else if (to == null || timeline is AttachmentTimeline || timeline is DrawOrderTimeline
-						|| timeline is EventTimeline || !to.animation.HasTimeline(ids)) {
+						|| timeline is EventTimeline || !to.animation.HasTimeline(id)) {
 					timelineMode[i] = AnimationState.First;
 				} else {
 					for (TrackEntry next = to.mixingTo; next != null; next = next.mixingTo) {
-						if (next.animation.HasTimeline(ids)) continue;
+						if (next.animation.HasTimeline(id)) continue;
 						if (next.mixDuration > 0) {
 							timelineMode[i] = AnimationState.HoldMix;
 							timelineHoldMix[i] = next;
@@ -928,7 +925,7 @@ namespace Spine {
 					}
 					timelineMode[i] = AnimationState.HoldFirst;
 				}
-				continue_outer: { }
+				continue_outer: {}
 			}
 		}
 
@@ -941,7 +938,6 @@ namespace Spine {
 		/// <summary> Discards all listener notifications that have not yet been delivered. This can be useful to call from an
 		/// AnimationState event subscriber when it is known that further notifications that may have been already queued for delivery
 		/// are not wanted because new animations are being set.
-		/// </summary>
 		public void ClearListenerNotifications () {
 			queue.Clear();
 		}
@@ -954,7 +950,7 @@ namespace Spine {
 		/// </summary>
 		public float TimeScale { get { return timeScale; } set { timeScale = value; } }
 
-		/// <summary>The <see cref="AnimationStateData"/> to look up mix durations.</summary>
+		/// <summary>The AnimationStateData to look up mix durations.</summary>
 		public AnimationStateData Data {
 			get {
 				return data;
@@ -969,10 +965,9 @@ namespace Spine {
 		public ExposedList<TrackEntry> Tracks { get { return tracks; } }
 
 		override public string ToString () {
-			System.Text.StringBuilder buffer = new System.Text.StringBuilder();
-			TrackEntry[] tracksItems = tracks.Items;
+			var buffer = new System.Text.StringBuilder();
 			for (int i = 0, n = tracks.Count; i < n; i++) {
-				TrackEntry entry = tracksItems[i];
+				TrackEntry entry = tracks.Items[i];
 				if (entry == null) continue;
 				if (buffer.Length > 0) buffer.Append(", ");
 				buffer.Append(entry.ToString());
@@ -991,12 +986,8 @@ namespace Spine {
 	public class TrackEntry : Pool<TrackEntry>.IPoolable {
 		internal Animation animation;
 
-		internal TrackEntry previous, next, mixingFrom, mixingTo;
+		internal TrackEntry next, mixingFrom, mixingTo;
 		// difference to libgdx reference: delegates are used for event callbacks instead of 'AnimationStateListener listener'.
-		/// <summary>See <see href="http://esotericsoftware.com/spine-api-reference#AnimationStateListener-Methods">
-		/// API Reference documentation pages here</see> for details. Usage in C# and spine-unity is explained
-		/// <see href="http://esotericsoftware.com/spine-unity#Processing-AnimationState-Events">here</see>
-		/// on the spine-unity documentation pages.</summary>
 		public event AnimationState.TrackEntryDelegate Start, Interrupt, End, Dispose, Complete;
 		public event AnimationState.TrackEntryEventDelegate Event;
 		internal void OnStart () { if (Start != null) Start(this); }
@@ -1008,8 +999,8 @@ namespace Spine {
 
 		internal int trackIndex;
 
-		internal bool loop, holdPrevious, reverse, shortestRotation;
-		internal float eventThreshold, mixAttachmentThreshold, alphaAttachmentThreshold, mixDrawOrderThreshold;
+		internal bool loop, holdPrevious;
+		internal float eventThreshold, attachmentThreshold, drawOrderThreshold;
 		internal float animationStart, animationEnd, animationLast, nextAnimationLast;
 		internal float delay, trackTime, trackLast, nextTrackLast, trackEnd, timeScale = 1f;
 		internal float alpha, mixTime, mixDuration, interruptAlpha, totalAlpha;
@@ -1020,7 +1011,6 @@ namespace Spine {
 
 		// IPoolable.Reset()
 		public void Reset () {
-			previous = null;
 			next = null;
 			mixingFrom = null;
 			mixingTo = null;
@@ -1049,18 +1039,15 @@ namespace Spine {
 		/// duration.</summary>
 		public bool Loop { get { return loop; } set { loop = value; } }
 
-		/// <summary>
+		///<summary>
 		/// <para>
-		/// Seconds to postpone playing the animation. When this track entry is the current track entry, <c>Delay</c>
-		/// postpones incrementing the <see cref="TrackEntry.TrackTime"/>. When this track entry is queued, <c>Delay</c> is the time from
+		/// Seconds to postpone playing the animation. When this track entry is the current track entry, <code>Delay</code>
+		/// postpones incrementing the <see cref="TrackEntry.TrackTime"/>. When this track entry is queued, <code>Delay</code> is the time from
 		/// the start of the previous animation to when this track entry will become the current track entry (ie when the previous
-		/// track entry <see cref="TrackEntry.TrackTime"/> &gt;= this track entry's <c>Delay</c>).</para>
+		/// track entry <see cref="TrackEntry.TrackTime"/> &gt;= this track entry's <code>Delay</code>).</para>
 		/// <para>
 		/// <see cref="TrackEntry.TimeScale"/> affects the delay.</para>
-		/// <para>
-		/// When using <see cref="AnimationState.AddAnimation(int, Animation, bool, float)"/> with a <c>delay</c> &lt;= 0, the delay
-		/// is set using the mix duration from the <see cref="AnimationStateData"/>. If <see cref="mixDuration"/> is set afterward, the delay
-		/// may need to be adjusted.</para></summary>
+		/// </summary>
 		public float Delay { get { return delay; } set { delay = value; } }
 
 		/// <summary>
@@ -1082,25 +1069,10 @@ namespace Spine {
 		public float TrackEnd { get { return trackEnd; } set { trackEnd = value; } }
 
 		/// <summary>
-		/// If this track entry is non-looping, the track time in seconds when <see cref="AnimationEnd"/> is reached, or the current
-		/// <see cref="TrackTime"/> if it has already been reached. If this track entry is looping, the track time when this
-		/// animation will reach its next <see cref="AnimationEnd"/> (the next loop completion).</summary>
-		public float TrackComplete {
-			get {
-				float duration = animationEnd - animationStart;
-				if (duration != 0) {
-					if (loop) return duration * (1 + (int)(trackTime / duration)); // Completion of next loop.
-					if (trackTime < duration) return duration; // Before duration.
-				}
-				return trackTime; // Next update.
-			}
-		}
-
-		/// <summary>
 		/// <para>
 		/// Seconds when this animation starts, both initially and after looping. Defaults to 0.</para>
 		/// <para>
-		/// When changing the <c>AnimationStart</c> time, it often makes sense to set <see cref="TrackEntry.AnimationLast"/> to the same
+		/// When changing the <code>AnimationStart</code> time, it often makes sense to set <see cref="TrackEntry.AnimationLast"> to the same
 		/// value to prevent timeline keys before the start time from triggering.</para>
 		/// </summary>
 		public float AnimationStart { get { return animationStart; } set { animationStart = value; } }
@@ -1108,13 +1080,13 @@ namespace Spine {
 		/// <summary>
 		/// Seconds for the last frame of this animation. Non-looping animations won't play past this time. Looping animations will
 		/// loop back to <see cref="TrackEntry.AnimationStart"/> at this time. Defaults to the animation <see cref="Animation.Duration"/>.
-		/// </summary>
+		///</summary>
 		public float AnimationEnd { get { return animationEnd; } set { animationEnd = value; } }
 
 		/// <summary>
 		/// The time in seconds this animation was last applied. Some timelines use this for one-time triggers. Eg, when this
-		/// animation is applied, event timelines will fire all events between the <c>AnimationLast</c> time (exclusive) and
-		/// <c>AnimationTime</c> (inclusive). Defaults to -1 to ensure triggers on frame 0 happen the first time this animation
+		/// animation is applied, event timelines will fire all events between the <code>AnimationLast</code> time (exclusive) and
+		/// <code>AnimationTime</code> (inclusive). Defaults to -1 to ensure triggers on frame 0 happen the first time this animation
 		/// is applied.</summary>
 		public float AnimationLast {
 			get { return animationLast; }
@@ -1125,12 +1097,9 @@ namespace Spine {
 		}
 
 		/// <summary>
-		/// Uses <see cref="TrackEntry.TrackTime"/> to compute the <c>AnimationTime</c>. When the <c>TrackTime</c> is 0, the
-		/// <c>AnimationTime</c> is equal to the <c>AnimationStart</c> time.
-		/// <para>
-		/// The <c>animationTime</c> is between <see cref="AnimationStart"/> and <see cref="AnimationEnd"/>, except if this
-		/// track entry is non-looping and <see cref="AnimationEnd"/> is >= to the animation <see cref="Animation.Duration"/>, then
-		/// <c>animationTime</c> continues to increase past <see cref="AnimationEnd"/>.</para>
+		/// Uses <see cref="TrackEntry.TrackTime"/> to compute the <code>AnimationTime</code>, which is between <see cref="TrackEntry.AnimationStart"/>
+		/// and <see cref="TrackEntry.AnimationEnd"/>. When the <code>TrackTime</code> is 0, the <code>AnimationTime</code> is equal to the
+		/// <code>AnimationStart</code> time.
 		/// </summary>
 		public float AnimationTime {
 			get {
@@ -1139,8 +1108,7 @@ namespace Spine {
 					if (duration == 0) return animationStart;
 					return (trackTime % duration) + animationStart;
 				}
-				float animationTime = trackTime + animationStart;
-				return animationEnd >= animation.duration ? animationTime : Math.Min(animationTime, animationEnd);
+				return Math.Min(trackTime + animationStart, animationEnd);
 			}
 		}
 
@@ -1149,13 +1117,11 @@ namespace Spine {
 		/// Multiplier for the delta time when this track entry is updated, causing time for this animation to pass slower or
 		/// faster. Defaults to 1.</para>
 		/// <para>
-		/// Values &lt; 0 are not supported. To play an animation in reverse, use <see cref="Reverse"/>.</para>
-		/// <para>
 		/// <see cref="TrackEntry.MixTime"/> is not affected by track entry time scale, so <see cref="TrackEntry.MixDuration"/> may need to be adjusted to
 		/// match the animation speed.</para>
 		/// <para>
-		/// When using <see cref="AnimationState.AddAnimation(int, Animation, bool, float)"/> with a <c>Delay</c> &lt;= 0, the
-		/// <see cref="TrackEntry.Delay"/> is set using the mix duration from the <see cref="AnimationStateData"/>, assuming time scale to be 1. If
+		/// When using <see cref="AnimationState.AddAnimation(int, Animation, boolean, float)"> with a <code>Delay</code> <= 0, note the
+		/// {<see cref="TrackEntry.Delay"/> is set using the mix duration from the <see cref="AnimationStateData"/>, assuming time scale to be 1. If
 		/// the time scale is not 1, the delay may need to be adjusted.</para>
 		/// <para>
 		/// See AnimationState <see cref="AnimationState.TimeScale"/> for affecting all animations.</para>
@@ -1164,7 +1130,7 @@ namespace Spine {
 
 		/// <summary>
 		/// <para>
-		/// Values &lt; 1 mix this animation with the skeleton's current pose (usually the pose resulting from lower tracks). Defaults
+		/// Values < 1 mix this animation with the skeleton's current pose (usually the pose resulting from lower tracks). Defaults
 		/// to 1, which overwrites the skeleton's current pose with this animation.</para>
 		/// <para>
 		/// Typically track 0 is used to completely pose the skeleton, then alpha is used on higher tracks. It doesn't make sense to
@@ -1172,59 +1138,30 @@ namespace Spine {
 		/// </summary>
 		public float Alpha { get { return alpha; } set { alpha = value; } }
 
-		public float InterruptAlpha { get { return interruptAlpha; } }
-
 		/// <summary>
 		/// When the mix percentage (<see cref="TrackEntry.MixTime"/> / <see cref="TrackEntry.MixDuration"/>) is less than the
-		/// <c>EventThreshold</c>, event timelines are applied while this animation is being mixed out. Defaults to 0, so event
+		/// <code>EventThreshold</code>, event timelines are applied while this animation is being mixed out. Defaults to 0, so event
 		/// timelines are not applied while this animation is being mixed out.
 		/// </summary>
 		public float EventThreshold { get { return eventThreshold; } set { eventThreshold = value; } }
 
 		/// <summary>
-		/// When <see cref="Alpha"/> is greater than <c>AlphaAttachmentThreshold</c>, attachment timelines are applied.
-		/// Defaults to 0, so attachment timelines are always applied.
-		/// </summary>
-		public float AlphaAttachmentThreshold { get { return alphaAttachmentThreshold; } set { alphaAttachmentThreshold = value; } }
+		/// When the mix percentage (<see cref="TrackEntry.MixTime"/> / <see cref="TrackEntry.MixDuration"/>) is less than the
+		/// <code>AttachmentThreshold</code>, attachment timelines are applied while this animation is being mixed out. Defaults to
+		/// 0, so attachment timelines are not applied while this animation is being mixed out.
+		///</summary>
+		public float AttachmentThreshold { get { return attachmentThreshold; } set { attachmentThreshold = value; } }
 
 		/// <summary>
 		/// When the mix percentage (<see cref="TrackEntry.MixTime"/> / <see cref="TrackEntry.MixDuration"/>) is less than the
-		/// <c>MixAttachmentThreshold</c>, attachment timelines are applied while this animation is being mixed out. Defaults
-		/// to 0, so attachment timelines are not applied while this animation is being mixed out.
+		/// <code>DrawOrderThreshold</code>, draw order timelines are applied while this animation is being mixed out. Defaults to 0,
+		/// so draw order timelines are not applied while this animation is being mixed out.
 		/// </summary>
-		public float MixAttachmentThreshold { get { return mixAttachmentThreshold; } set { mixAttachmentThreshold = value; } }
+		public float DrawOrderThreshold { get { return drawOrderThreshold; } set { drawOrderThreshold = value; } }
 
 		/// <summary>
-		/// When the mix percentage (<see cref="TrackEntry.MixTime"/> / <see cref="TrackEntry.MixDuration"/>) is less than the
-		/// <c>MixDrawOrderThreshold</c>, draw order timelines are applied while this animation is being mixed out. Defaults to
-		/// 0, so draw order timelines are not applied while this animation is being mixed out.
-		/// </summary>
-		public float MixDrawOrderThreshold { get { return mixDrawOrderThreshold; } set { mixDrawOrderThreshold = value; } }
-
-		/// <summary>
-		/// The animation queued to start after this animation, or null if there is none. <c>next</c> makes up a doubly linked
-		/// list.
-		/// <para>
-		/// See <see cref="AnimationState.ClearNext(TrackEntry)"/> to truncate the list.</para></summary>
+		/// The animation queued to start after this animation, or null. <code>Next</code> makes up a linked list. </summary>
 		public TrackEntry Next { get { return next; } }
-
-		/// <summary>
-		/// The animation queued to play before this animation, or null. <c>previous</c> makes up a doubly linked list.</summary>
-		public TrackEntry Previous { get { return previous; } }
-
-		/// <summary>Returns true if this track entry has been applied at least once.</summary>
-		/// <seealso cref="AnimationState.Apply(Skeleton)"/>
-		public bool WasApplied {
-			get { return nextTrackLast != -1; }
-		}
-
-		/// <summary>Returns true if there is a <see cref="Next"/> track entry that will become the current track entry during the
-		/// next <see cref="AnimationState.Update(float)"/>.</summary>
-		public bool IsNextReady {
-			get {
-				return (next != null) && (nextTrackLast - next.delay >= 0);
-			}
-		}
 
 		/// <summary>
 		/// Returns true if at least one loop has been completed.</summary>
@@ -1235,7 +1172,7 @@ namespace Spine {
 
 		/// <summary>
 		/// Seconds from 0 to the <see cref="TrackEntry.MixDuration"/> when mixing from the previous animation to this animation. May be
-		/// slightly more than <c>MixDuration</c> when the mix is complete.</summary>
+		/// slightly more than <code>MixDuration</code> when the mix is complete.</summary>
 		public float MixTime { get { return mixTime; } set { mixTime = value; } }
 
 		/// <summary>
@@ -1243,49 +1180,35 @@ namespace Spine {
 		/// Seconds for mixing from the previous animation to this animation. Defaults to the value provided by AnimationStateData
 		/// <see cref="AnimationStateData.GetMix(Animation, Animation)"/> based on the animation before this animation (if any).</para>
 		/// <para>
-		/// The <c>MixDuration</c> can be set manually rather than use the value from
-		/// <see cref="AnimationStateData.GetMix(Animation, Animation)"/>. In that case, the <c>MixDuration</c> can be set for a new
-		/// track entry only before <see cref="AnimationState.Update(float)"/> is first called.</para>
-		/// <para>
-		/// When using <seealso cref="AnimationState.AddAnimation(int, Animation, bool, float)"/> with a <c>Delay</c> &lt;= 0, the
-		/// <see cref="TrackEntry.Delay"/> is set using the mix duration from the <see cref=" AnimationStateData"/>. If <c>mixDuration</c> is set
-		/// afterward, the delay may need to be adjusted. For example:</para>
-		/// <para><c>entry.Delay = entry.previous.TrackComplete - entry.MixDuration;</c></para>
-		/// <para>Alternatively, <see cref="SetMixDuration(float, float)"/> can be used to recompute the delay:</para>
-		/// <para><c>entry.SetMixDuration(0.25f, 0);</c></para>
+		/// The <code>MixDuration</code> can be set manually rather than use the value from
+		/// <see cref="AnimationStateData.GetMix(Animation, Animation)"/>. In that case, the <code>MixDuration</code> can be set for a new
+		///  track entry only before <see cref="AnimationState.Update(float)"/> is first called.</para>
+		///  <para>
+		///  When using <seealso cref="AnimationState.AddAnimation(int, Animation, bool, float)"/> with a <code>Delay</code> &lt;= 0, note the
+		///  <see cref="TrackEntry.Delay"/> is set using the mix duration from the <see cref=" AnimationStateData"/>, not a mix duration set
+		///  afterward.</para>
 		/// </summary>
 		public float MixDuration { get { return mixDuration; } set { mixDuration = value; } }
 
-		/// <summary>Sets both <see cref="MixDuration"/> and <see cref="Delay"/>.</summary>
-		/// <param name="delay">If > 0, sets <see cref="TrackEntry.Delay"/>. If &lt;= 0, the delay set is the duration of the previous track
-		///		entry minus the specified mix duration plus the specified<c> delay</c> (ie the mix ends at
-		///		(<c>delay</c> = 0) or before (<c>delay</c> &lt; 0) the previous track entry duration). If the previous
-		///		entry is looping, its next loop completion is used instead of its duration.</param>
-		public void SetMixDuration (float mixDuration, float delay) {
-			this.mixDuration = mixDuration;
-			if (previous != null && delay <= 0) delay += previous.TrackComplete - mixDuration;
-			this.delay = delay;
-		}
-
 		/// <summary>
 		/// <para>
-		/// Controls how properties keyed in the animation are mixed with lower tracks. Defaults to <see cref="MixBlend.Replace"/>.
-		/// </para><para>
-		/// Track entries on track 0 ignore this setting and always use <see cref="MixBlend.First"/>.
-		/// </para><para>
-		///  The <c>MixBlend</c> can be set for a new track entry only before <see cref="AnimationState.Apply(Skeleton)"/> is first
+		/// Controls how properties keyed in the animation are mixed with lower tracks. Defaults to <see cref="MixBlend.Replace"/>, which
+		/// replaces the values from the lower tracks with the animation values. <see cref="MixBlend.Add"/> adds the animation values to
+		/// the values from the lower tracks.</para>
+		/// <para>
+		///  The <code>MixBlend</code> can be set for a new track entry only before <see cref="AnimationState.Apply(Skeleton)"/> is first
 		///  called.</para>
 		/// </summary>
 		public MixBlend MixBlend { get { return mixBlend; } set { mixBlend = value; } }
 
 		/// <summary>
 		/// The track entry for the previous animation when mixing from the previous animation to this animation, or null if no
-		/// mixing is currently occurring. When mixing from multiple animations, <c>MixingFrom</c> makes up a linked list.</summary>
+		/// mixing is currently occuring. When mixing from multiple animations, <code>MixingFrom</code> makes up a linked list.</summary>
 		public TrackEntry MixingFrom { get { return mixingFrom; } }
 
 		/// <summary>
 		/// The track entry for the next animation when mixing from this animation to the next animation, or null if no mixing is
-		/// currently occurring. When mixing to multiple animations, <c>MixingTo</c> makes up a linked list.</summary>
+		/// currently occuring. When mixing to multiple animations, <code>MixingTo</code> makes up a linked list.</summary>
 		public TrackEntry MixingTo { get { return mixingTo; } }
 
 		/// <summary>
@@ -1295,31 +1218,14 @@ namespace Spine {
 		/// <para>
 		/// When mixing between animations that key the same property, if a lower track also keys that property then the value will
 		/// briefly dip toward the lower track value during the mix. This happens because the first animation mixes from 100% to 0%
-		/// while the second animation mixes from 0% to 100%. Setting <c>HoldPrevious</c> to true applies the first animation
+		/// while the second animation mixes from 0% to 100%. Setting <code>HoldPrevious</code> to true applies the first animation
 		/// at 100% during the mix so the lower track value is overwritten. Such dipping does not occur on the lowest track which
 		/// keys the property, only when a higher track also keys the property.</para>
 		/// <para>
-		/// Snapping will occur if <c>HoldPrevious</c> is true and this animation does not key all the same properties as the
+		/// Snapping will occur if <code>HoldPrevious</code> is true and this animation does not key all the same properties as the
 		/// previous animation.</para>
 		/// </summary>
 		public bool HoldPrevious { get { return holdPrevious; } set { holdPrevious = value; } }
-
-		/// <summary>
-		/// If true, the animation will be applied in reverse. Events are not fired when an animation is applied in reverse.</summary>
-		public bool Reverse { get { return reverse; } set { reverse = value; } }
-
-		/// <summary><para>
-		/// If true, mixing rotation between tracks always uses the shortest rotation direction. If the rotation is animated, the
-		/// shortest rotation direction may change during the mix.
-		/// </para><para>
-		/// If false, the shortest rotation direction is remembered when the mix starts and the same direction is used for the rest
-		/// of the mix. Defaults to false.</para></summary>
-		public bool ShortestRotation { get { return shortestRotation; } set { shortestRotation = value; } }
-
-		/// <summary>Returns true if this entry is for the empty animation. See <see cref="AnimationState.SetEmptyAnimation(int, float)"/>,
-		/// <see cref="AnimationState.AddEmptyAnimation(int, float, float)"/>, and <see cref="AnimationState.SetEmptyAnimations(float)"/>.
-		/// </summary>
-		public bool IsEmptyAnimation { get { return animation == AnimationState.EmptyAnimation; } }
 
 		/// <summary>
 		/// <para>
@@ -1338,14 +1244,6 @@ namespace Spine {
 		override public string ToString () {
 			return animation == null ? "<none>" : animation.name;
 		}
-
-		// Note: This method is required by SpineAnimationStateMixerBehaviour,
-		// which is part of the timeline extension package. Thus the internal member variable
-		// nextTrackLast is not accessible. We favor providing this method
-		// over exposing nextTrackLast as public property, which would rather confuse users.
-		public void AllowImmediateQueue () {
-			if (nextTrackLast < 0) nextTrackLast = 0;
-		}
 	}
 
 	class EventQueue {
@@ -1360,6 +1258,22 @@ namespace Spine {
 			this.state = state;
 			this.AnimationsChanged += HandleAnimationsChanged;
 			this.trackEntryPool = trackEntryPool;
+		}
+
+		struct EventQueueEntry {
+			public EventType type;
+			public TrackEntry entry;
+			public Event e;
+
+			public EventQueueEntry (EventType eventType, TrackEntry trackEntry, Event e = null) {
+				this.type = eventType;
+				this.entry = trackEntry;
+				this.e = e;
+			}
+		}
+
+		enum EventType {
+			Start, Interrupt, End, Dispose, Complete, Event
 		}
 
 		internal void Start (TrackEntry entry) {
@@ -1393,12 +1307,12 @@ namespace Spine {
 			if (drainDisabled) return;
 			drainDisabled = true;
 
-			List<EventQueueEntry> eventQueueEntries = this.eventQueueEntries;
+			var entries = this.eventQueueEntries;
 			AnimationState state = this.state;
 
-			// Don't cache eventQueueEntries.Count so callbacks can queue their own events (eg, call SetAnimation in AnimationState_Complete).
-			for (int i = 0; i < eventQueueEntries.Count; i++) {
-				EventQueueEntry queueEntry = eventQueueEntries[i];
+			// Don't cache entries.Count so callbacks can queue their own events (eg, call SetAnimation in AnimationState_Complete).
+			for (int i = 0; i < entries.Count; i++) {
+				var queueEntry = entries[i];
 				TrackEntry trackEntry = queueEntry.entry;
 
 				switch (queueEntry.type) {
@@ -1417,7 +1331,7 @@ namespace Spine {
 				case EventType.Dispose:
 					trackEntry.OnDispose();
 					state.OnDispose(trackEntry);
-					trackEntryPool.Free(trackEntry);
+					trackEntryPool.Free(trackEntry); // Pooling
 					break;
 				case EventType.Complete:
 					trackEntry.OnComplete();
@@ -1437,25 +1351,9 @@ namespace Spine {
 		internal void Clear () {
 			eventQueueEntries.Clear();
 		}
-
-		struct EventQueueEntry {
-			public EventType type;
-			public TrackEntry entry;
-			public Event e;
-
-			public EventQueueEntry (EventType eventType, TrackEntry trackEntry, Event e = null) {
-				this.type = eventType;
-				this.entry = trackEntry;
-				this.e = e;
-			}
-		}
-
-		enum EventType {
-			Start, Interrupt, End, Dispose, Complete, Event
-		}
 	}
 
-	class Pool<T> where T : class, new() {
+	public class Pool<T> where T : class, new() {
 		public readonly int max;
 		readonly Stack<T> freeObjects;
 
@@ -1480,12 +1378,25 @@ namespace Spine {
 			Reset(obj);
 		}
 
+//		protected void FreeAll (List<T> objects) {
+//			if (objects == null) throw new ArgumentNullException("objects", "objects cannot be null.");
+//			var freeObjects = this.freeObjects;
+//			int max = this.max;
+//			for (int i = 0; i < objects.Count; i++) {
+//				T obj = objects[i];
+//				if (obj == null) continue;
+//				if (freeObjects.Count < max) freeObjects.Push(obj);
+//				Reset(obj);
+//			}
+//			Peak = Math.Max(Peak, freeObjects.Count);
+//		}
+
 		public void Clear () {
 			freeObjects.Clear();
 		}
 
 		protected void Reset (T obj) {
-			IPoolable poolable = obj as IPoolable;
+			var poolable = obj as IPoolable;
 			if (poolable != null) poolable.Reset();
 		}
 
@@ -1494,14 +1405,4 @@ namespace Spine {
 		}
 	}
 
-	public static class HashSetExtensions {
-		public static bool AddAll<T> (this HashSet<T> set, T[] addSet) {
-			bool anyItemAdded = false;
-			for (int i = 0, n = addSet.Length; i < n; ++i) {
-				T item = addSet[i];
-				anyItemAdded |= set.Add(item);
-			}
-			return anyItemAdded;
-		}
-	}
 }

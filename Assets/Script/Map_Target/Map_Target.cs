@@ -5,18 +5,18 @@ using UnityEngine;
 
 public class Map_Target:MonoBehaviour
 {
-    [Header("¡ª¡ª¡ª¡ªÖÖµØ»úÆ÷/¾«ÁéÍ¼¡ª¡ª¡ª¡ª")]
+    [Header("â€”â€”â€”â€”ç§åœ°æœºå™¨/ç²¾çµå›¾â€”â€”â€”â€”")]
     public Sprite Water_Sprite;
     public Sprite Fertilize_Sprite;
     public Sprite BugControl_Sprite;
-    [Header("¡ª¡ª¡ª¡ª»õÎïÊı¾İ¡ª¡ª¡ª¡ª")]
-    public PlantItem_Data Freight;//»õÎï
-    [Header("¡ª¡ª¡ª¡ª¶¯Ì¬Êı¾İ¡ª¡ª¡ª¡ª")]
-    public GameObject npc;//µ±Ç°Õ¼¾İ¸ÃµãµÄnpc
+    [Header("â€”â€”â€”â€”è´§ç‰©æ•°æ®â€”â€”â€”â€”")]
+    public PlantItem_Data Freight;//è´§ç‰©
+    [Header("â€”â€”â€”â€”åŠ¨æ€æ•°æ®â€”â€”â€”â€”")]
+    public GameObject npc;//å½“å‰å æ®è¯¥ç‚¹çš„npc
 
-    public Map_Target_Kind kind;//µãÎ»ÖÖÀà
+    public Map_Target_Kind kind;//ç‚¹ä½ç§ç±»
 
-    public bool Is_Empty=true;//ÊÇ²»ÊÇ¿ÕµÄ
+    public bool Is_Empty=true;//æ˜¯ä¸æ˜¯ç©ºçš„
     private void Start()
     {
         Kind_SignIn(gameObject.tag);
@@ -28,31 +28,31 @@ public class Map_Target:MonoBehaviour
         switch (tag)
         {
             case "Farm_Machine":
-                kind = Map_Target_Kind.Farm_Machine;//ÖÖµØ»úÆ÷
+                kind = Map_Target_Kind.Farm_Machine;//ç§åœ°æœºå™¨
                 break;
             case "Eat_Area":
-                kind = Map_Target_Kind.Eat_Area;//²ÍÌü
+                kind = Map_Target_Kind.Eat_Area;//é¤å…
                 break;
             case "Freight_Target":
-                kind = Map_Target_Kind.Freight_Target;//»õÎïÄ¿±ê
+                kind = Map_Target_Kind.Freight_Target;//è´§ç‰©ç›®æ ‡
                 break;
             case "WareHouse_Area":
-                kind = Map_Target_Kind.WareHouse_Area;//²Ö¿â
+                kind = Map_Target_Kind.WareHouse_Area;//ä»“åº“
                 break;
             case "TouchFish_Area":
-                kind = Map_Target_Kind.TouchFish_Area;//ÃşÓãÇøÓò
+                kind = Map_Target_Kind.TouchFish_Area;//æ‘¸é±¼åŒºåŸŸ
                 break;
         }
 
     }
     /// <summary>
-    /// »õÎï³õÊ¼»¯
+    /// è´§ç‰©åˆå§‹åŒ–
     /// </summary>
     public void Freight_SignIn()
     {
-        //»õÎï³õÊ¼»¯
+        //è´§ç‰©åˆå§‹åŒ–
         Freight = new PlantItem_Data();
-        //Èç¹ûÊÇ»õÎïÄ¿±ê£¬ÔòÒş²ØÆäSprite
+        //å¦‚æœæ˜¯è´§ç‰©ç›®æ ‡ï¼Œåˆ™éšè—å…¶Sprite
         if (kind == Map_Target_Kind.Freight_Target)
         {
             GetComponent<SpriteRenderer>().enabled = false;
@@ -63,14 +63,14 @@ public class Map_Target:MonoBehaviour
         if (collision.gameObject.tag == "NPC")
         {
             CharaController charaController=collision.gameObject.GetComponent<CharaController>();
-            #region ·ÏÂë£¬ÔİÊ±µÄ
+            #region åºŸç ï¼Œæš‚æ—¶çš„
             //float distance = Vector2.Distance(collision.transform.position, transform.position);
 
             //float EndDistance = collision.GetComponent<AIPath>().endReachedDistance;
             //print(gameObject.name);
             //print(charaController.Target.target);
             #endregion
-            //Èç¹ûNPCµÄÄ¿±êÎªµ±Ç°µãÎ»£¬Ôò½«¸Ã¾İµãµÄÕ¼¾İÊı¾İ¸üĞÂÎª¸ÃNPC
+            //å¦‚æœNPCçš„ç›®æ ‡ä¸ºå½“å‰ç‚¹ä½ï¼Œåˆ™å°†è¯¥æ®ç‚¹çš„å æ®æ•°æ®æ›´æ–°ä¸ºè¯¥NPC
             if (charaController.Target.target== this.transform)
             {
                 npc = collision.gameObject;
@@ -141,11 +141,11 @@ public class Map_Target:MonoBehaviour
 
                 if (Is_Empty)
                 {
-                    //ÎªNPC¸³Öµ£¬Ê¹Æä»ñµÃ»õÎï×´Ì¬
+                    //ä¸ºNPCèµ‹å€¼ï¼Œä½¿å…¶è·å¾—è´§ç‰©çŠ¶æ€
                     npc.GetComponent<CharaController>().freight = Freight;
-                    //ÇĞ»»NPC×´Ì¬
+                    //åˆ‡æ¢NPCçŠ¶æ€
                     charaController.NPC_Status = NPC_status.Transport;
-                    //Çå¿Õ×ÔÉí
+                    //æ¸…ç©ºè‡ªèº«
                     Freight = new PlantItem_Data();
                     GetComponent<SpriteRenderer>().enabled = false;
 
@@ -158,29 +158,18 @@ public class Map_Target:MonoBehaviour
                 PlantItem_Data plantData = npc.GetComponent<CharaController>().freight;
                 GamerData gamerData = ObjectKeeper_Singleton.Instance.gamerData;
 
-                //print(gamerData);
-                print(gamerData.HarvestItems == null);
-                if(plantData.ID!=0&&plantData.ID!=0)
+                if(plantData.ID!=0)//å¦‚æœè´§ç‰©ä¸ä¸ºç©º
                 {
-                    if (gamerData.HarvestItems == null || gamerData.HarvestItems.Count == 0)
+                    if (gamerData.Player_PlantNum.ContainsKey(plantData.ID))
                     {
-                        gamerData.HarvestItems.Add(plantData);
+                        gamerData.Player_PlantNum[plantData.ID] += plantData.Harvest_Num;
                     }
                     else
                     {
-                        PlantItem_Data foundItem = gamerData.HarvestItems.Find(item => item.ID == plantData.ID);
-                        if (foundItem != null)
-                        {
-                            foundItem.Gamer_Num += plantData.Harvest_Num;
-                        }
-                        else
-                        {
-                            gamerData.HarvestItems.Add(plantData);
-                        }
+                        gamerData.Player_PlantNum.Add(plantData.ID, plantData.Harvest_Num);
                     }
                 }
-                
-                EventCenter.GetInstance().EventTrigger("ItemList_Update");
+                EventCenter.GetInstance().EventTrigger("ItemList_Update");//åˆ—è¡¨æ›´æ–°äº‹ä»¶ï¼ŒListenerå¤„äºPhone_WareHouseè„šæœ¬ä¸­
                 npc.GetComponent<CharaController>().freight = new PlantItem_Data();
                 npc.GetComponent<CharaController>().NPC_Status = NPC_status.GoToWork;
 

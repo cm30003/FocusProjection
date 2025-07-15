@@ -4,15 +4,14 @@ using UnityEngine;
 using Pathfinding;
 using Unity.VisualScripting;
 using UnityEngine.UI;
-using TMPro;
 using LitJson;
-using UnityEngine.AI;
+using Spine;
 
 public class CharaController : MonoBehaviour
 {
     [Header("————需要交互的动态对象————")]
-    public float RestWalk_InRest_RangeY;//漫游范围
-    public float RestWalk_InRest_RangeX;//漫游范围
+    public float RestWalk_InRest_RangeY;//漫游范围Y
+    public float RestWalk_InRest_RangeX;//漫游范围X
 
     public float RestIde_Time;//完成一个漫游后的待机时间
     public float CurrentRestIde_Time;//完成一个漫游后的待机时间
@@ -97,11 +96,11 @@ public class CharaController : MonoBehaviour
         //专注时间设置事件，当专注时间被设置，小动物会去工作
         //EventCenter.GetInstance().AddEventListener("FocusTime_Set", IsChoosen);
         //玩家选中事件
-        EventCenter.GetInstance().AddEventListener<string>("Is_Choosen",IsChoosen);
+        EventCenter.GetInstance().AddEventListener<string>("Is_Choosen",IsChoosen);//玩家选中，Trigger位于Phone_NPCManager中
         //待命事件
-        EventCenter.GetInstance().AddEventListener<string>("Is_Waiting", IsWaiting);
+        EventCenter.GetInstance().AddEventListener<string>("Is_Waiting", IsWaiting);//待命，Trigger位于Phone_NPCManager中
         //礼物事件，增加好感度，减少玩家金钱
-        EventCenter.GetInstance().AddEventListener<Button>("Gifted", Gifted);
+        EventCenter.GetInstance().AddEventListener<Button>("Gifted", Gifted);//送礼，Trigger位于Phone_WareHouse中
         //工作事件
         EventCenter.GetInstance().AddEventListener<Button>("NPC_Work", Order_Work);
         //休息事件
@@ -181,13 +180,11 @@ public class CharaController : MonoBehaviour
     #endregion
     private void FixedUpdate()
     {
-        #region 专注时间结束小动物回房的逻辑 已弃用
         //专注时间结束了就不管三七二十一下班,除非已经在休息室休息了
         if (!ObjectKeeper_Singleton.Instance.Is_Set && NPC_Status != NPC_status.Rest&&!Check_PlantedField())
         {
             NPC_Status = NPC_status.Go_To_Rest;
         }
-        #endregion
         Switch_Status();
         aiPath.maxSpeed = data.MoveSpeed;
     }
@@ -201,8 +198,6 @@ public class CharaController : MonoBehaviour
             case NPC_status.GoToWork://当小动物处于去工作状态，则寻找距离最近的种田机器
 
                 ObjectKeeper_Singleton.Instance.Add_WorkNpcs(gameObject);//添加到工作NPC列表
-
-                animator.Play("z_move");//行走动画
 
                 Target.target = null;//首先目标置空
 
@@ -220,6 +215,8 @@ public class CharaController : MonoBehaviour
                     Target.target = null;
                 }
                 Move_Right_OR_Left();//判断左右并进行翻转
+                Move_Up_OR_Down();
+
                 break;
 
             case NPC_status.Work://工作
@@ -263,10 +260,10 @@ public class CharaController : MonoBehaviour
             case NPC_status.Go_To_Rest://小动物回休息室
 
                 ObjectKeeper_Singleton.Instance.Remove_WorkNpc(gameObject);
-
+                //判断左右
                 Move_Right_OR_Left();
-                
-                animator.Play("z_move");//行走动画
+                //判断上下
+                Move_Up_OR_Down();
 
                 Leave_Field();//离开田地，田地的负责人置空
                 Target.target = ObjectKeeper_Singleton.Instance.Rest_Area.transform;//目标为休息室
@@ -307,9 +304,8 @@ public class CharaController : MonoBehaviour
                 }
                 else
                 {
-                    animator.Play("z_move");//行走动画
-
                     Move_Right_OR_Left();
+                    Move_Up_OR_Down();
                 }
                 break;
 
@@ -317,7 +313,7 @@ public class CharaController : MonoBehaviour
             case NPC_status.GoTo_TouchFish://小动物去摸鱼
 
                 Move_Right_OR_Left();
-                animator.Play("z_move");
+                Move_Up_OR_Down();
 
                 if (Target.target == null)
                 {
@@ -346,8 +342,8 @@ public class CharaController : MonoBehaviour
             case NPC_status.GoToEat://小动物去吃东西
                 //判断左右
                 Move_Right_OR_Left();
-
-                animator.Play("z_move");//行走动画
+                //判断上下
+                Move_Up_OR_Down();
 
                 Target.target = null;
 
@@ -391,9 +387,8 @@ public class CharaController : MonoBehaviour
 
             case NPC_status.Transport://搬运
 
-                animator.Play("z_hug");//搬运动画
-
                 Move_Right_OR_Left();//判断左右并进行翻转
+                Move_Up_OR_Down();
 
                 if (freight.ID!=0)
                 {
@@ -406,6 +401,10 @@ public class CharaController : MonoBehaviour
                 break;
         }
     }
+    /// <summary>
+    /// 检查田地是否有种子
+    /// </summary>
+    /// <returns></returns>
     public bool Check_PlantedField()
     {
         for(int i = 0; i < ObjectKeeper_Singleton.Instance.Farm_Group.transform.childCount; i++)
@@ -414,7 +413,6 @@ public class CharaController : MonoBehaviour
             if(state.State!=Plant_State.Empty)
             {
                 return true;
-                
             }
         }
         return false;
@@ -431,6 +429,34 @@ public class CharaController : MonoBehaviour
         else if (aiPath.desiredVelocity.x < 0)//左边
         {
             this.transform.rotation = Quaternion.Euler(0, 180, 0);
+        }
+    }
+    /// <summary>
+    /// 判断小动物是往上还是往下走了
+    /// </summary>
+    public void Move_Up_OR_Down()
+    {
+        if(NPC_Status!=NPC_status.Transport)
+        {
+            if (aiPath.desiredVelocity.y > 0)//上边
+            {
+                animator.Play("b_move");//背面行走动画
+            }
+            else if (aiPath.desiredVelocity.y < 0)//下边
+            {
+                animator.Play("z_move");//行走动画
+            }
+        }
+        else
+        {
+            if (aiPath.desiredVelocity.y > 0)//上边
+            {
+                animator.Play("b_hug");//背面搬运动画
+            }
+            else if (aiPath.desiredVelocity.y < 0)//下边
+            {
+                animator.Play("z_hug");//搬运动画
+            }
         }
     }
     /// <summary>

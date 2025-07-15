@@ -3,13 +3,13 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class WarehouseUI : UIBase//²Ö¿âUI
+public class WarehouseUI : UIBase//ä»“åº“UI
 {
     public GameObject Object_Group;
-    [Header("¡ª¡ª¡ª¡ªButton¡ª¡ª¡ª¡ª")]
+    [Header("â€”â€”â€”â€”Buttonâ€”â€”â€”â€”")]
     public GameObject Item_Button;
     public Button Quit_Button;
-    [Header("¡ª¡ª¡ª¡ªSprite¡ª¡ª¡ª¡ª")]
+    [Header("â€”â€”â€”â€”Spriteâ€”â€”â€”â€”")]
     public Sprite Start_Image;
     public Sprite Choosen_Image;
     
@@ -22,7 +22,7 @@ public class WarehouseUI : UIBase//²Ö¿âUI
     }
     private void InitClick()
     {
-        Quit_Button.onClick.AddListener(Quit_UI);//ÍË³ö
+        Quit_Button.onClick.AddListener(Quit_UI);//é€€å‡º
 
         //Item_Sign_In();
     }
@@ -30,27 +30,27 @@ public class WarehouseUI : UIBase//²Ö¿âUI
     public void Update_Evnet()
     {
         Clear_ObjectGroup();
-        Item_Sign_In();
+        //Item_Sign_In();
     }
     /// <summary>
-    /// ÎïÆ·°´Å¥×¢²á²¢Éú³Éµã»÷ÊÂ¼ş
+    /// ç‰©å“æŒ‰é’®æ³¨å†Œå¹¶ç”Ÿæˆç‚¹å‡»äº‹ä»¶
     /// </summary>
-    public void Item_Sign_In()
-    {
-        if(ObjectKeeper_Singleton.Instance.gamerData.HarvestItems != null && ObjectKeeper_Singleton.Instance.gamerData.HarvestItems.Count > 0)
-        {
-            for (int i = 0; i < ObjectKeeper_Singleton.Instance.gamerData.HarvestItems.Count; i++)
-            {
-                Button button = Instantiate(Item_Button, Object_Group.transform).GetComponent<Button>();
-                Button Sell_Button = button.transform.GetChild(0).GetComponent<Button>();
-                //ÎïÆ·Í¼±êÎªÒÑ³ÉÊìµÄÖ²ÎïÍ¼±ê
-                button.transform.GetChild(1).GetComponent<Image>().sprite =ResourceManager.GetInstance().Load<Sprite>(ObjectKeeper_Singleton.Instance.gamerData.HarvestItems[i].Mature_SpriteResPath) ;
-                button.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = ObjectKeeper_Singleton.Instance.gamerData.HarvestItems[i].Gamer_Num.ToString();
-                button.onClick.AddListener(() => Click(Sell_Button));
-                Sell_Button.onClick.AddListener(() => Sell(button));
-            }
-        }
-    }
+    //public void Item_Sign_In()
+    //{
+    //    if(ObjectKeeper_Singleton.Instance.gamerData.HarvestItems != null && ObjectKeeper_Singleton.Instance.gamerData.HarvestItems.Count > 0)
+    //    {
+    //        for (int i = 0; i < ObjectKeeper_Singleton.Instance.gamerData.HarvestItems.Count; i++)
+    //        {
+    //            Button button = Instantiate(Item_Button, Object_Group.transform).GetComponent<Button>();
+    //            Button Sell_Button = button.transform.GetChild(0).GetComponent<Button>();
+    //            //ç‰©å“å›¾æ ‡ä¸ºå·²æˆç†Ÿçš„æ¤ç‰©å›¾æ ‡
+    //            button.transform.GetChild(1).GetComponent<Image>().sprite =ResourceManager.GetInstance().Load<Sprite>(ObjectKeeper_Singleton.Instance.gamerData.HarvestItems[i].Mature_SpriteResPath) ;
+    //            button.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = ObjectKeeper_Singleton.Instance.gamerData.HarvestItems[i].Player_Num.ToString();
+    //            button.onClick.AddListener(() => Click(Sell_Button));
+    //            Sell_Button.onClick.AddListener(() => Sell(button));
+    //        }
+    //    }
+    //}
     public void Clear_ObjectGroup()
     {
         for (int i = 0; i < Object_Group.transform.childCount; i++)
@@ -59,9 +59,9 @@ public class WarehouseUI : UIBase//²Ö¿âUI
         }
     }
     /// <summary>
-    /// µã»÷ÊÂ¼ş
+    /// ç‚¹å‡»äº‹ä»¶
     /// </summary>
-    /// <param name="current">µ±Ç°±»µã»÷µÄ°´Å¥/Item</param>
+    /// <param name="current">å½“å‰è¢«ç‚¹å‡»çš„æŒ‰é’®/Item</param>
     public void Click(Button current)
     {
         Current_Button = current;
@@ -82,41 +82,41 @@ public class WarehouseUI : UIBase//²Ö¿âUI
         }
     }
     /// <summary>
-    /// Âô³öÊÂ¼ş
+    /// å–å‡ºäº‹ä»¶
     /// </summary>
     /// <param name="button"></param>
-    public void Sell(Button button)
-    {
-        PlantItem_Data plantData=button.GetComponent<Plant>().Data;
-        foreach(PlantItem_Data item in ObjectKeeper_Singleton.Instance.gamerData.HarvestItems)
-        {
-            if(item==plantData&&item.Gamer_Num>0)
-            {
-                item.Gamer_Num--;
-                ObjectKeeper_Singleton.Instance.gamerData.Money++;
-            }
-        }
+    //public void Sell(Button button)
+    //{
+    //    PlantItem_Data plantData=button.GetComponent<Plant>().Data;
+    //    foreach(PlantItem_Data item in ObjectKeeper_Singleton.Instance.gamerData.HarvestItems)
+    //    {
+    //        if(item==plantData&&item.Player_Num>0)
+    //        {
+    //            item.Player_Num--;
+    //            ObjectKeeper_Singleton.Instance.gamerData.Money++;
+    //        }
+    //    }
         
-        EventCenter.GetInstance().EventTrigger("Info_Update");//»­Ãæ×óÉÏ½ÇÍæ¼ÒĞÅÏ¢¸üĞÂĞÅÏ¢
-    }
-    #region ÆúÓÃ
+    //    EventCenter.GetInstance().EventTrigger("Info_Update");//ç”»é¢å·¦ä¸Šè§’ç©å®¶ä¿¡æ¯æ›´æ–°ä¿¡æ¯
+    //}
+    #region å¼ƒç”¨
     /// <summary>
-    /// ¼ì²éÁĞ±íÊÇ·ñ´æÔÚ´æÈëÎïÆ·
+    /// æ£€æŸ¥åˆ—è¡¨æ˜¯å¦å­˜åœ¨å­˜å…¥ç‰©å“
     /// </summary>
     //public void CheckList(GameObject gameObject)
     //{
     //    PlantData plantData=gameObject.GetComponent<PlantData>();
-    //    //Èç¹ûÁĞ±íÖĞ´æÔÚ¸ÃItem£¬Ôò¸üĞÂÆäÊıÁ¿
+    //    //å¦‚æœåˆ—è¡¨ä¸­å­˜åœ¨è¯¥Itemï¼Œåˆ™æ›´æ–°å…¶æ•°é‡
     //    if(ObjectKeeper_Singleton.Instance.gamerData.Items.Contains(plantData))
     //    {
     //        int Index= ObjectKeeper_Singleton.Instance.gamerData.Items.IndexOf(plantData);
     //        ObjectKeeper_Singleton.Instance.gamerData.Items[Index].Num++;
     //    }
-    //    //Èô²»´æÔÚ¸ÃItem£¬ÔòÌí¼Ó¸ÃItem
+    //    //è‹¥ä¸å­˜åœ¨è¯¥Itemï¼Œåˆ™æ·»åŠ è¯¥Item
     //    else
     //    {
     //        ObjectKeeper_Singleton.Instance.gamerData.Items.Add(plantData);
-    //        //ÔÚ¿âÖĞ Éú³ÉÒ»¸öItem°´Å¥
+    //        //åœ¨åº“ä¸­ ç”Ÿæˆä¸€ä¸ªItemæŒ‰é’®
     //        Button button = Instantiate(Item_Button, Object_Group.transform).GetComponent<Button>();
     //        button.onClick.AddListener(Quit_UI);
     //    }

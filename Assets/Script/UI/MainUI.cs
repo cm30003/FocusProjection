@@ -40,13 +40,13 @@ public class MainUI : UIBase
     public Button Timer_Button;//计时器
     public Button Player_IDCard_Button;//玩家名片
     [Header("————右上计划板————")]
-    public GameObject PlanText_Group;
+    //public GameObject PlanText_Group;
 
     public GameObject Choose_Bar;
 
     public GameObject PlaceHolder;
 
-    public Mission_ADay mission_ADay;
+    //public Mission_ADay mission_ADay;
     [Header("————左上玩家信息————")]
     public TextMeshProUGUI Player_Name;
     public TextMeshProUGUI Player_Money;
@@ -55,14 +55,14 @@ public class MainUI : UIBase
     public GameObject OpenMainUI_Trigger;
     private void Start()
     {
-        if (JsonManager.Instance.LoadData<Mission_ADay>("ADay") != null)
-        {
-            mission_ADay = JsonManager.Instance.LoadData<Mission_ADay>("ADay");
-        }
-        else
-        {
-            mission_ADay = new Mission_ADay();
-        }
+        //if (JsonManager.Instance.LoadData<Mission_ADay>("ADay") != null)
+        //{
+        //    mission_ADay = JsonManager.Instance.LoadData<Mission_ADay>("ADay");
+        //}
+        //else
+        //{
+        //    mission_ADay = new Mission_ADay();
+        //}
         InitClick();
     }
     /// <summary>
@@ -103,7 +103,7 @@ public class MainUI : UIBase
         Player_Money.text = ObjectKeeper_Singleton.Instance.gamerData.Money.ToString();
         Player_level.text ="Lv."+ObjectKeeper_Singleton.Instance.gamerData.Level.ToString();
     }
-    #region 计划板相关
+    #region 计划板相关 已弃用
     /// <summary>
     /// 为计划板添加按钮事件-输入文本框选择事件
     /// </summary>

@@ -1,16 +1,16 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated July 28, 2023. Replaces all prior versions.
+ * Last updated January 1, 2020. Replaces all prior versions.
  *
- * Copyright (c) 2013-2023, Esoteric Software LLC
+ * Copyright (c) 2013-2020, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
  * conditions of Section 2 of the Spine Editor License Agreement:
  * http://esotericsoftware.com/spine-editor-license
  *
- * Otherwise, it is permitted to integrate the Spine Runtimes into software or
- * otherwise create derivative works of the Spine Runtimes (collectively,
+ * Otherwise, it is permitted to integrate the Spine Runtimes into software
+ * or otherwise create derivative works of the Spine Runtimes (collectively,
  * "Products"), provided that each user of the Products must obtain their own
  * Spine Editor license and redistribution of the Products in any form must
  * include this license and copyright notice.
@@ -23,15 +23,12 @@
  * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
  * BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THE
- * SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
-using System.Collections.Generic;
 using UnityEngine;
-#if UNITY_EDITOR
-using UnityEditor.Animations;
-#endif
+using System.Collections.Generic;
 
 namespace Spine.Unity {
 	[RequireComponent(typeof(Animator))]
@@ -42,15 +39,11 @@ namespace Spine.Unity {
 		public MecanimTranslator Translator { get { return translator; } }
 		private bool wasUpdatedAfterInit = true;
 
-		#region Bone and Initialization Callbacks ISkeletonAnimation
-		protected event ISkeletonAnimationDelegate _OnAnimationRebuild;
+		#region Bone Callbacks (ISkeletonAnimation)
 		protected event UpdateBonesDelegate _BeforeApply;
 		protected event UpdateBonesDelegate _UpdateLocal;
 		protected event UpdateBonesDelegate _UpdateWorld;
 		protected event UpdateBonesDelegate _UpdateComplete;
-
-		/// <summary>OnAnimationRebuild is raised after the SkeletonAnimation component is successfully initialized.</summary>
-		public event ISkeletonAnimationDelegate OnAnimationRebuild { add { _OnAnimationRebuild += value; } remove { _OnAnimationRebuild -= value; } }
 
 		/// <summary>
 		/// Occurs before the animations are applied.
@@ -66,8 +59,7 @@ namespace Spine.Unity {
 		/// <summary>
 		/// Occurs after the Skeleton's bone world space values are resolved (including all constraints).
 		/// Using this callback will cause the world space values to be solved an extra time.
-		/// Use this callback if want to use bone world space values, and also set bone local values.
-		/// </summary>
+		/// Use this callback if want to use bone world space values, and also set bone local values.</summary>
 		public event UpdateBonesDelegate UpdateWorld { add { _UpdateWorld += value; } remove { _UpdateWorld -= value; } }
 
 		/// <summary>
@@ -75,18 +67,12 @@ namespace Spine.Unity {
 		/// Use this callback if you want to use bone world space values, but don't intend to modify bone local values.
 		/// This callback can also be used when setting world position and the bone matrix.</summary>
 		public event UpdateBonesDelegate UpdateComplete { add { _UpdateComplete += value; } remove { _UpdateComplete -= value; } }
-
-		[SerializeField] protected UpdateTiming updateTiming = UpdateTiming.InUpdate;
-		public UpdateTiming UpdateTiming { get { return updateTiming; } set { updateTiming = value; } }
 		#endregion
 
 		public override void Initialize (bool overwrite, bool quiet = false) {
 			if (valid && !overwrite)
 				return;
-#if UNITY_EDITOR
-			if (BuildUtilities.IsInSkeletonAssetBuildPreProcessing)
-				return;
-#endif
+
 			base.Initialize(overwrite, quiet);
 
 			if (!valid)
@@ -95,54 +81,31 @@ namespace Spine.Unity {
 			if (translator == null) translator = new MecanimTranslator();
 			translator.Initialize(GetComponent<Animator>(), this.skeletonDataAsset);
 			wasUpdatedAfterInit = false;
-
-			if (_OnAnimationRebuild != null)
-				_OnAnimationRebuild(this);
 		}
 
-		public virtual void Update () {
-			if (!valid || updateTiming != UpdateTiming.InUpdate) return;
-			UpdateAnimation(Time.deltaTime);
-		}
-
-		public virtual void FixedUpdate () {
-			if (!valid || updateTiming != UpdateTiming.InFixedUpdate) return;
-			UpdateAnimation(Time.deltaTime);
-		}
-
-		/// <summary>Manual animation update. Required when <c>updateTiming</c> is set to <c>ManualUpdate</c>.</summary>
-		/// <param name="deltaTime">Ignored parameter.</param>
-		public virtual void Update (float deltaTime) {
+		public void Update () {
 			if (!valid) return;
-			UpdateAnimation(deltaTime);
-		}
 
-		protected void UpdateAnimation (float deltaTime) {
 			wasUpdatedAfterInit = true;
-
 			// animation status is kept by Mecanim Animator component
 			if (updateMode <= UpdateMode.OnlyAnimationStatus)
 				return;
-
-			skeleton.Update(deltaTime);
-
-			ApplyTransformMovementToPhysics();
-
 			ApplyAnimation();
 		}
 
-		public virtual void ApplyAnimation () {
+		protected void ApplyAnimation () {
 			if (_BeforeApply != null)
 				_BeforeApply(this);
 
-#if UNITY_EDITOR
-			Animator translatorAnimator = translator.Animator;
+		#if UNITY_EDITOR
+			var translatorAnimator = translator.Animator;
 			if (translatorAnimator != null && !translatorAnimator.isInitialized)
 				translatorAnimator.Rebind();
 
 			if (Application.isPlaying) {
 				translator.Apply(skeleton);
-			} else {
+			}
+			else {
 				if (translatorAnimator != null && translatorAnimator.isInitialized &&
 					translatorAnimator.isActiveAndEnabled && translatorAnimator.runtimeAnimatorController != null) {
 					// Note: Rebind is required to prevent warning "Animator is not playing an AnimatorController" with prefabs
@@ -150,46 +113,31 @@ namespace Spine.Unity {
 					translator.Apply(skeleton);
 				}
 			}
-#else
+		#else
 			translator.Apply(skeleton);
-#endif
-			AfterAnimationApplied();
-		}
+		#endif
 
-		public virtual void AfterAnimationApplied () {
-			if (_UpdateLocal != null)
-				_UpdateLocal(this);
+			// UpdateWorldTransform and Bone Callbacks
+			{
+				if (_UpdateLocal != null)
+					_UpdateLocal(this);
 
-			if (_UpdateWorld == null) {
-				UpdateWorldTransform(Skeleton.Physics.Update);
-			} else {
-				UpdateWorldTransform(Skeleton.Physics.Pose);
-				_UpdateWorld(this);
-				UpdateWorldTransform(Skeleton.Physics.Update);
+				skeleton.UpdateWorldTransform();
+
+				if (_UpdateWorld != null) {
+					_UpdateWorld(this);
+					skeleton.UpdateWorldTransform();
+				}
+
+				if (_UpdateComplete != null)
+					_UpdateComplete(this);
 			}
-
-			if (_UpdateComplete != null)
-				_UpdateComplete(this);
 		}
 
 		public override void LateUpdate () {
-			if (updateTiming == UpdateTiming.InLateUpdate && valid && translator != null && translator.Animator != null)
-				UpdateAnimation(Time.deltaTime);
 			// instantiation can happen from Update() after this component, leading to a missing Update() call.
 			if (!wasUpdatedAfterInit) Update();
 			base.LateUpdate();
-		}
-
-		public override void OnBecameVisible () {
-			UpdateMode previousUpdateMode = updateMode;
-			updateMode = UpdateMode.FullUpdate;
-
-			// OnBecameVisible is called after LateUpdate()
-			if (previousUpdateMode != UpdateMode.FullUpdate &&
-				previousUpdateMode != UpdateMode.EverythingExceptMesh)
-				Update();
-			if (previousUpdateMode != UpdateMode.FullUpdate)
-				LateUpdate();
 		}
 
 		[System.Serializable]
@@ -210,7 +158,7 @@ namespace Spine.Unity {
 
 			public event OnClipAppliedDelegate OnClipApplied { add { _OnClipApplied += value; } remove { _OnClipApplied -= value; } }
 
-			public enum MixMode { AlwaysMix, MixNext, Hard, Match }
+			public enum MixMode { AlwaysMix, MixNext, Hard }
 
 			readonly Dictionary<int, Spine.Animation> animationTable = new Dictionary<int, Spine.Animation>(IntEqualityComparer.Instance);
 			readonly Dictionary<AnimationClip, int> clipNameHashCodeTable = new Dictionary<AnimationClip, int>(AnimationClipEqualityComparer.Instance);
@@ -226,9 +174,6 @@ namespace Spine.Unity {
 				public readonly List<AnimatorClipInfo> clipInfos = new List<AnimatorClipInfo>();
 				public readonly List<AnimatorClipInfo> nextClipInfos = new List<AnimatorClipInfo>();
 				public readonly List<AnimatorClipInfo> interruptingClipInfos = new List<AnimatorClipInfo>();
-				public float[] clipResolvedWeights = new float[0];
-				public float[] nextClipResolvedWeights = new float[0];
-				public float[] interruptingClipResolvedWeights = new float[0];
 
 				public AnimatorStateInfo stateInfo;
 				public AnimatorStateInfo nextStateInfo;
@@ -261,14 +206,14 @@ namespace Spine.Unity {
 				}
 			}
 
-			public void Initialize (Animator animator, SkeletonDataAsset skeletonDataAsset) {
+			public void Initialize(Animator animator, SkeletonDataAsset skeletonDataAsset) {
 				this.animator = animator;
 
 				previousAnimations.Clear();
 
 				animationTable.Clear();
-				SkeletonData data = skeletonDataAsset.GetSkeletonData(true);
-				foreach (Animation a in data.Animations)
+				var data = skeletonDataAsset.GetSkeletonData(true);
+				foreach (var a in data.Animations)
 					animationTable.Add(a.Name.GetHashCode(), a);
 
 				clipNameHashCodeTable.Clear();
@@ -276,18 +221,18 @@ namespace Spine.Unity {
 			}
 
 			private bool ApplyAnimation (Skeleton skeleton, AnimatorClipInfo info, AnimatorStateInfo stateInfo,
-										int layerIndex, float layerWeight, MixBlend layerBlendMode,
-										bool useCustomClipWeight = false, float customClipWeight = 1.0f) {
+										int layerIndex, float layerWeight, MixBlend layerBlendMode, bool useClipWeight1 = false) {
 				float weight = info.weight * layerWeight;
 				if (weight < WeightEpsilon)
 					return false;
 
-				Animation clip = GetAnimation(info.clip);
+				var clip = GetAnimation(info.clip);
 				if (clip == null)
 					return false;
-				float time = AnimationTime(stateInfo.normalizedTime, info.clip.length,
+
+				var time = AnimationTime(stateInfo.normalizedTime, info.clip.length,
 										info.clip.isLooping, stateInfo.speed < 0);
-				weight = useCustomClipWeight ? layerWeight * customClipWeight : weight;
+				weight = useClipWeight1 ? layerWeight : weight;
 				clip.Apply(skeleton, 0, time, info.clip.isLooping, null,
 						weight, layerBlendMode, MixDirection.In);
 				if (_OnClipApplied != null)
@@ -298,20 +243,20 @@ namespace Spine.Unity {
 			private bool ApplyInterruptionAnimation (Skeleton skeleton,
 				bool interpolateWeightTo1, AnimatorClipInfo info, AnimatorStateInfo stateInfo,
 				int layerIndex, float layerWeight, MixBlend layerBlendMode, float interruptingClipTimeAddition,
-				bool useCustomClipWeight = false, float customClipWeight = 1.0f) {
+				bool useClipWeight1 = false) {
 
 				float clipWeight = interpolateWeightTo1 ? (info.weight + 1.0f) * 0.5f : info.weight;
 				float weight = clipWeight * layerWeight;
 				if (weight < WeightEpsilon)
 					return false;
 
-				Animation clip = GetAnimation(info.clip);
+				var clip = GetAnimation(info.clip);
 				if (clip == null)
 					return false;
 
-				float time = AnimationTime(stateInfo.normalizedTime + interruptingClipTimeAddition,
-										info.clip.length, info.clip.isLooping, stateInfo.speed < 0);
-				weight = useCustomClipWeight ? layerWeight * customClipWeight : weight;
+				var time = AnimationTime(stateInfo.normalizedTime + interruptingClipTimeAddition,
+										info.clip.length, stateInfo.speed < 0);
+				weight = useClipWeight1 ? layerWeight : weight;
 				clip.Apply(skeleton, 0, time, info.clip.isLooping, null,
 							weight, layerBlendMode, MixDirection.In);
 				if (_OnClipApplied != null) {
@@ -325,20 +270,19 @@ namespace Spine.Unity {
 
 				float speedFactor = stateInfo.speedMultiplier * stateInfo.speed;
 				float lastTime = time - (Time.deltaTime * speedFactor);
-				float clipDuration = clip.Duration;
-				if (isLooping && clipDuration != 0) {
-					time %= clipDuration;
-					lastTime %= clipDuration;
+				if (isLooping && clip.duration != 0) {
+					time %= clip.duration;
+					lastTime %= clip.duration;
 				}
 				_OnClipApplied(clip, layerIndex, weight, time, lastTime, speedFactor < 0);
 			}
 
 			public void Apply (Skeleton skeleton) {
-#if UNITY_EDITOR
+			#if UNITY_EDITOR
 				if (!Application.isPlaying) {
 					GetLayerBlendModes();
 				}
-#endif
+			#endif
 
 				if (layerMixModes.Length < animator.layerCount) {
 					int oldSize = layerMixModes.Length;
@@ -358,9 +302,9 @@ namespace Spine.Unity {
 
 				// Clear Previous
 				if (autoReset) {
-					List<Animation> previousAnimations = this.previousAnimations;
+					var previousAnimations = this.previousAnimations;
 					for (int i = 0, n = previousAnimations.Count; i < n; i++)
-						previousAnimations[i].Apply(skeleton, 0, 0, false, null, 0, MixBlend.Setup, MixDirection.Out); // SetKeyedItemsToSetupPose
+						previousAnimations[i].SetKeyedItemsToSetupPose(skeleton);
 
 					previousAnimations.Clear();
 					for (int layer = 0, n = animator.layerCount; layer < n; layer++) {
@@ -378,29 +322,30 @@ namespace Spine.Unity {
 											out clipInfo, out nextClipInfo, out interruptingClipInfo, out shallInterpolateWeightTo1);
 
 						for (int c = 0; c < clipInfoCount; c++) {
-							AnimatorClipInfo info = clipInfo[c];
+							var info = clipInfo[c];
 							float weight = info.weight * layerWeight; if (weight < WeightEpsilon) continue;
-							Spine.Animation clip = GetAnimation(info.clip);
+							var clip = GetAnimation(info.clip);
 							if (clip != null)
 								previousAnimations.Add(clip);
 						}
 
 						if (hasNext) {
 							for (int c = 0; c < nextClipInfoCount; c++) {
-								AnimatorClipInfo info = nextClipInfo[c];
+								var info = nextClipInfo[c];
 								float weight = info.weight * layerWeight; if (weight < WeightEpsilon) continue;
-								Spine.Animation clip = GetAnimation(info.clip);
+								var clip = GetAnimation(info.clip);
 								if (clip != null)
 									previousAnimations.Add(clip);
 							}
 						}
 
 						if (isInterruptionActive) {
-							for (int c = 0; c < interruptingClipInfoCount; c++) {
-								AnimatorClipInfo info = interruptingClipInfo[c];
+							for (int c = 0; c < interruptingClipInfoCount; c++)
+							{
+								var info = interruptingClipInfo[c];
 								float clipWeight = shallInterpolateWeightTo1 ? (info.weight + 1.0f) * 0.5f : info.weight;
 								float weight = clipWeight * layerWeight; if (weight < WeightEpsilon) continue;
-								Spine.Animation clip = GetAnimation(info.clip);
+								var clip = GetAnimation(info.clip);
 								if (clip != null)
 									previousAnimations.Add(clip);
 							}
@@ -440,45 +385,18 @@ namespace Spine.Unity {
 							}
 						}
 						if (isInterruptionActive) {
-							for (int c = 0; c < interruptingClipInfoCount; c++) {
+							for (int c = 0; c < interruptingClipInfoCount; c++)
+							{
 								ApplyInterruptionAnimation(skeleton, interpolateWeightTo1,
 									interruptingClipInfo[c], interruptingStateInfo,
 									layer, layerWeight, layerBlendMode, interruptingClipTimeAddition);
 							}
 						}
-					} else if (mode == MixMode.Match) {
-						// Calculate matching Spine lerp(lerp(A, B, w2), C, w3) weights
-						// from Unity's absolute weights A*W1 + B*W2 + C*W3.
-						MatchWeights(layerClipInfos[layer], hasNext, isInterruptionActive, clipInfoCount, nextClipInfoCount, interruptingClipInfoCount,
-							clipInfo, nextClipInfo, interruptingClipInfo);
-
-						float[] customWeights = layerClipInfos[layer].clipResolvedWeights;
-						for (int c = 0; c < clipInfoCount; c++) {
-							ApplyAnimation(skeleton, clipInfo[c], stateInfo, layer, layerWeight, layerBlendMode,
-								true, customWeights[c]);
-						}
-						if (hasNext) {
-							customWeights = layerClipInfos[layer].nextClipResolvedWeights;
-							for (int c = 0; c < nextClipInfoCount; c++) {
-								ApplyAnimation(skeleton, nextClipInfo[c], nextStateInfo, layer, layerWeight, layerBlendMode,
-									true, customWeights[c]);
-							}
-						}
-						if (isInterruptionActive) {
-							customWeights = layerClipInfos[layer].interruptingClipResolvedWeights;
-							for (int c = 0; c < interruptingClipInfoCount; c++) {
-								ApplyInterruptionAnimation(skeleton, interpolateWeightTo1,
-									interruptingClipInfo[c], interruptingStateInfo,
-									layer, layerWeight, layerBlendMode, interruptingClipTimeAddition,
-									true, customWeights[c]);
-							}
-						}
 					} else { // case MixNext || Hard
-							 // Apply first non-zero weighted clip
+						// Apply first non-zero weighted clip
 						int c = 0;
 						for (; c < clipInfoCount; c++) {
-							if (!ApplyAnimation(skeleton, clipInfo[c], stateInfo, layer, layerWeight, layerBlendMode,
-								true, 1.0f))
+							if (!ApplyAnimation(skeleton, clipInfo[c], stateInfo, layer, layerWeight, layerBlendMode, useClipWeight1:true))
 								continue;
 							++c; break;
 						}
@@ -492,8 +410,7 @@ namespace Spine.Unity {
 							// Apply next clip directly instead of mixing (ie: no crossfade, ignores mecanim transition weights)
 							if (mode == MixMode.Hard) {
 								for (; c < nextClipInfoCount; c++) {
-									if (!ApplyAnimation(skeleton, nextClipInfo[c], nextStateInfo, layer, layerWeight, layerBlendMode,
-										true, 1.0f))
+									if (!ApplyAnimation(skeleton, nextClipInfo[c], nextStateInfo, layer, layerWeight, layerBlendMode, useClipWeight1:true))
 										continue;
 									++c; break;
 								}
@@ -512,7 +429,7 @@ namespace Spine.Unity {
 								for (; c < interruptingClipInfoCount; c++) {
 									if (ApplyInterruptionAnimation(skeleton, interpolateWeightTo1,
 										interruptingClipInfo[c], interruptingStateInfo,
-										layer, layerWeight, layerBlendMode, interruptingClipTimeAddition, true, 1.0f)) {
+										layer, layerWeight, layerBlendMode, interruptingClipTimeAddition, useClipWeight1:true)) {
 
 										++c; break;
 									}
@@ -529,51 +446,11 @@ namespace Spine.Unity {
 				}
 			}
 
-			/// <summary>
-			/// Resolve matching weights from Unity's absolute weights A*w1 + B*w2 + C*w3 to
-			/// Spine's lerp(lerp(A, B, x), C, y) weights, in reverse order of clips.
-			/// </summary>
-			protected void MatchWeights (ClipInfos clipInfos, bool hasNext, bool isInterruptionActive,
-				int clipInfoCount, int nextClipInfoCount, int interruptingClipInfoCount,
-				IList<AnimatorClipInfo> clipInfo, IList<AnimatorClipInfo> nextClipInfo, IList<AnimatorClipInfo> interruptingClipInfo) {
-
-				if (clipInfos.clipResolvedWeights.Length < clipInfoCount) {
-					System.Array.Resize<float>(ref clipInfos.clipResolvedWeights, clipInfoCount);
-				}
-				if (hasNext && clipInfos.nextClipResolvedWeights.Length < nextClipInfoCount) {
-					System.Array.Resize<float>(ref clipInfos.nextClipResolvedWeights, nextClipInfoCount);
-				}
-				if (isInterruptionActive && clipInfos.interruptingClipResolvedWeights.Length < interruptingClipInfoCount) {
-					System.Array.Resize<float>(ref clipInfos.interruptingClipResolvedWeights, interruptingClipInfoCount);
-				}
-
-				float inverseWeight = 1.0f;
-				if (isInterruptionActive) {
-					for (int c = interruptingClipInfoCount - 1; c >= 0; c--) {
-						float unityWeight = interruptingClipInfo[c].weight;
-						clipInfos.interruptingClipResolvedWeights[c] = interruptingClipInfo[c].weight * inverseWeight;
-						inverseWeight /= (1.0f - unityWeight);
-					}
-				}
-				if (hasNext) {
-					for (int c = nextClipInfoCount - 1; c >= 0; c--) {
-						float unityWeight = nextClipInfo[c].weight;
-						clipInfos.nextClipResolvedWeights[c] = nextClipInfo[c].weight * inverseWeight;
-						inverseWeight /= (1.0f - unityWeight);
-					}
-				}
-				for (int c = clipInfoCount - 1; c >= 0; c--) {
-					float unityWeight = clipInfo[c].weight;
-					clipInfos.clipResolvedWeights[c] = (c == 0) ? 1f : clipInfo[c].weight * inverseWeight;
-					inverseWeight /= (1.0f - unityWeight);
-				}
-			}
-
 			public KeyValuePair<Spine.Animation, float> GetActiveAnimationAndTime (int layer) {
 				if (layer >= layerClipInfos.Length)
 					return new KeyValuePair<Spine.Animation, float>(null, 0);
 
-				ClipInfos layerInfos = layerClipInfos[layer];
+				var layerInfos = layerClipInfos[layer];
 				bool isInterruptionActive = layerInfos.isInterruptionActive;
 				AnimationClip clip = null;
 				Spine.Animation animation = null;
@@ -581,7 +458,8 @@ namespace Spine.Unity {
 				if (isInterruptionActive && layerInfos.interruptingClipInfoCount > 0) {
 					clip = layerInfos.interruptingClipInfos[0].clip;
 					stateInfo = layerInfos.interruptingStateInfo;
-				} else {
+				}
+				else {
 					clip = layerInfos.clipInfos[0].clip;
 					stateInfo = layerInfos.stateInfo;
 				}
@@ -592,17 +470,17 @@ namespace Spine.Unity {
 			}
 
 			static float AnimationTime (float normalizedTime, float clipLength, bool loop, bool reversed) {
-				float time = ToSpineAnimationTime(normalizedTime, clipLength, loop, reversed);
+				float time = AnimationTime(normalizedTime, clipLength, reversed);
 				if (loop) return time;
 				const float EndSnapEpsilon = 1f / 30f; // Workaround for end-duration keys not being applied.
 				return (clipLength - time < EndSnapEpsilon) ? clipLength : time; // return a time snapped to clipLength;
 			}
 
-			static float ToSpineAnimationTime (float normalizedTime, float clipLength, bool loop, bool reversed) {
+			static float AnimationTime (float normalizedTime, float clipLength, bool reversed) {
 				if (reversed)
 					normalizedTime = (1 - normalizedTime);
 				if (normalizedTime < 0.0f)
-					normalizedTime = loop ? (normalizedTime % 1.0f) + 1.0f : 0.0f;
+					normalizedTime = (normalizedTime % 1.0f) + 1.0f;
 				return normalizedTime * clipLength;
 			}
 
@@ -641,18 +519,19 @@ namespace Spine.Unity {
 						layerMixModes[layer] = mode;
 					}
 					return mode;
-				} else {
+				}
+				else {
 					return layerBlendMode == MixBlend.Add ? MixMode.AlwaysMix : MixMode.MixNext;
 				}
 			}
 
 #if UNITY_EDITOR
-			void GetLayerBlendModes () {
+			void GetLayerBlendModes() {
 				if (layerBlendModes.Length < animator.layerCount) {
 					System.Array.Resize<MixBlend>(ref layerBlendModes, animator.layerCount);
 				}
 				for (int layer = 0, n = animator.layerCount; layer < n; ++layer) {
-					AnimatorController controller = animator.runtimeAnimatorController as UnityEditor.Animations.AnimatorController;
+					var controller = animator.runtimeAnimatorController as UnityEditor.Animations.AnimatorController;
 					if (controller != null) {
 						layerBlendModes[layer] = MixBlend.First;
 						if (layer > 0) {
@@ -662,17 +541,17 @@ namespace Spine.Unity {
 					}
 				}
 			}
-#endif
+		#endif
 
 			void GetStateUpdatesFromAnimator (int layer) {
 
-				ClipInfos layerInfos = layerClipInfos[layer];
+				var layerInfos = layerClipInfos[layer];
 				int clipInfoCount = animator.GetCurrentAnimatorClipInfoCount(layer);
 				int nextClipInfoCount = animator.GetNextAnimatorClipInfoCount(layer);
 
-				List<AnimatorClipInfo> clipInfos = layerInfos.clipInfos;
-				List<AnimatorClipInfo> nextClipInfos = layerInfos.nextClipInfos;
-				List<AnimatorClipInfo> interruptingClipInfos = layerInfos.interruptingClipInfos;
+				var clipInfos = layerInfos.clipInfos;
+				var nextClipInfos = layerInfos.nextClipInfos;
+				var interruptingClipInfos = layerInfos.interruptingClipInfos;
 
 				layerInfos.isInterruptionActive = (clipInfoCount == 0 && clipInfos.Count != 0 &&
 													nextClipInfoCount == 0 && nextClipInfos.Count != 0);
@@ -686,7 +565,7 @@ namespace Spine.Unity {
 					// will have fullPathHash set to 0, therefore we have to use previous
 					// frame's infos about interruption clips and correct some values
 					// accordingly (normalizedTime and weight).
-					AnimatorStateInfo interruptingStateInfo = animator.GetNextAnimatorStateInfo(layer);
+					var interruptingStateInfo = animator.GetNextAnimatorStateInfo(layer);
 					layerInfos.isLastFrameOfInterruption = interruptingStateInfo.fullPathHash == 0;
 					if (!layerInfos.isLastFrameOfInterruption) {
 						animator.GetNextAnimatorClipInfo(layer, interruptingClipInfos);
@@ -724,7 +603,7 @@ namespace Spine.Unity {
 				out IList<AnimatorClipInfo> interruptingClipInfo,
 				out bool shallInterpolateWeightTo1) {
 
-				ClipInfos layerInfos = layerClipInfos[layer];
+				var layerInfos = layerClipInfos[layer];
 				isInterruptionActive = layerInfos.isInterruptionActive;
 
 				clipInfoCount = layerInfos.clipInfoCount;
@@ -745,7 +624,7 @@ namespace Spine.Unity {
 				out AnimatorStateInfo interruptingStateInfo,
 				out float interruptingClipTimeAddition) {
 
-				ClipInfos layerInfos = layerClipInfos[layer];
+				var layerInfos = layerClipInfos[layer];
 				isInterruptionActive = layerInfos.isInterruptionActive;
 
 				stateInfo = layerInfos.stateInfo;
@@ -774,7 +653,7 @@ namespace Spine.Unity {
 			class IntEqualityComparer : IEqualityComparer<int> {
 				internal static readonly IEqualityComparer<int> Instance = new IntEqualityComparer();
 				public bool Equals (int x, int y) { return x == y; }
-				public int GetHashCode (int o) { return o; }
+				public int GetHashCode(int o) { return o; }
 			}
 		}
 

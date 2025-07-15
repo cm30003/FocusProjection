@@ -1,0 +1,16 @@
+[
+  {
+    "ID": 6001,
+    "Name": "地图1",
+    "Description": "地图1的描述",
+    "Cost": 500,
+    "ResPath": "Map"
+  },
+  {
+    "ID": 6002,
+    "Name": "地图2",
+    "Description": "地图2的描述",
+    "Cost": 500,
+    "ResPath": "Map"
+  }
+]

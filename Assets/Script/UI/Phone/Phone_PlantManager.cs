@@ -7,22 +7,17 @@ using UnityEngine.UI;
 
 public class Phone_PlantManager : NewUIBase
 {
-    [Header("¡ª¡ª¡ª¡ªÁĞ±í¡ª¡ª¡ª¡ª")]
-    public List<PlantItem_Data> PlantItem_List;
-
-    public List<GameObject> PlantItem_Prefab_List;//×°Ö²Îï°´Å¥µÄÁĞ±í
-    [Header("¡ª¡ª¡ª¡ª×é¡ª¡ª¡ª¡ª")]
+    [Header("â€”â€”â€”â€”åˆ—è¡¨â€”â€”â€”â€”")]
+    public List<GameObject> PlantItem_Prefab_List;//è£…æ¤ç‰©æŒ‰é’®çš„åˆ—è¡¨
+    [Header("â€”â€”â€”â€”ç»„â€”â€”â€”â€”")]
     public Transform PlantItem_Group;
-    [Header("¡ª¡ª¡ª¡ªËØ²Ä¡ª¡ª¡ª¡ª")]
+    [Header("â€”â€”â€”â€”ç´ æâ€”â€”â€”â€”")]
     public Sprite Clicked_Sprite;
     public Sprite Stat_Sprite;
 
     private void Start()
     {
-        string PlantInfo = ResourceManager.GetInstance().Load<TextAsset>("JsonDataAsset/Plant_Data").text;
-        //·´ĞòÁĞ»¯½âÎöÎª¶ÔÓ¦µÄÊı¾İ½á¹¹
-        PlantItem_Data[] PlantItem_Datas = JsonMapper.ToObject<PlantItem_Data[]>(PlantInfo);
-        PlantItem_List = new List<PlantItem_Data>(PlantItem_Datas);
+
 
         PlantItem_Creat();
     }
@@ -36,18 +31,18 @@ public class Phone_PlantManager : NewUIBase
         }
     }
     /// <summary>
-    /// ¶¯Ì¬Éú³ÉÖ²Îï°´Å¥
+    /// åŠ¨æ€ç”Ÿæˆæ¤ç‰©æŒ‰é’®
     /// </summary>
     public void PlantItem_Creat()
     {
-        for (int i = 0; i < PlantItem_List.Count; i++)
+        for (int i = 0; i < ObjectKeeper_Singleton.Instance.PlantItem_List.Count; i++)
         {
-            GameObject Plant_Button = Instantiate(PlantItem_Prefab_List[i % PlantItem_Prefab_List.Count], PlantItem_Group);//Éú³É°´Å¥
-            Plant_Button.GetComponent<Plant>().Data = PlantItem_List[i];//¸ø°´Å¥¸³Öµ
+            GameObject Plant_Button = Instantiate(PlantItem_Prefab_List[i % PlantItem_Prefab_List.Count], PlantItem_Group);//ç”ŸæˆæŒ‰é’®
+            Plant_Button.GetComponent<Plant>().Data = ObjectKeeper_Singleton.Instance.PlantItem_List[i];//ç»™æŒ‰é’®èµ‹å€¼
             Plant data = Plant_Button.GetComponent<Plant>();
 
             Button_SignIn(Plant_Button);
-            //¸ü¸Ä°´Å¥Ï¸½Ú
+            //æ›´æ”¹æŒ‰é’®ç»†èŠ‚
             Plant_Button.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = data.Data.Description;
             Plant_Button.transform.GetChild(1).GetComponent<Image>().sprite = ResourceManager.GetInstance().Load<Sprite>(data.Data.Mature_SpriteResPath); ;
             Plant_Button.transform.GetChild(2).GetComponentInChildren<TextMeshProUGUI>().text = data.Data.Name;
@@ -55,11 +50,11 @@ public class Phone_PlantManager : NewUIBase
     }
 
     /// <summary>
-    /// ×¢²á°´Å¥µã»÷ÖÖÖ²ÊÂ¼ş
+    /// æ³¨å†ŒæŒ‰é’®ç‚¹å‡»ç§æ¤äº‹ä»¶
     /// </summary>
     public void Button_SignIn(GameObject Plant_Button)
     {
-        //Ôİ´æ°´Å¥
+        //æš‚å­˜æŒ‰é’®
         Button button = Plant_Button.GetComponent<Button>();
         PlantItem_Data plant_Data = button.GetComponent<Plant>().Data;
         Button Buy_Button = button.transform.GetChild(3).GetComponent<Button>();
@@ -78,9 +73,9 @@ public class Phone_PlantManager : NewUIBase
         button.onClick.AddListener(() => Click(button));
     }
     /// <summary>
-    /// µã»÷ÊÂ¼ş
+    /// ç‚¹å‡»äº‹ä»¶
     /// </summary>
-    /// <param name="current">µ±Ç°±»µã»÷µÄ°´Å¥/Item</param>
+    /// <param name="current">å½“å‰è¢«ç‚¹å‡»çš„æŒ‰é’®/Item</param>
     public void Click(Button parent)
     {
         Current_Button = parent;
@@ -102,39 +97,39 @@ public class Phone_PlantManager : NewUIBase
         }
     }
     /// <summary>
-    /// Ö²Îï¹ºÂòÊÂ¼ş ÌïµØ/ÖÖÖ²ÊÂ¼ş
+    /// æ¤ç‰©è´­ä¹°äº‹ä»¶ ç”°åœ°/ç§æ¤äº‹ä»¶
     /// </summary>
-    /// <param name="button">Item°´Å¥</param>
+    /// <param name="button">ItemæŒ‰é’®</param>
     public void Field(Button button)
     {
-        //Ôİ´æËùÓĞÌïµØ
+        //æš‚å­˜æ‰€æœ‰ç”°åœ°
         GameObject[] fileds = ObjectKeeper_Singleton.Instance.Farm_Field;
 
-        //¸üĞÂÌïµØ×´Ì¬
+        //æ›´æ–°ç”°åœ°çŠ¶æ€
         for (int i = 0; i < fileds.Length; i++)
         {
-            //»ñÈ¡ÌïµØ
+            //è·å–ç”°åœ°
             GameObject field = fileds[i];
-            //»ñÈ¡ÌïµØ×´Ì¬
+            //è·å–ç”°åœ°çŠ¶æ€
             plant_State plant_State = field.GetComponent<plant_State>();
-            if (plant_State.State == Plant_State.Empty)//Èç¹ûÌïµØÎª¿Õ
+            if (plant_State.State == Plant_State.Empty)//å¦‚æœç”°åœ°ä¸ºç©º
             {
                 plant_State.State = Plant_State.plant;
 
                 plant_State.Call_NPC();
 
                 Plant(field, button);
-                //¸üĞÂÊı¾İ
+                //æ›´æ–°æ•°æ®
                 ObjectKeeper_Singleton.Instance.Planted(button);
                 break;
             }
         }
     }
     /// <summary>
-    /// Ö²Îï ÖÖÖ²ÊÂ¼ş
+    /// æ¤ç‰© ç§æ¤äº‹ä»¶
     /// </summary>
-    /// <param name="field">ÌïµØ</param>
-    /// <param name="button">Ö²Îï¹ÜÀíÖĞ±»µã»÷µÄ°´Å¥</param>
+    /// <param name="field">ç”°åœ°</param>
+    /// <param name="button">æ¤ç‰©ç®¡ç†ä¸­è¢«ç‚¹å‡»çš„æŒ‰é’®</param>
     public void Plant(GameObject field, Button button)
     {
         for (int i = 0; i < field.transform.childCount; i++)

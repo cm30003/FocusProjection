@@ -5,7 +5,8 @@
     "Description": "帽子01",
     "Cost": 10,
     "Target_Animal_ID": 1001,
-    "ResPath": "UI/Sprite/Cloth/帽子01"
+    "ResPath": "UI/Sprite/Cloth/帽子01",
+    "Is_Bought": false
   },
   {
     "ID": 4002,
@@ -13,23 +14,26 @@
     "Description": "帽子02",
     "Cost": 20,
     "Target_Animal_ID": 1001,
-    "ResPath": "UI/Sprite/Cloth/帽子02"
+    "ResPath": "UI/Sprite/Cloth/帽子02",
+    "Is_Bought": false
   },
   {
     "ID": 4003,
     "Name": "帽子03",
     "Description": "帽子03",
     "Cost": 30,
-    "Target_Animal_ID": 1001,
-    "ResPath": "UI/Sprite/Cloth/帽子03"
+    "Target_Animal_ID": 1003,
+    "ResPath": "UI/Sprite/Cloth/帽子03",
+    "Is_Bought": false
   },
   {
     "ID": 4004,
     "Name": "帽子04",
     "Description": "帽子04",
     "Cost": 40,
-    "Target_Animal_ID": 1001,
-    "ResPath": "UI/Sprite/Cloth/帽子04"
+    "Target_Animal_ID": 1003,
+    "ResPath": "UI/Sprite/Cloth/帽子04",
+    "Is_Bought": false
   },
   {
     "ID": 4005,
@@ -37,7 +41,8 @@
     "Description": "帽子05",
     "Cost": 50,
     "Target_Animal_ID": 1002,
-    "ResPath": "UI/Sprite/Cloth/帽子05"
+    "ResPath": "UI/Sprite/Cloth/帽子05",
+    "Is_Bought": false
   },
   {
     "ID": 4006,
@@ -45,22 +50,25 @@
     "Description": "帽子06",
     "Cost": 60,
     "Target_Animal_ID": 1002,
-    "ResPath": "UI/Sprite/Cloth/帽子06"
+    "ResPath": "UI/Sprite/Cloth/帽子06",
+    "Is_Bought": false
   },
   {
     "ID": 4007,
     "Name": "帽子07",
     "Description": "帽子07",
     "Cost": 70,
-    "Target_Animal_ID": 1002,
-    "ResPath": "UI/Sprite/Cloth/帽子07"
+    "Target_Animal_ID": 1004,
+    "ResPath": "UI/Sprite/Cloth/帽子07",
+    "Is_Bought": false
   },
   {
     "ID": 4008,
     "Name": "帽子08",
     "Description": "帽子08",
     "Cost": 80,
-    "Target_Animal_ID": 1002,
-    "ResPath": "UI/Sprite/Cloth/帽子08"
+    "Target_Animal_ID": 1004,
+    "ResPath": "UI/Sprite/Cloth/帽子08",
+    "Is_Bought": false
   }
 ]

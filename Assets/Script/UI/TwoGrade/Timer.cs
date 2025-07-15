@@ -11,7 +11,7 @@ public class Timer : UIBase
     private int second=0;//储存秒数
     private int Start_Second=0;//储存初始专注秒数
 
-    private int is_pause=0;
+    private int is_pause=0;//暂停
 
     public TextMeshProUGUI Time_Text;
     public TextMeshProUGUI Month_Day;
@@ -39,12 +39,6 @@ public class Timer : UIBase
         Pause_Button.onClick.AddListener(Pause_Timer);
         Reset_Button.onClick.AddListener(Reset_Timer);
     }
-
-    //private void Open_SetFoucusTimeUI()
-    //{
-    //    OpenUI(SetFoucusTimeUI.GetComponent<CanvasGroup>());
-    //    Debug.Log("1111");
-    //}
 
     private void Update()
     {
